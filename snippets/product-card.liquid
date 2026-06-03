@@ -63,6 +63,16 @@
       endunless
     endfor
   endcapture
+
+  # Gather tags
+  capture product_tags
+    for tag in product.tags
+      echo tag | downcase
+      unless forloop.last
+        echo ','
+      endunless
+    endfor
+  endcapture
 -%}
 
 <div 
@@ -70,6 +80,7 @@
   data-category="{{ category }}" 
   data-subcategory="{{ subcategory }}" 
   data-collections="{{ product_collections }}" 
+  data-tags="{{ product_tags }}"
   data-on-sale="{{ is_on_sale }}"
   data-oos="{% if is_out_of_stock %}true{% else %}false{% endif %}"
   data-id="{{ stable_id }}"

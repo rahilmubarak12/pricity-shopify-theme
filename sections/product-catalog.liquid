@@ -45,6 +45,9 @@
       <button type="button" class="category-filter-btn pb-0.5 transition text-[#1a1a1a] font-bold border-b border-[#1a1a1a]" data-category="all">
         All
       </button>
+      <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="new-drops">
+        New Drops
+      </button>
       <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="men">
         Men
       </button>
@@ -181,6 +184,14 @@
         let matchesCategory = false;
         if (activeCategory === 'all') {
           matchesCategory = true;
+        } else if (activeCategory === 'new-drops') {
+          const tags = (card.getAttribute('data-tags') || '').split(',');
+          matchesCategory = collections.includes('new-drops') || 
+                            collections.includes('new_drops') || 
+                            collections.includes('newdrops') || 
+                            tags.includes('new-drops') || 
+                            tags.includes('newdrops') || 
+                            tags.includes('new drops');
         } else if (activeCategory === 'men') {
           matchesCategory = (cat === 'men' || cat === 'unisex');
         } else if (activeCategory === 'women') {
@@ -214,6 +225,8 @@
         titleText.textContent = "Women's Archive";
       } else if (activeCategory === 'sale') {
         titleText.textContent = "Archival Sale";
+      } else if (activeCategory === 'new-drops') {
+        titleText.textContent = "New Drops";
       } else {
         titleText.textContent = titleBase;
       }
@@ -296,6 +309,8 @@
         category = 'men';
       } else if (href.includes('/collections/women') || href.includes('filter=women') || href === '#women') {
         category = 'women';
+      } else if (href.includes('/collections/new-drops') || href.includes('/collections/newdrops') || href.includes('filter=new-drops') || href.includes('filter=newdrops') || href === '#new-drops') {
+        category = 'new-drops';
       } else if (href.includes('/collections/sale') || href.includes('filter=sale') || href === '#sale') {
         category = 'sale';
       } else if (href.includes('/collections/all') || href.includes('filter=all') || href === '#all') {
@@ -306,6 +321,8 @@
           category = 'women';
         } else if (text.includes('men')) {
           category = 'men';
+        } else if (text.includes('new drops') || text.includes('newdrops')) {
+          category = 'new-drops';
         } else if (text.includes('sale')) {
           category = 'sale';
         } else if (text.includes('shop now') || text.includes('all') || text.includes('shop')) {
