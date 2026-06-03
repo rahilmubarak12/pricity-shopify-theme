@@ -55,6 +55,16 @@ document.addEventListener('DOMContentLoaded', () => {
               newPanel.style.transition = '';
             }
             document.body.classList.add('overflow-hidden');
+          } else {
+            // Explicitly keep drawer hidden after DOM swap
+            cartContainer.classList.add('pointer-events-none', 'opacity-0');
+            cartContainer.classList.remove('opacity-100', 'pointer-events-auto');
+            const newPanel = cartContainer.querySelector('.cart-drawer-panel');
+            if (newPanel) {
+              newPanel.classList.add('translate-x-full');
+              newPanel.classList.remove('translate-x-0');
+            }
+            document.body.classList.remove('overflow-hidden');
           }
 
           // Rebind event listeners

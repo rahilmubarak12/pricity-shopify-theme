@@ -392,15 +392,8 @@ function initProductDetailEngine(container) {
           svg.innerHTML = '<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>';
         }
 
-        // Update cart count badge without opening the drawer
-        fetch('/cart.js')
-          .then(r => r.json())
-          .then(cart => {
-            document.querySelectorAll('.cart-count').forEach(el => {
-              el.textContent = cart.item_count;
-            });
-          })
-          .catch(() => {});
+        // Refresh cart drawer content (without opening it)
+        document.dispatchEvent(new CustomEvent('cart:updated', { detail: { item: item, openDrawer: false } }));
       })
       .catch(err => {
         console.error('Failed to add to cart:', err);
