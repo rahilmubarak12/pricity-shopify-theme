@@ -28,6 +28,21 @@ function initProductDetailEngine(container) {
   let quantity = 1;
   let activeVariant = null;
   let maxStock = 99;
+  let addedToCart = false;
+
+  const resetAddToCartBtn = () => {
+    if (!addToCartBtn) return;
+    addedToCart = false;
+    addToCartBtn.disabled = false;
+    addToCartBtn.querySelector('.btn-text').textContent = 'Add to Cart';
+    addToCartBtn.classList.remove('bg-emerald-600');
+    addToCartBtn.classList.add('bg-zinc-900', 'hover:bg-zinc-700');
+    // Restore bag icon
+    const svg = addToCartBtn.querySelector('svg');
+    if (svg) {
+      svg.innerHTML = '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>';
+    }
+  };
 
   // Media Gallery Thumbnails
   container.querySelectorAll('.thumbnail-btn').forEach(btn => {
@@ -167,7 +182,7 @@ function initProductDetailEngine(container) {
     
     if (activeVariant) {
       // Reset "Go to Cart" back to "Add to Cart" when variant changes
-      if (typeof resetAddToCartBtn === 'function') resetAddToCartBtn();
+      resetAddToCartBtn();
       maxStock = activeVariant.inventory_quantity || 99;
       
       // Update Price
@@ -339,22 +354,6 @@ function initProductDetailEngine(container) {
   }
 
   // Handle Add to Cart AJAX
-  let addedToCart = false;
-
-  const resetAddToCartBtn = () => {
-    if (!addToCartBtn) return;
-    addedToCart = false;
-    addToCartBtn.disabled = false;
-    addToCartBtn.querySelector('.btn-text').textContent = 'Add to Cart';
-    addToCartBtn.classList.remove('bg-emerald-600');
-    addToCartBtn.classList.add('bg-zinc-900', 'hover:bg-zinc-700');
-    // Restore bag icon
-    const svg = addToCartBtn.querySelector('svg');
-    if (svg) {
-      svg.innerHTML = '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>';
-    }
-  };
-
   if (addToCartBtn) {
     addToCartBtn.addEventListener('click', () => {
       // If already added, go to cart
@@ -497,7 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Intercept grid card click to open quickview instead of PDP
+  // Navigate to product page on card click
   document.addEventListener('click', (e) => {
     const card = e.target.closest('.product-card');
     if (!card) return;
@@ -514,16 +513,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     e.preventDefault();
     
-    // Extract handle from the data-url attribute
+    // Navigate directly to product page
     const url = card.getAttribute('data-url');
     if (url) {
-      const handle = url.split('/').pop().split('?')[0];
-      if (handle) {
-        openCartDrawerTriggerClose(); // Close cart before modal opens
-        openModal(handle);
-      } else {
-        window.location.href = url;
-      }
+      window.location.href = url;
     }
   });
 });
