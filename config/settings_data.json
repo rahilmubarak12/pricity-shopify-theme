@@ -1,5 +1,63 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "current": "Default",
+  "current": {
+    "color_primary": "#141414",
+    "color_contrast": "#fafaf9",
+    "color_accent": "#bf4800",
+    "color_background": "#faf9f7",
+    "font_size_scale": 100,
+    "checkout_logo_position": "left",
+    "checkout_logo_size": "medium",
+    "checkout_accent_color": "#141414",
+    "checkout_button_color": "#141414",
+    "checkout_error_color": "#ff5c5c",
+    "social_instagram_link": "",
+    "social_twitter_link": "",
+    "social_facebook_link": "",
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "show_announcement": true,
+          "announcement_text": "Complimentary Shipping Across Saudi Arabia",
+          "menu": "main-menu",
+          "show_the_rule": false,
+          "the_rule_text": "The Rule",
+          "the_rule_link": "",
+          "whatsapp_number": "+966 53 647 0644",
+          "whatsapp_url": "",
+          "email_address": "theapricity.officials@gmail.com"
+        }
+      },
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {}
+      },
+      "product-modal": {
+        "type": "product-modal",
+        "settings": {}
+      },
+      "discount-popup": {
+        "type": "discount-popup",
+        "settings": {
+          "sticky_text": "Want 15% off? Tap here",
+          "coupon_code": "APY-15",
+          "offer_1_title": "15% Off",
+          "offer_1_description": "when you purchase two or more items",
+          "offer_2_text": "Free shipping with no minimum order"
+        }
+      }
+    },
+    "content_for_index": []
+  },
   "presets": {
     "Default": {
       "color_primary": "#141414",
