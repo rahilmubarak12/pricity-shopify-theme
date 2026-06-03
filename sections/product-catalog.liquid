@@ -89,11 +89,64 @@
 
   <!-- GRID -->
   <div class="catalog-grid grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-8 sm:gap-x-6 sm:gap-y-12">
-    {%- for product in collection_obj.products limit: products_limit -%}
-      {% render 'product-card', product: product %}
-    {%- else -%}
+    {%- liquid
+      assign rendered_count = 0
+      
+      # First pass: Summer products (Not hoodies, Not sweatshirts)
+      for product in collection_obj.products
+        if rendered_count >= products_limit
+          break
+        endif
+
+        assign is_winter = false
+        assign title_lower = product.title | downcase
+        if title_lower contains 'hoodie' or title_lower contains 'sweatshirt'
+          assign is_winter = true
+        else
+          for tag in product.tags
+            assign tag_lower = tag | downcase
+            if tag_lower contains 'hoodie' or tag_lower contains 'sweatshirt'
+              assign is_winter = true
+              break
+            endif
+          endfor
+        endif
+
+        if is_winter == false
+          render 'product-card', product: product
+          assign rendered_count = rendered_count | plus: 1
+        endif
+      endfor
+
+      # Second pass: Winter products (Hoodies and Sweatshirts)
+      for product in collection_obj.products
+        if rendered_count >= products_limit
+          break
+        endif
+
+        assign is_winter = false
+        assign title_lower = product.title | downcase
+        if title_lower contains 'hoodie' or title_lower contains 'sweatshirt'
+          assign is_winter = true
+        else
+          for tag in product.tags
+            assign tag_lower = tag | downcase
+            if tag_lower contains 'hoodie' or tag_lower contains 'sweatshirt'
+              assign is_winter = true
+              break
+            endif
+          endfor
+        endif
+
+        if is_winter == true
+          render 'product-card', product: product
+          assign rendered_count = rendered_count | plus: 1
+        endif
+      endfor
+    -%}
+    {%- if rendered_count == 0 -%}
       <p class="text-center col-span-full py-12 text-zinc-400 font-mono-street text-xs uppercase">No products in this collection.</p>
-    {%- endfor -%}
+    {%- endif -%}
   </div>
 
 </section>
