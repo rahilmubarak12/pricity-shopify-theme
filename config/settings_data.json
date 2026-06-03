@@ -54,9 +54,42 @@
           "offer_1_description": "when you purchase two or more items",
           "offer_2_text": "Free shipping with no minimum order"
         }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "newsletter_subtitle": "Apricity Archive List",
+          "newsletter_title": "Join the Drop Notification List",
+          "newsletter_description": "Our limited pieces sell out rapidly. Subscribe for early private access 24 hours before public release.",
+          "newsletter_placeholder": "Enter your email...",
+          "about_title": "About Us",
+          "about_content": "<p>Apricity is built through tension and refined over time.</p><p>Guided by the Three-Year Rule, we release only what proves its place. now and years from now.</p><p>Quietly considered. Meant to last.</p>",
+          "services_title": "Client Services",
+          "services_menu": "",
+          "instagram_url": "",
+          "tiktok_url": "",
+          "copyright_text": "Apricity Officials",
+          "designed_text": "Designed in Saudi Arabia 🇸🇦"
+        }
       }
     },
-    "content_for_index": []
+    "content_for_index": [],
+    "blocks": {
+      "15683396631634586217": {
+        "type": "shopify://apps/inbox/blocks/chat/841fc607-4181-4ad1-842d-e24d7f8bad6b",
+        "disabled": false,
+        "settings": {
+          "button_color": "#FFFFFF",
+          "secondary_color": "#6A6A6A",
+          "ternary_color": "#6A6A6A",
+          "button_icon": "chat_bubble",
+          "button_text": "chat_with_us",
+          "button_horizontal_position": "bottom_right",
+          "button_vertical_position": "lowest",
+          "greeting_message": ""
+        }
+      }
+    }
   },
   "presets": {
     "Default": {
