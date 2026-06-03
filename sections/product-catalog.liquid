@@ -382,7 +382,8 @@
     });
 
     // Dismiss size picker clicking outside
-    document.addEventListener('click', () => {
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.mobile-size-popup') || e.target.closest('.mobile-quick-add-trigger')) return;
       catalog.querySelectorAll('.mobile-size-popup').forEach(pop => {
         pop.classList.add('hidden');
       });
@@ -425,6 +426,9 @@
         setTimeout(() => {
           sizeBtn.disabled = false;
           sizeBtn.textContent = originalText;
+          // Close the mobile size popup after adding to cart
+          const popup = sizeBtn.closest('.mobile-size-popup');
+          if (popup) popup.classList.add('hidden');
         }, 1500);
       })
       .catch(err => {
