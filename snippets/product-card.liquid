@@ -54,6 +54,19 @@
     endif
   endfor
 
+  # Check collections for subcategory (fallback if title/tags didn't match)
+  for c in product.collections
+    assign col_lower = c.title | downcase
+    assign col_handle = c.handle | downcase
+    if col_lower contains 't-shirt' or col_lower contains 'tee' or col_lower contains 'top' or col_handle contains 't-shirt' or col_handle contains 'tshirt' or col_handle contains 'tee'
+      assign subcategory = 't-shirt'
+    elsif subcategory == 'all' and (col_lower contains 'sweatshirt' or col_handle contains 'sweatshirt')
+      assign subcategory = 'sweatshirt'
+    elsif subcategory == 'all' and (col_lower contains 'hoodie' or col_handle contains 'hoodie')
+      assign subcategory = 'hoodie'
+    endif
+  endfor
+
   # Gather collections handles
   capture product_collections
     for c in product.collections
