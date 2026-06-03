@@ -383,7 +383,7 @@
 
     // Dismiss size picker clicking outside
     document.addEventListener('click', (e) => {
-      if (e.target.closest('.mobile-size-popup') || e.target.closest('.mobile-quick-add-trigger')) return;
+      if (e.target.closest('.mobile-size-popup') || e.target.closest('.mobile-quick-add-trigger') || e.target.closest('.quick-add-size-btn')) return;
       catalog.querySelectorAll('.mobile-size-popup').forEach(pop => {
         pop.classList.add('hidden');
       });
@@ -392,7 +392,8 @@
     // Handle AJAX Add to Cart
     catalog.addEventListener('click', (e) => {
       const sizeBtn = e.target.closest('.quick-add-size-btn');
-      if (!sizeBtn) return;
+      if (!sizeBtn || sizeBtn.disabled) return;
+      e.preventDefault();
       e.stopPropagation();
 
       const variantId = sizeBtn.getAttribute('data-variant-id');
