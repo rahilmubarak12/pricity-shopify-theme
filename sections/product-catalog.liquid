@@ -1,0 +1,405 @@
+{% comment %}
+  Product Catalog Section
+  Renders product grids with instant category and subcategory filtering, OOS handling, and size selector triggers.
+{% endcomment %}
+
+{%- liquid
+  assign selected_collection = section.settings.collection
+  assign collection_obj = collections[selected_collection] | default: collections.all
+  assign products_limit = section.settings.products_to_show | default: 48
+-%}
+
+<section class="py-24 px-6 md:px-16 max-w-7xl mx-auto" id="shop-catalog" data-section-id="{{ section.id }}">
+
+  <!-- HEADER -->
+  <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 pb-6 border-b border-zinc-200 gap-6">
+    <div>
+      <span class="text-[11px] font-mono-street tracking-[0.25em] text-zinc-400 uppercase">
+        {{ section.settings.subtitle | default: 'Catalog' }}
+      </span>
+
+      {%- liquid
+        assign base_title = section.settings.title | default: 'The Collection'
+        assign suffix = ''
+        if collection_obj.handle == 'new-drops'
+          assign suffix = ' · New Drops'
+        elsif collection_obj.handle == 'sale' or collection_obj.handle == 'archival-sale'
+          assign suffix = ' · Archival Sale'
+        elsif collection_obj.handle == 'summer-capsule' or collection_obj.handle == 'summer-drop'
+          assign suffix = ' · Summer Capsule'
+        endif
+        assign final_title = base_title | append: suffix
+      -%}
+      <h2 class="catalog-title font-heading font-extrabold text-3xl md:text-5xl uppercase text-[#1a1a1a] mt-1" 
+          data-title-base="{{ final_title }}">
+        {{ final_title }}
+      </h2>
+
+      <p class="catalog-count text-[11px] text-zinc-400 font-mono-street tracking-wider mt-2 uppercase">
+        Showing {{ collection_obj.products_count }} premium pieces
+      </p>
+    </div>
+
+    <!-- CATEGORY TOGGLE -->
+    <div class="category-filters flex items-center gap-6 font-mono-street text-[11px] uppercase tracking-widest">
+      <button type="button" class="category-filter-btn pb-0.5 transition text-[#1a1a1a] font-bold border-b border-[#1a1a1a]" data-category="all">
+        All
+      </button>
+      <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="men">
+        Men
+      </button>
+      <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="women">
+        Women
+      </button>
+      <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="sale">
+        Sale
+      </button>
+    </div>
+  </div>
+
+  <!-- SUBCATEGORY PILLS -->
+  <div class="subcategory-filters flex items-center gap-3 overflow-x-auto pb-6 scrollbar-none mb-12 select-none">
+    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] uppercase whitespace-nowrap border transition bg-[#1a1a1a] text-white" data-subcategory="all">
+      All
+    </button>
+    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] uppercase whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="hoodie">
+      Hoodies
+    </button>
+    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] uppercase whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="shirt">
+      Sets
+    </button>
+    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] uppercase whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="sweatshirt">
+      Sweatshirts
+    </button>
+    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] uppercase whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="t-shirt">
+      T-Shirts & Tops
+    </button>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div class="catalog-empty-state hidden flex flex-col items-center justify-center py-32 text-center gap-4">
+    <p class="font-mono-street text-xs uppercase tracking-[0.25em] text-zinc-400">
+      No products found
+    </p>
+    <p class="text-zinc-300 text-sm font-light">Try adjusting your filters</p>
+    <button type="button" class="catalog-reset-btn mt-2 px-8 py-3 bg-[#1a1a1a] text-white font-mono-street text-[11px] uppercase tracking-widest hover:bg-zinc-800 transition-colors">
+      Reset Filters
+    </button>
+  </div>
+
+  <!-- GRID -->
+  <div class="catalog-grid grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-8 sm:gap-x-6 sm:gap-y-12">
+    {%- for product in collection_obj.products limit: products_limit -%}
+      {% render 'product-card', product: product %}
+    {%- else -%}
+      <p class="text-center col-span-full py-12 text-zinc-400 font-mono-street text-xs uppercase">No products in this collection.</p>
+    {%- endfor -%}
+  </div>
+
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const catalog = document.getElementById('shop-catalog');
+    if (!catalog) return;
+
+    const cards = catalog.querySelectorAll('.product-card');
+    const categoryBtns = catalog.querySelectorAll('.category-filter-btn');
+    const subcategoryBtns = catalog.querySelectorAll('.subcategory-filter-btn');
+    const emptyState = catalog.querySelector('.catalog-empty-state');
+    const countText = catalog.querySelector('.catalog-count');
+    const titleText = catalog.querySelector('.catalog-title');
+    const titleBase = titleText.getAttribute('data-title-base');
+    const resetBtn = catalog.querySelector('.catalog-reset-btn');
+
+    let activeCategory = 'all';
+    let activeSubcategory = 'all';
+
+    // Update Filter Visibility
+    const filterGrid = () => {
+      let visibleCount = 0;
+      
+      cards.forEach(card => {
+        const cat = card.getAttribute('data-category');
+        const sub = card.getAttribute('data-subcategory');
+        const collections = (card.getAttribute('data-collections') || '').split(',');
+        const isOnSale = card.getAttribute('data-on-sale') === 'true';
+        
+        let matchesCategory = false;
+        if (activeCategory === 'all') {
+          matchesCategory = true;
+        } else if (activeCategory === 'men') {
+          matchesCategory = (cat === 'men' || cat === 'unisex');
+        } else if (activeCategory === 'women') {
+          matchesCategory = (cat === 'women' || cat === 'unisex');
+        } else if (activeCategory === 'sale') {
+          matchesCategory = (isOnSale || collections.includes('sale') || collections.includes('archival-sale'));
+        }
+
+        let matchesSubcategory = false;
+        if (activeSubcategory === 'all') {
+          matchesSubcategory = true;
+        } else {
+          matchesSubcategory = (sub === activeSubcategory);
+        }
+
+        if (matchesCategory && matchesSubcategory) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      // Update Showing Text
+      countText.textContent = `Showing ${visibleCount} premium pieces`;
+
+      // Update Heading Title
+      if (activeCategory === 'men') {
+        titleText.textContent = "Men's Archive";
+      } else if (activeCategory === 'women') {
+        titleText.textContent = "Women's Archive";
+      } else if (activeCategory === 'sale') {
+        titleText.textContent = "Archival Sale";
+      } else {
+        titleText.textContent = titleBase;
+      }
+
+      // Empty State Toggle
+      if (visibleCount === 0 && cards.length > 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+      }
+    };
+
+    // Category click handler
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryBtns.forEach(b => {
+          b.classList.remove('text-[#1a1a1a]', 'font-bold', 'border-b', 'border-[#1a1a1a]');
+          b.classList.add('text-zinc-400');
+        });
+        btn.classList.add('text-[#1a1a1a]', 'font-bold', 'border-b', 'border-[#1a1a1a]');
+        btn.classList.remove('text-zinc-400');
+
+        activeCategory = btn.getAttribute('data-category');
+        filterGrid();
+      });
+    });
+
+    // Subcategory click handler
+    subcategoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        subcategoryBtns.forEach(b => {
+          b.classList.remove('bg-[#1a1a1a]', 'text-white');
+          b.classList.add('bg-white', 'text-zinc-400', 'border-zinc-200');
+        });
+        btn.classList.remove('bg-white', 'text-zinc-400', 'border-zinc-200');
+        btn.classList.add('bg-[#1a1a1a]', 'text-white');
+
+        activeSubcategory = btn.getAttribute('data-subcategory');
+        filterGrid();
+      });
+    });
+
+    // Reset Filter Button
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        const defaultCategoryBtn = catalog.querySelector('.category-filter-btn[data-category="all"]');
+        const defaultSubcategoryBtn = catalog.querySelector('.subcategory-filter-btn[data-subcategory="all"]');
+        if (defaultCategoryBtn) defaultCategoryBtn.click();
+        if (defaultSubcategoryBtn) defaultSubcategoryBtn.click();
+      });
+    }
+
+    // Auto-filter from URL param e.g. /?filter=men or /?filter=women or /?filter=sale
+    const urlParams = new URLSearchParams(window.location.search);
+    const filterParam = urlParams.get('filter');
+    if (filterParam) {
+      const targetBtn = catalog.querySelector(`.category-filter-btn[data-category="${filterParam}"]`);
+      if (targetBtn) {
+        targetBtn.click();
+        catalog.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // Intercept clicks on links pointing to Men, Women, Sale collections or #shop-catalog to filter locally
+    const handleFilterLinkClick = (e) => {
+      const link = e.target.closest('a');
+      if (!link) return;
+
+      const href = link.getAttribute('href');
+      if (!href) return;
+
+      // Only intercept on homepage to keep single page feel
+      const isHomepage = window.location.pathname === '/' || window.location.pathname === '';
+      if (!isHomepage) return;
+
+      let category = null;
+      if (href.includes('/collections/men') || href.includes('filter=men') || href === '#men') {
+        category = 'men';
+      } else if (href.includes('/collections/women') || href.includes('filter=women') || href === '#women') {
+        category = 'women';
+      } else if (href.includes('/collections/sale') || href.includes('filter=sale') || href === '#sale') {
+        category = 'sale';
+      } else if (href.includes('#shop-catalog')) {
+        // Fallback: check link text if configured directly to #shop-catalog
+        const text = link.textContent.toLowerCase();
+        if (text.includes('women')) {
+          category = 'women';
+        } else if (text.includes('men')) {
+          category = 'men';
+        } else if (text.includes('sale')) {
+          category = 'sale';
+        }
+      }
+
+      if (category) {
+        e.preventDefault();
+        
+        // Find the category button
+        const btn = catalog.querySelector(`.category-filter-btn[data-category="${category}"]`);
+        if (btn) {
+          // Close mobile menu if it is open
+          const mobileDrawer = document.getElementById('MobileNavDrawer');
+          if (mobileDrawer && !mobileDrawer.classList.contains('hidden')) {
+            const closeBtn = mobileDrawer.querySelector('.mobile-menu-close');
+            if (closeBtn) closeBtn.click();
+          }
+
+          btn.click();
+          catalog.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          history.pushState(null, '', `?filter=${category}`);
+        }
+      }
+    };
+
+    document.addEventListener('click', handleFilterLinkClick);
+
+    // Toggle Mobile Size Picker
+    cards.forEach(card => {
+      const mobileTrigger = card.querySelector('.mobile-quick-add-trigger');
+      const mobilePopup = card.querySelector('.mobile-size-popup');
+      
+      if (mobileTrigger && mobilePopup) {
+        mobileTrigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isClosed = mobilePopup.classList.contains('hidden');
+          
+          // Close all other popups
+          catalog.querySelectorAll('.mobile-size-popup').forEach(pop => {
+            pop.classList.add('hidden');
+          });
+
+          if (isClosed) {
+            mobilePopup.classList.remove('hidden');
+          }
+        });
+      }
+    });
+
+    // Dismiss size picker clicking outside
+    document.addEventListener('click', () => {
+      catalog.querySelectorAll('.mobile-size-popup').forEach(pop => {
+        pop.classList.add('hidden');
+      });
+    });
+
+    // Handle AJAX Add to Cart
+    catalog.addEventListener('click', (e) => {
+      const sizeBtn = e.target.closest('.quick-add-size-btn');
+      if (!sizeBtn) return;
+      e.stopPropagation();
+
+      const variantId = sizeBtn.getAttribute('data-variant-id');
+      if (!variantId) return;
+
+      const originalText = sizeBtn.textContent;
+      sizeBtn.disabled = true;
+      sizeBtn.textContent = '...';
+
+      // POST to Shopify AJAX API
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: variantId,
+          quantity: 1
+        })
+      })
+      .then(res => res.json())
+      .then(item => {
+        // Success
+        sizeBtn.textContent = '✓';
+        
+        // Dispatch custom cart update event to update the cart drawer (built in Phase 5)
+        document.dispatchEvent(new CustomEvent('cart:updated', {
+          detail: { item: item }
+        }));
+        
+        // Open the Cart Drawer globally
+        const cartDrawer = document.getElementById('CartDrawerSection') || document.querySelector('.cart-drawer-container');
+        if (cartDrawer) {
+          cartDrawer.dispatchEvent(new CustomEvent('cart:open'));
+        }
+
+        setTimeout(() => {
+          sizeBtn.disabled = false;
+          sizeBtn.textContent = originalText;
+        }, 1500);
+      })
+      .catch(err => {
+        console.error('AJAX quick add failed:', err);
+        sizeBtn.textContent = 'Error';
+        setTimeout(() => {
+          sizeBtn.disabled = false;
+          sizeBtn.textContent = originalText;
+        }, 1500);
+      });
+    });
+
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product Catalog Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Section Subtitle",
+      "default": "Catalog"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Heading",
+      "default": "The Collection"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection to Show",
+      "info": "Choose the collection to pull products from. Defaults to all products."
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to Show",
+      "min": 8,
+      "max": 96,
+      "step": 4,
+      "default": 24
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Catalog Grid"
+    }
+  ]
+}
+{% endschema %}

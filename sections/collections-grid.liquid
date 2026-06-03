@@ -1,0 +1,265 @@
+{% comment %}
+  Collections Grid Section
+  4-column grid displaying links to key collections (Men, Women, New Drops, Sale) with hover animations.
+{% endcomment %}
+
+<section class="py-24 px-6 md:px-16 max-w-7xl mx-auto">
+  <!-- Section Title -->
+  <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 pb-6 border-b border-zinc-200">
+    <div>
+      <span class="text-[11px] uppercase tracking-[0.25em] font-mono-street text-zinc-400">
+        {{ section.settings.subtitle | default: 'Collections' }}
+      </span>
+      <h2 class="font-heading font-extrabold text-3xl md:text-4xl uppercase text-[#1a1a1a] mt-1">
+        {{ section.settings.title | default: 'Explore the Archive' }}
+      </h2>
+    </div>
+    <span class="text-[11px] font-mono-street text-zinc-400 uppercase tracking-widest mt-4 md:mt-0">
+      {{ section.settings.season_label | default: "Season '26" }}
+    </span>
+  </div>
+
+  <!-- Grid Items -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    
+    <!-- Item 1: Men -->
+    <a href="{{ section.settings.collection_1_url | default: '#' }}" class="group relative h-[460px] overflow-hidden cursor-pointer no-underline block">
+      {%- if section.settings.collection_1_image != blank -%}
+        <img src="{{ section.settings.collection_1_image | image_url: width: 800 }}" alt="Men" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
+      {%- else -%}
+        <img src="{{ 'man-v2.jpg' | asset_url }}" alt="Men" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
+      {%- endif -%}
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-8">
+        <span class="text-[10px] font-mono-street tracking-[0.2em] text-white/60 uppercase">
+          {{ section.settings.collection_1_tag | default: 'Category' }}
+        </span>
+        <h3 class="font-heading font-extrabold text-2xl text-white uppercase mt-0.5">
+          {{ section.settings.collection_1_title | default: 'Men' }}
+        </h3>
+        <span class="text-[11px] font-mono-street tracking-widest text-white/60 mt-2 group-hover:text-white transition-colors">
+          {{ section.settings.collection_1_cta | default: 'Shop Collection →' }}
+        </span>
+      </div>
+    </a>
+
+    <!-- Item 2: Women -->
+    <a href="{{ section.settings.collection_2_url | default: '#' }}" class="group relative h-[460px] overflow-hidden cursor-pointer no-underline block">
+      {%- if section.settings.collection_2_image != blank -%}
+        <img src="{{ section.settings.collection_2_image | image_url: width: 800 }}" alt="Women" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
+      {%- else -%}
+        <img src="{{ 'woman-v2.jpg' | asset_url }}" alt="Women" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
+      {%- endif -%}
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-8">
+        <span class="text-[10px] font-mono-street tracking-[0.2em] text-white/60 uppercase">
+          {{ section.settings.collection_2_tag | default: 'Category' }}
+        </span>
+        <h3 class="font-heading font-extrabold text-2xl text-white uppercase mt-0.5">
+          {{ section.settings.collection_2_title | default: 'Women' }}
+        </h3>
+        <span class="text-[11px] font-mono-street tracking-widest text-white/60 mt-2 group-hover:text-white transition-colors">
+          {{ section.settings.collection_2_cta | default: 'Shop Collection →' }}
+        </span>
+      </div>
+    </a>
+
+    <!-- Item 3: New Drops -->
+    <a href="{{ section.settings.collection_3_url | default: '#' }}" class="group relative h-[460px] overflow-hidden cursor-pointer no-underline block">
+      {%- if section.settings.collection_3_image != blank -%}
+        <img src="{{ section.settings.collection_3_image | image_url: width: 800 }}" alt="New Drops" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
+      {%- else -%}
+        <img src="{{ 'both-v2.jpg' | asset_url }}" alt="New Drops" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
+      {%- endif -%}
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-8">
+        <span class="text-[10px] font-mono-street tracking-[0.2em] text-white/60 uppercase">
+          {{ section.settings.collection_3_tag | default: 'Capsule' }}
+        </span>
+        <h3 class="font-heading font-extrabold text-2xl text-white uppercase mt-0.5">
+          {{ section.settings.collection_3_title | default: 'New Drops' }}
+        </h3>
+        <span class="text-[11px] font-mono-street tracking-widest text-white/60 mt-2 group-hover:text-white transition-colors">
+          {{ section.settings.collection_3_cta | default: 'Discover Pieces →' }}
+        </span>
+      </div>
+    </a>
+
+    <!-- Item 4: Sale -->
+    <a href="{{ section.settings.collection_4_url | default: '#' }}" class="group relative h-[460px] overflow-hidden cursor-pointer no-underline block">
+      {%- if section.settings.collection_4_image != blank -%}
+        <img src="{{ section.settings.collection_4_image | image_url: width: 800 }}" alt="Sale" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
+      {%- else -%}
+        <img src="{{ 'sale-v2.jpg' | asset_url }}" alt="Sale" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
+      {%- endif -%}
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-8">
+        <span class="text-[10px] font-mono-street tracking-[0.2em] text-white/60 uppercase">
+          {{ section.settings.collection_4_tag | default: 'Seasonal' }}
+        </span>
+        <h3 class="font-heading font-extrabold text-2xl text-white uppercase mt-0.5">
+          {{ section.settings.collection_4_title | default: 'SALE' }}
+        </h3>
+        <span class="text-[11px] font-mono-street tracking-widest text-white/60 mt-2 group-hover:text-white transition-colors">
+          {{ section.settings.collection_4_cta | default: 'Shop Sale →' }}
+        </span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collections Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Section Subtitle",
+      "default": "Collections"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Heading",
+      "default": "Explore the Archive"
+    },
+    {
+      "type": "text",
+      "id": "season_label",
+      "label": "Season Label",
+      "default": "Season '26"
+    },
+    {
+      "type": "header",
+      "content": "Collection 1"
+    },
+    {
+      "type": "text",
+      "id": "collection_1_title",
+      "label": "Title",
+      "default": "Men"
+    },
+    {
+      "type": "text",
+      "id": "collection_1_tag",
+      "label": "Tag",
+      "default": "Category"
+    },
+    {
+      "type": "text",
+      "id": "collection_1_cta",
+      "label": "CTA Text",
+      "default": "Shop Collection →"
+    },
+    {
+      "type": "url",
+      "id": "collection_1_url",
+      "label": "Link URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "collection_1_image",
+      "label": "Image Override"
+    },
+    {
+      "type": "header",
+      "content": "Collection 2"
+    },
+    {
+      "type": "text",
+      "id": "collection_2_title",
+      "label": "Title",
+      "default": "Women"
+    },
+    {
+      "type": "text",
+      "id": "collection_2_tag",
+      "label": "Tag",
+      "default": "Category"
+    },
+    {
+      "type": "text",
+      "id": "collection_2_cta",
+      "label": "CTA Text",
+      "default": "Shop Collection →"
+    },
+    {
+      "type": "url",
+      "id": "collection_2_url",
+      "label": "Link URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "collection_2_image",
+      "label": "Image Override"
+    },
+    {
+      "type": "header",
+      "content": "Collection 3"
+    },
+    {
+      "type": "text",
+      "id": "collection_3_title",
+      "label": "Title",
+      "default": "New Drops"
+    },
+    {
+      "type": "text",
+      "id": "collection_3_tag",
+      "label": "Tag",
+      "default": "Capsule"
+    },
+    {
+      "type": "text",
+      "id": "collection_3_cta",
+      "label": "CTA Text",
+      "default": "Discover Pieces →"
+    },
+    {
+      "type": "url",
+      "id": "collection_3_url",
+      "label": "Link URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "collection_3_image",
+      "label": "Image Override"
+    },
+    {
+      "type": "header",
+      "content": "Collection 4"
+    },
+    {
+      "type": "text",
+      "id": "collection_4_title",
+      "label": "Title",
+      "default": "SALE"
+    },
+    {
+      "type": "text",
+      "id": "collection_4_tag",
+      "label": "Tag",
+      "default": "Seasonal"
+    },
+    {
+      "type": "text",
+      "id": "collection_4_cta",
+      "label": "CTA Text",
+      "default": "Shop Sale →"
+    },
+    {
+      "type": "url",
+      "id": "collection_4_url",
+      "label": "Link URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "collection_4_image",
+      "label": "Image Override"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collections Grid"
+    }
+  ]
+}
+{% endschema %}

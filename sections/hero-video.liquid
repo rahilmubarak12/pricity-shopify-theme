@@ -1,0 +1,216 @@
+<script src="{{ 'hero-typewriter.js' | asset_url }}" defer="defer"></script>
+
+<div class="relative w-full h-[90vh] min-h-[640px] bg-black overflow-hidden flex items-center justify-center">
+  <!-- Fallback Image -->
+  <picture class="absolute inset-0 w-full h-full z-0">
+    {%- if section.settings.image_mobile != blank -%}
+      <source media="(max-width: 768px)" srcset="{{ section.settings.image_mobile | image_url: width: 1000 }}">
+    {%- else -%}
+      <source media="(max-width: 768px)" srcset="{{ 'hero-photo-mobile.jpg' | asset_url }}">
+    {%- endif -%}
+
+    {%- if section.settings.image_desktop != blank -%}
+      <img src="{{ section.settings.image_desktop | image_url: width: 2000 }}" alt="Hero Background" class="absolute inset-0 w-full h-full object-cover object-center z-0" width="1000" height="1000">
+    {%- else -%}
+      <img src="{{ 'hero-photo.jpg' | asset_url }}" alt="Hero Background" class="absolute inset-0 w-full h-full object-cover object-center z-0" width="1000" height="1000">
+    {%- endif -%}
+  </picture>
+
+  <!-- Video -->
+  <video
+    autoplay
+    loop
+    muted
+    playsinline
+    preload="auto"
+    disableRemotePlayback
+    class="hero-video-element absolute inset-0 w-full h-full object-cover object-center z-10 opacity-0 transition-opacity duration-700 ease-out pointer-events-none"
+    style="-webkit-appearance: none; pointer-events: none;"
+  >
+    {%- if section.settings.video_url != blank -%}
+      <source src="{{ section.settings.video_url }}" type="video/mp4">
+    {%- else -%}
+      <source src="{{ 'hero-video.mp4' | asset_url }}" type="video/mp4">
+    {%- endif -%}
+  </video>
+
+  <!-- Thin bottom gradient overlay -->
+  <div class="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-black/70 to-transparent pointer-events-none z-20"></div>
+
+  <!-- Content -->
+  <div class="relative z-20 max-w-5xl mx-auto px-6 w-full text-center -mt-10">
+    <span class="text-[11px] font-mono-street tracking-[0.3em] uppercase text-white/60 mb-5 block">
+      {{ section.settings.subtitle | default: "Summer Capsule '26" }}
+    </span>
+
+    <h1 class="font-heading font-bold text-4xl sm:text-6xl md:text-7xl text-white uppercase leading-none mb-6 min-h-[1.1em] typewriter-target"
+        data-text="{{ section.settings.title | default: 'APRICITY OFFICIALS' }}"
+        data-speed="75"
+        data-delay="300">
+      <!-- Typed text will be written here by Javascript -->
+    </h1>
+
+    <p class="text-white/70 font-light text-base md:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
+      {{ section.settings.description | default: 'Elevated essentials with a refined modern fit.' }}
+    </p>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto font-mono-street text-xs uppercase tracking-[0.2em]">
+      {%- if section.settings.btn_1_label != blank -%}
+        <a href="{{ section.settings.btn_1_url | default: '#' }}" class="w-full sm:w-auto px-10 py-4 bg-white text-black font-extrabold hover:bg-zinc-100 transition-colors no-underline">
+          {{ section.settings.btn_1_label }}
+        </a>
+      {%- endif -%}
+      {%- if section.settings.btn_2_label != blank -%}
+        <a href="{{ section.settings.btn_2_url | default: '#' }}" class="w-full sm:w-auto px-8 py-4 bg-transparent text-white border border-white/40 hover:border-white hover:bg-white/10 transition-colors no-underline">
+          {{ section.settings.btn_2_label }}
+        </a>
+      {%- endif -%}
+      {%- if section.settings.btn_3_label != blank -%}
+        <a href="{{ section.settings.btn_3_url | default: '#' }}" class="w-full sm:w-auto px-8 py-4 bg-transparent text-white border border-white/40 hover:border-white hover:bg-white/10 transition-colors no-underline">
+          {{ section.settings.btn_3_label }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const video = document.querySelector('.hero-video-element');
+    if (!video) return;
+
+    // Set muted synchronously (essential for Safari/iOS background autoplay)
+    video.muted = true;
+
+    const handlePlaySuccess = () => {
+      video.classList.remove('opacity-0');
+      video.classList.add('opacity-100');
+    };
+
+    if (!video.paused) {
+      handlePlaySuccess();
+    }
+
+    video.addEventListener('playing', handlePlaySuccess);
+    video.addEventListener('play', handlePlaySuccess);
+    
+    // Timeupdate fail-safe
+    const checkTime = () => {
+      if (video.currentTime > 0 && !video.paused) {
+        handlePlaySuccess();
+        video.removeEventListener('timeupdate', checkTime);
+      }
+    };
+    video.addEventListener('timeupdate', checkTime);
+
+    // Explicit call to play() if paused
+    if (video.paused) {
+      video.play()
+        .then(handlePlaySuccess)
+        .catch(() => {
+          // Autoplay blocked by browser rules or low-power state — retry on user interaction
+          const playOnInteraction = () => {
+            video.play().then(() => {
+              handlePlaySuccess();
+              document.removeEventListener('touchstart', playOnInteraction);
+              document.removeEventListener('click', playOnInteraction);
+            }).catch(() => {});
+          };
+          document.addEventListener('touchstart', playOnInteraction, { passive: true });
+          document.addEventListener('click', playOnInteraction, { passive: true });
+        });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Hero Video",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Summer Capsule '26"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading Title",
+      "default": "APRICITY OFFICIALS"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Elevated essentials with a refined modern fit."
+    },
+    {
+      "type": "header",
+      "content": "Video Settings"
+    },
+    {
+      "type": "url",
+      "id": "video_url",
+      "label": "Video MP4 URL",
+      "info": "URL of the mp4 video file. If left blank, it will load the default hero-video.mp4 asset."
+    },
+    {
+      "type": "header",
+      "content": "Fallback Background Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Desktop Background Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile Background Image"
+    },
+    {
+      "type": "header",
+      "content": "CTA Buttons"
+    },
+    {
+      "type": "text",
+      "id": "btn_1_label",
+      "label": "Button 1 Label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "btn_1_url",
+      "label": "Button 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "btn_2_label",
+      "label": "Button 2 Label",
+      "default": "Men"
+    },
+    {
+      "type": "url",
+      "id": "btn_2_url",
+      "label": "Button 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "btn_3_label",
+      "label": "Button 3 Label",
+      "default": "Women"
+    },
+    {
+      "type": "url",
+      "id": "btn_3_url",
+      "label": "Button 3 URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Video"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,153 @@
+{% comment %}
+  Fabric Detail Section
+  Split layout section with editorial video crossfade on hover.
+{% endcomment %}
+
+<section class="py-24 bg-[#f3f2f0] border-y border-zinc-200 fabric-detail-section">
+  <div class="max-w-7xl mx-auto px-6 md:px-16">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+      
+      <!-- Left Column: Content -->
+      <div class="lg:col-span-6 space-y-8">
+        <span class="text-[11px] font-mono-street text-zinc-400 uppercase tracking-[0.25em] block">
+          {{ section.settings.subtitle | default: 'EDITORIAL DROP' }}
+        </span>
+        <h2 class="font-heading font-extrabold text-3xl md:text-5xl uppercase leading-[1.05] text-[#1a1a1a]">
+          {{ section.settings.title | default: 'WHERE COMFORT MEETS QUALITY' }}
+        </h2>
+        <p class="text-zinc-500 font-light text-base md:text-lg leading-relaxed">
+          {{ section.settings.description | default: 'Clean silhouettes crafted for everyday confidence.' }}
+        </p>
+      </div>
+      
+      <!-- Right Column: Interactive Card -->
+      <div class="lg:col-span-6">
+        <div class="fabric-card bg-white p-2 border border-zinc-200 group cursor-pointer">
+          <div class="relative overflow-hidden h-[480px]">
+            
+            <!-- Still Image - Visible by default -->
+            {%- if section.settings.image != blank -%}
+              <img 
+                src="{{ section.settings.image | image_url: width: 1000 }}" 
+                alt="Editorial Cover" 
+                class="fabric-image w-full h-full object-cover object-center transition-opacity duration-500 group-hover:opacity-0" 
+               width="1000" height="1000" />
+            {%- else -%}
+              <img 
+                src="{{ 'editorial-cover.jpg' | asset_url }}" 
+                alt="Editorial Cover" 
+                class="fabric-image w-full h-full object-cover object-center transition-opacity duration-500 group-hover:opacity-0" 
+               width="1000" height="1000" />
+            {%- endif -%}
+            
+            <!-- Video - Hidden until hover -->
+            <video 
+              muted 
+              loop 
+              playsinline 
+              class="fabric-video absolute inset-0 w-full h-full object-cover object-center opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            >
+              {%- if section.settings.video_url != blank -%}
+                <source src="{{ section.settings.video_url }}" type="video/mp4">
+              {%- else -%}
+                <source src="{{ 'editorial.mp4' | asset_url }}" type="video/mp4">
+              {%- endif -%}
+            </video>
+
+          </div>
+          
+          <div class="p-6 flex items-center justify-between text-[11px] font-mono-street border-t border-zinc-200 mt-2 uppercase tracking-widest">
+            <span class="text-zinc-400">
+              {{ section.settings.card_left_text | default: 'Editorial Motion' }}
+            </span>
+            <span class="text-[#1a1a1a] font-bold">
+              {{ section.settings.card_right_text | default: 'Summer Drop 26' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const card = document.querySelector('.fabric-card');
+    if (!card) return;
+
+    const video = card.querySelector('.fabric-video');
+    if (!video) return;
+
+    // Restart and play video on mouse enter
+    card.addEventListener('mouseenter', () => {
+      video.currentTime = 0;
+      video.play().catch(e => {
+        // Handle play exception (e.g. mobile rules)
+      });
+    });
+
+    // Pause video on mouse leave
+    card.addEventListener('mouseleave', () => {
+      video.pause();
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Fabric Detail Editorial",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "EDITORIAL DROP"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading Title",
+      "default": "WHERE COMFORT MEETS QUALITY"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Clean silhouettes crafted for everyday confidence."
+    },
+    {
+      "type": "header",
+      "content": "Interactive Card"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Cover Image"
+    },
+    {
+      "type": "url",
+      "id": "video_url",
+      "label": "Editorial Video URL",
+      "info": "URL of the mp4 video file. If left blank, it will load the default editorial.mp4 asset."
+    },
+    {
+      "type": "text",
+      "id": "card_left_text",
+      "label": "Card Label (Left)",
+      "default": "Editorial Motion"
+    },
+    {
+      "type": "text",
+      "id": "card_right_text",
+      "label": "Card Label (Right)",
+      "default": "Summer Drop 26"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fabric Detail Editorial"
+    }
+  ]
+}
+{% endschema %}

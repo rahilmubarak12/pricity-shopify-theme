@@ -1,0 +1,37 @@
+{% comment %}
+  Main Product Section
+  Dedicated PDP section rendering the shared product-detail snippet.
+{% endcomment %}
+
+<div class="main-product-section-wrapper py-12 md:py-16 bg-[#faf9f7]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    {% render 'product-detail', product: product, is_modal: false %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const pdpContainer = document.querySelector('.main-product-section-wrapper .product-detail-wrapper');
+    if (pdpContainer && typeof initProductDetailEngine === 'function') {
+      initProductDetailEngine(pdpContainer);
+    } else {
+      // Fallback in case defer script executes slightly later or earlier
+      const checkInterval = setInterval(() => {
+        const container = document.querySelector('.main-product-section-wrapper .product-detail-wrapper');
+        if (container && typeof initProductDetailEngine === 'function') {
+          initProductDetailEngine(container);
+          clearInterval(checkInterval);
+        }
+      }, 50);
+      // Timeout after 3 seconds
+      setTimeout(() => clearInterval(checkInterval), 3000);
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product Details",
+  "settings": []
+}
+{% endschema %}

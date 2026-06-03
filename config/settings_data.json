@@ -1,0 +1,20 @@
+{
+  "current": "Default",
+  "presets": {
+    "Default": {
+      "color_primary": "#141414",
+      "color_contrast": "#fafaf9",
+      "color_accent": "#bf4800",
+      "color_background": "#faf9f7",
+      "font_size_scale": 100,
+      "checkout_logo_position": "left",
+      "checkout_logo_size": "medium",
+      "checkout_accent_color": "#141414",
+      "checkout_button_color": "#141414",
+      "checkout_error_color": "#ff5c5c",
+      "social_instagram_link": "",
+      "social_twitter_link": "",
+      "social_facebook_link": ""
+    }
+  }
+}

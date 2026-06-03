@@ -1,0 +1,186 @@
+{% comment %}
+  Cart Drawer Section
+  Sliding cart drawer displaying items, free shipping progress, quantity adjustments, and Tabby installments.
+{% endcomment %}
+
+<div 
+  id="CartDrawerSection" 
+  class="cart-drawer-container fixed inset-0 z-[9999] overflow-hidden bg-black/40 opacity-0 pointer-events-none transition-opacity duration-300 flex justify-end"
+>
+  <div 
+    class="cart-drawer-panel w-full max-w-md bg-white h-full flex flex-col shadow-2xl border-l border-zinc-200 transform translate-x-full transition-transform duration-300"
+  >
+    <!-- Header -->
+    <div class="p-8 border-b border-zinc-200 flex items-center justify-between">
+      <div>
+        <span class="text-[10px] font-mono-street text-zinc-400 uppercase tracking-[0.25em]">Apricity Officials</span>
+        <h2 class="font-heading font-extrabold text-xl text-[#1a1a1a] uppercase mt-0.5">
+          Bag (<span class="cart-total-qty">{{ cart.item_count }}</span>)
+        </h2>
+      </div>
+      <button type="button" class="cart-drawer-close p-2 text-zinc-400 hover:text-[#1a1a1a]" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" x2="6" y1="6" y2="18"></line>
+          <line x1="6" x2="18" y1="6" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Free Shipping Notice -->
+    <div class="bg-[#f3f2f0] border-b border-zinc-200 py-2.5 px-8 flex items-center justify-between text-[11px] font-mono-street text-zinc-500 uppercase tracking-wider">
+      <span>🇸🇦 Free KSA Express Shipping</span>
+      <span>{{ 0 | money_without_trailing_zeros }}</span>
+    </div>
+
+    <!-- Cart Contents -->
+    <div class="cart-drawer-items flex-1 overflow-y-auto p-8 divide-y divide-zinc-100">
+      {%- if cart.item_count == 0 -%}
+        <div class="h-full flex flex-col items-center justify-center text-center text-zinc-400 space-y-4 py-12 font-mono-street">
+          <p class="text-xs uppercase tracking-wider">Your bag is empty.</p>
+          <button type="button" class="cart-drawer-close px-6 py-3 bg-[#1a1a1a] text-white text-[11px] font-bold uppercase tracking-widest hover:bg-zinc-800 transition-colors">
+            Discover Pieces
+          </button>
+        </div>
+      {%- else -%}
+        {%- for item in cart.items -%}
+          {%- liquid
+            assign max_stock = item.variant.inventory_quantity
+            if item.variant.inventory_policy == 'continue' or max_stock == blank
+              assign max_stock = 99
+            endif
+            assign at_max = false
+            if item.quantity >= max_stock
+              assign at_max = true
+            endif
+          -%}
+          <div 
+            class="cart-item py-6 flex gap-4 items-start transition-all duration-300"
+            data-line="{{ forloop.index }}"
+            data-max-stock="{{ max_stock }}"
+          >
+            {%- if item.image != blank -%}
+              <img src="{{ item.image | image_url: width: 240 }}" alt="{{ item.title | escape }}" class="w-20 h-24 object-cover bg-[#f3f2f0] shrink-0"  width="1000" height="1000" />
+            {%- endif -%}
+            
+            <div class="flex-1">
+              <div class="flex items-start justify-between">
+                <div>
+                  <h4 class="font-heading font-bold text-sm text-[#1a1a1a] uppercase">{{ item.product.title }}</h4>
+                  <p class="text-[10px] text-zinc-400 font-mono-street mt-1 uppercase tracking-wider">
+                    {%- for option in item.options_with_values -%}
+                      {{ option.name }}: <strong class="text-[#1a1a1a]">{{ option.value }}</strong>{% unless forloop.last %} · {% endunless %}
+                    {%- endfor -%}
+                  </p>
+                </div>
+                <button type="button" class="cart-item-remove text-zinc-300 hover:text-red-400 p-1" aria-label="Remove item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    <line x1="10" x2="10" y1="11" y2="17"></line>
+                    <line x1="14" x2="14" y1="11" y2="17"></line>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="flex items-end justify-between mt-5">
+                <!-- Quantity Selector -->
+                <div class="flex items-center border border-zinc-200 bg-[#f3f2f0] rounded">
+                  <button 
+                    type="button" 
+                    class="cart-qty-btn cart-qty-minus px-3 py-1 text-zinc-400 hover:text-[#1a1a1a] disabled:opacity-30"
+                    {% if item.quantity <= 1 %}disabled{% endif %}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" x2="19" y1="12" y2="12"></line>
+                    </svg>
+                  </button>
+                  
+                  <span class="cart-qty-display font-mono-street text-xs px-3 text-[#1a1a1a] font-bold">{{ item.quantity }}</span>
+                  
+                  <button 
+                    type="button" 
+                    class="cart-qty-btn cart-qty-plus px-3 py-1 text-zinc-400 hover:text-[#1a1a1a] disabled:opacity-30"
+                    {% if at_max %}disabled{% endif %}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" x2="12" y1="5" y2="19"></line>
+                      <line x1="5" x2="19" y1="12" y2="12"></line>
+                    </svg>
+                  </button>
+                </div>
+                
+                <span class="font-mono-street font-bold text-sm text-[#1a1a1a]">
+                  {{ item.final_line_price | money_without_trailing_zeros }}
+                </span>
+              </div>
+              
+              {%- if at_max -%}
+                <p class="text-[10px] text-amber-500 font-mono-street mt-1.5 uppercase tracking-wider">Max stock reached</p>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    <!-- Footer Summary -->
+    {%- if cart.item_count > 0 -%}
+      <div class="cart-drawer-footer p-8 bg-[#f3f2f0] border-t border-zinc-200 space-y-4">
+        <div class="flex items-center justify-between text-zinc-400 font-mono-street text-[11px] uppercase">
+          <span>Subtotal</span>
+          <span class="cart-subtotal-price text-[#1a1a1a] font-bold text-base">
+            {{ cart.total_price | money_without_trailing_zeros }}
+          </span>
+        </div>
+        
+        <!-- Tabby calculations -->
+        <div class="py-2.5 px-3 bg-white border border-zinc-200 flex items-center justify-between text-[11px] font-mono-street text-zinc-500 uppercase">
+          <span class="text-[#1a1a1a] font-bold">Tabby 4×</span>
+          <span>
+            4 payments of 
+            <span class="tabby-split-price">
+              {{ cart.total_price | divided_by: 4 | money_without_trailing_zeros }}
+            </span>
+          </span>
+        </div>
+
+        <a 
+          href="/checkout" 
+          class="w-full py-4 text-white font-mono-street text-[11px] font-extrabold uppercase tracking-[0.2em] bg-[#0B3D2E] hover:bg-[#07402A] hover:shadow-lg hover:shadow-[#0B3D2E]/30 active:scale-[0.99] transition-all duration-300 ease-in-out flex items-center justify-center gap-2 no-underline"
+        >
+          <span>Guest Checkout</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" x2="19" y1="12" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+
+        <div class="flex items-center justify-center gap-2 text-[10px] text-zinc-400 font-mono-street uppercase tracking-wider pt-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg> 
+          Secure Checkout
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<style>
+  /* Local animations for removal transition */
+  .animate-slide-out {
+    animation: slideOut 0.25s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    overflow: hidden;
+  }
+  @keyframes slideOut {
+    from { opacity: 1; transform: translateX(0); max-height: 200px; }
+    to   { opacity: 0; transform: translateX(30px); max-height: 0; padding-top: 0; padding-bottom: 0; margin: 0; border: none; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Cart Drawer",
+  "settings": []
+}
+{% endschema %}

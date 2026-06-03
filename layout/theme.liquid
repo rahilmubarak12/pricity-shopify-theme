@@ -1,0 +1,89 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.color_background }}">
+    <meta name="msvalidate.01" content="A352E6A0AF9A652267361BBB572B8468">
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <link rel="preconnect" href="https://shop.app" crossorigin>
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags -%} &ndash; tagged "{{ current_tags | join: ', ' }}"{%- endif -%}
+      {%- if current_page != 1 -%} &ndash; Page {{ current_page }}{%- endif -%}
+      {%- unless page_title contains shop.name -%} &ndash; {{ shop.name }}{%- endunless -%}
+    </title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    {% render 'meta-tags' %}
+
+    {%- if template.name == 'collection' -%}
+      <script>
+        window.location.href = "{{ routes.root_url }}?filter={{ collection.handle }}";
+      </script>
+    {%- endif -%}
+
+    {{ content_for_header }}
+
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'product-modal.js' | asset_url }}" defer="defer"></script>
+
+    <style>
+      :root {
+        {%- if settings.color_primary != blank -%}
+          --color-primary: {{ settings.color_primary | color_extract: 'red' }} {{ settings.color_primary | color_extract: 'green' }} {{ settings.color_primary | color_extract: 'blue' }};
+        {%- endif -%}
+        {%- if settings.color_contrast != blank -%}
+          --color-contrast: {{ settings.color_contrast | color_extract: 'red' }} {{ settings.color_contrast | color_extract: 'green' }} {{ settings.color_contrast | color_extract: 'blue' }};
+        {%- endif -%}
+        {%- if settings.color_accent != blank -%}
+          --color-accent: {{ settings.color_accent | color_extract: 'red' }} {{ settings.color_accent | color_extract: 'green' }} {{ settings.color_accent | color_extract: 'blue' }};
+        {%- endif -%}
+        {%- if settings.color_background != blank -%}
+          --color-bg-base: {{ settings.color_background }};
+        {%- endif -%}
+      }
+      
+      body {
+        {%- if settings.color_background != blank -%}
+          background-color: {{ settings.color_background }} !important;
+        {%- endif -%}
+      }
+    </style>
+  </head>
+
+  <body>
+    <a class="skip-to-content-link sr-only" href="#MainContent">
+      Skip to content
+    </a>
+
+    {% comment %} Header section will be built in Phase 2 {% endcomment %}
+    {% section 'header' %}
+
+    <main id="MainContent" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% comment %} Footer section will be built in Phase 2 {% endcomment %}
+    {% section 'footer' %}
+
+    {% comment %} Custom overlays/drawers (Phase 3/4) {% endcomment %}
+    {% section 'cart-drawer' %}
+    {% section 'product-modal' %}
+    {% section 'discount-popup' %}
+
+
+  </body>
+</html>

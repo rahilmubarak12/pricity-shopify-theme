@@ -1,0 +1,327 @@
+{% comment %}
+  Header Section
+  Frosted glass scrolling navbar and mobile navigation drawer.
+{% endcomment %}
+
+<header class="fixed top-0 left-0 right-0 z-40">
+  <!-- Announcement Bar -->
+  {%- if section.settings.show_announcement and section.settings.announcement_text != blank -%}
+    <div class="bg-black/95 backdrop-blur-sm text-white/70 text-[10px] sm:text-[11px] font-mono-street tracking-[0.2em] py-2.5 px-4 text-center uppercase overflow-hidden">
+      <span class="inline-block sm:inline animate-marquee sm:animate-none whitespace-nowrap">
+        {{ section.settings.announcement_text }}
+      </span>
+    </div>
+  {%- endif -%}
+
+  <!-- Main Navbar -->
+  <nav class="main-navbar transition-all duration-300 px-4 sm:px-6 lg:px-16 py-4 lg:py-5 bg-gradient-to-b from-black/50 to-transparent text-white">
+    <div class="grid grid-cols-3 items-center">
+      
+      <!-- LEFT: Hamburger (Mobile) / Links (Desktop) -->
+      <div class="flex items-center justify-start">
+        <button class="mobile-menu-trigger lg:hidden transition-colors p-1 text-current" aria-label="Open Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" x2="20" y1="12" y2="12"></line>
+            <line x1="4" x2="20" y1="6" y2="6"></line>
+            <line x1="4" x2="20" y1="18" y2="18"></line>
+          </svg>
+        </button>
+
+        <div class="hidden lg:flex items-center gap-8 text-[17px] font-mono-street tracking-[0.06em] uppercase font-medium">
+          {%- assign main_menu_links = linklists[section.settings.menu].links -%}
+          {%- if main_menu_links == blank or main_menu_links.size == 0 -%}
+            <a href="/collections/men" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">Men</a>
+            <a href="/collections/women" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">Women</a>
+            <a href="/collections/new-drops" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">New Drops</a>
+            <a href="/collections/sale" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">Sale</a>
+          {%- else -%}
+            {%- for link in main_menu_links -%}
+              <a href="{{ link.url }}" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white {% if link.active %}font-bold border-b border-current text-white{% endif %}">
+                {{ link.title }}
+              </a>
+            {%- endfor -%}
+          {%- endif -%}
+
+          {%- if section.settings.show_the_rule -%}
+            <a href="{{ section.settings.the_rule_link | default: '#' }}" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white no-underline normal-case the-rule-trigger">
+              {{ section.settings.the_rule_text | default: 'The Rule' }}
+            </a>
+          {%- endif -%}
+
+          <!-- Contact Dropdown -->
+          <div class="relative group flex items-center contact-dropdown">
+            <button class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white outline-none cursor-pointer uppercase font-mono-street text-[17px] font-medium tracking-[0.06em]">
+              Contact
+            </button>
+            <div class="absolute left-0 top-full mt-2 w-72 bg-black border border-zinc-800 text-white p-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.8)] z-50 rounded-sm">
+              <div class="flex flex-col space-y-4 text-[10px] tracking-[0.15em] font-mono-street uppercase text-left">
+                <span class="text-zinc-500 border-b border-zinc-800 pb-1.5 block font-bold text-[11px] tracking-widest">Contact Details</span>
+                {%- if section.settings.whatsapp_number != blank -%}
+                  <div class="space-y-1">
+                    <span class="text-zinc-600 block text-[8px] font-bold">WhatsApp Support</span>
+                    <a href="{{ section.settings.whatsapp_url | default: 'https://wa.me/966536470644' }}" target="_blank" rel="noopener noreferrer" class="text-white hover:text-zinc-300 transition-colors block text-[11px] font-semibold">
+                      {{ section.settings.whatsapp_number }}
+                    </a>
+                  </div>
+                {%- endif -%}
+                {%- if section.settings.email_address != blank -%}
+                  <div class="space-y-1">
+                    <span class="text-zinc-600 block text-[8px] font-bold">Email Inquiry</span>
+                    <a href="mailto:{{ section.settings.email_address }}" class="text-white hover:text-zinc-300 transition-colors block text-[10px] lowercase tracking-normal font-semibold break-all">
+                      {{ section.settings.email_address }}
+                    </a>
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CENTER: Logo & Wordmark -->
+      <a href="{{ routes.root_url }}" class="flex flex-row items-center justify-center cursor-pointer select-none gap-3 sm:gap-4 no-underline">
+        {%- if section.settings.logo != blank -%}
+          <img src="{{ section.settings.logo | image_url: width: 150 }}" alt="Logo" class="h-10 w-10 sm:h-14 sm:w-14 lg:h-16 lg:w-16 object-contain transition-all" width="1000" height="1000">
+        {%- else -%}
+          <img src="{{ 'logo.png' | asset_url }}" alt="Logo" class="h-10 w-10 sm:h-14 sm:w-14 lg:h-16 lg:w-16 object-contain transition-all" onerror="this.style.display='none';" width="1000" height="1000">
+        {%- endif -%}
+        <span class="transition-all leading-none text-2xl sm:text-3xl lg:text-4xl apricity-wordmark text-[#3d4a6b]">
+          APRICITY
+        </span>
+      </a>
+
+      <!-- RIGHT: Icons -->
+      <div class="flex items-center gap-3 sm:gap-6 lg:gap-8 justify-end text-sm sm:text-[17px] font-mono-street uppercase tracking-[0.1em] font-medium">
+        <button class="search-drawer-trigger transition-colors flex items-center gap-2 p-1 hover:opacity-80 text-current" aria-label="Search">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sm:w-[24px] sm:h-[24px]">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+          </svg>
+          <span class="hidden md:inline">Search</span>
+        </button>
+
+        <button class="cart-drawer-trigger relative transition-all flex items-center gap-1.5 p-1 hover:opacity-80 text-current" aria-label="Bag">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sm:w-[24px] sm:h-[24px]">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" x2="21" y1="6" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="text-sm sm:text-base">
+            <span class="hidden sm:inline">Cart </span>(<span class="cart-count">{{ cart.item_count }}</span>)
+          </span>
+        </button>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Overlay -->
+  <div id="MobileNavDrawer" class="hidden lg:hidden fixed inset-0 bg-black/95 backdrop-blur-lg border-b border-zinc-800 h-screen w-full transition-all duration-300 flex flex-col z-50">
+    <div class="flex flex-col space-y-6 font-mono-street text-lg tracking-[0.25em] uppercase text-center pt-12 px-6 flex-1">
+      {%- assign main_menu_links = linklists[section.settings.menu].links -%}
+      {%- if main_menu_links == blank or main_menu_links.size == 0 -%}
+        <a href="/collections/men" class="py-2 transition-colors text-zinc-400 hover:text-white">Men</a>
+        <a href="/collections/women" class="py-2 transition-colors text-zinc-400 hover:text-white">Women</a>
+        <a href="/collections/new-drops" class="py-2 transition-colors text-zinc-400 hover:text-white">New Drops</a>
+        <a href="/collections/sale" class="py-2 transition-colors text-zinc-400 hover:text-white">Sale</a>
+      {%- else -%}
+        {%- for link in main_menu_links -%}
+          <a href="{{ link.url }}" class="py-2 transition-colors text-zinc-400 hover:text-white {% if link.active %}text-white font-bold{% endif %}">
+            {{ link.title }}
+          </a>
+        {%- endfor -%}
+      {%- endif -%}
+
+      {%- if section.settings.show_the_rule -%}
+        <a href="{{ section.settings.the_rule_link | default: '#' }}" class="py-2 transition-colors text-zinc-400 hover:text-white no-underline normal-case the-rule-trigger-mobile">
+          {{ section.settings.the_rule_text | default: 'The Rule' }}
+        </a>
+      {%- endif -%}
+
+      <!-- Mobile Contact Info -->
+      <div class="pt-6 border-t border-zinc-800 flex flex-col items-center gap-3">
+        <span class="text-zinc-500 text-[10px] tracking-[0.2em] font-bold">Contact Us</span>
+        <div class="flex flex-col items-center gap-2">
+          {%- if section.settings.whatsapp_number != blank -%}
+            <a href="{{ section.settings.whatsapp_url | default: 'https://wa.me/966536470644' }}" target="_blank" rel="noopener noreferrer" class="text-white hover:text-zinc-300 font-semibold text-xs tracking-wider">
+              WhatsApp: {{ section.settings.whatsapp_number }}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.email_address != blank -%}
+            <a href="mailto:{{ section.settings.email_address }}" class="text-white hover:text-zinc-300 font-semibold text-[11px] lowercase tracking-normal">
+              {{ section.settings.email_address }}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    <!-- Close button anchored at the bottom of the drawer -->
+    <div class="px-6 pb-16 pt-4 flex justify-center">
+      <button class="mobile-menu-close flex items-center gap-2 px-8 py-3 border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-400 font-mono-street text-[11px] uppercase tracking-widest transition-colors" aria-label="Close menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" x2="6" y1="6" y2="18"></line>
+          <line x1="6" x2="18" y1="6" y2="18"></line>
+        </svg> Close
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const navbar = document.querySelector('.main-navbar');
+    const mobileMenuOpenBtn = document.querySelector('.mobile-menu-trigger');
+    const mobileMenuCloseBtn = document.querySelector('.mobile-menu-close');
+    const mobileDrawer = document.getElementById('MobileNavDrawer');
+
+    let mobileMenuOpen = false;
+
+    // Scroll state toggler — only applies when mobile menu is NOT open
+    const handleScroll = () => {
+      if (mobileMenuOpen) return; // Don't override dark drawer state
+
+      const isScrolled = window.scrollY > 50;
+      if (isScrolled) {
+        navbar.classList.remove('bg-gradient-to-b', 'from-black/50', 'to-transparent', 'text-white');
+        navbar.classList.add('bg-[#faf9f7]/85', 'backdrop-blur-md', 'border-b', 'border-zinc-200/40', 'shadow-sm', 'text-[#1a1a1a]');
+
+        // Nav links
+        navbar.querySelectorAll('.nav-link-hover').forEach(el => {
+          el.classList.remove('text-white/70');
+          el.classList.add('text-zinc-500');
+        });
+        // Icon buttons (Search + Cart)
+        navbar.querySelectorAll('.search-drawer-trigger, .cart-drawer-trigger').forEach(el => {
+          el.classList.remove('text-white');
+          el.classList.add('text-[#1a1a1a]');
+        });
+      } else {
+        navbar.classList.add('bg-gradient-to-b', 'from-black/50', 'to-transparent', 'text-white');
+        navbar.classList.remove('bg-[#faf9f7]/85', 'backdrop-blur-md', 'border-b', 'border-zinc-200/40', 'shadow-sm', 'text-[#1a1a1a]');
+
+        // Nav links
+        navbar.querySelectorAll('.nav-link-hover').forEach(el => {
+          el.classList.remove('text-zinc-500');
+          el.classList.add('text-white/70');
+        });
+        // Icon buttons (Search + Cart)
+        navbar.querySelectorAll('.search-drawer-trigger, .cart-drawer-trigger').forEach(el => {
+          el.classList.remove('text-[#1a1a1a]');
+          el.classList.add('text-white');
+        });
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial trigger
+
+    // Toggle Drawer Open
+    if (mobileMenuOpenBtn) {
+      mobileMenuOpenBtn.addEventListener('click', () => {
+        mobileMenuOpen = true;
+        mobileDrawer.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+        // Lock navbar to dark state while drawer is open
+        navbar.classList.remove('bg-gradient-to-b', 'from-black/50', 'to-transparent', 'bg-[#faf9f7]/85', 'backdrop-blur-md', 'border-zinc-200/40', 'shadow-sm', 'text-[#1a1a1a]');
+        navbar.classList.add('bg-black/95', 'backdrop-blur-md', 'border-b', 'border-zinc-800', 'text-white');
+      });
+    }
+
+    // Toggle Drawer Close
+    if (mobileMenuCloseBtn) {
+      mobileMenuCloseBtn.addEventListener('click', () => {
+        mobileMenuOpen = false;
+        mobileDrawer.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+        // Re-apply correct scroll state
+        navbar.classList.remove('bg-black/95', 'border-zinc-800');
+        handleScroll();
+      });
+    }
+
+    // Also close drawer if we click a link inside it
+    mobileDrawer.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenuOpen = false;
+        mobileDrawer.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+        navbar.classList.remove('bg-black/95', 'border-zinc-800');
+        handleScroll();
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show Announcement Bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement Text",
+      "default": "Complimentary Shipping Across Saudi Arabia"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo Image"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "The Rule Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_the_rule",
+      "label": "Show The Rule link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "the_rule_text",
+      "label": "The Rule Link Text",
+      "default": "The Rule"
+    },
+    {
+      "type": "url",
+      "id": "the_rule_link",
+      "label": "The Rule Page"
+    },
+    {
+      "type": "header",
+      "content": "Contact Info Settings"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp Support Display",
+      "default": "+966 53 647 0644"
+    },
+    {
+      "type": "url",
+      "id": "whatsapp_url",
+      "label": "WhatsApp Link URL"
+    },
+    {
+      "type": "text",
+      "id": "email_address",
+      "label": "Contact Email",
+      "default": "theapricity.officials@gmail.com"
+    }
+  ]
+}
+{% endschema %}

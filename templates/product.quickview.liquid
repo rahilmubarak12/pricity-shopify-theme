@@ -1,0 +1,7 @@
+{% comment %}
+  Product Quickview AJAX Template
+  Renders the shared product-detail snippet with layout none so it can be fetched via AJAX.
+{% endcomment %}
+
+{% layout none %}
+{% render 'product-detail', product: product, is_modal: true %}

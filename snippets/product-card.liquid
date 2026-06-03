@@ -1,0 +1,388 @@
+{% comment %}
+  Product Card Snippet
+  Displays a single product card with hover image swap, desktop quick-add tray, mobile size picker, and custom color swatches.
+  Accepts:
+  - product: {Product} The Shopify product object
+  - selected_collection: {String} (Optional) Active collection context
+{% endcomment %}
+
+{%- liquid
+  assign stable_id = product.id
+  assign first_variant = product.selected_or_first_available_variant
+  assign is_out_of_stock = true
+  if product.available
+    assign is_out_of_stock = false
+  endif
+
+  # Calculate discounts
+  assign is_on_sale = false
+  assign money_off = 0
+  if first_variant.compare_at_price > first_variant.price
+    assign is_on_sale = true
+    assign money_off = first_variant.compare_at_price | minus: first_variant.price
+  endif
+
+  # Determine category & subcategory tags for client filtering
+  assign category = 'unisex'
+  assign subcategory = 'all'
+  
+  # Check product title first for subcategory
+  assign title_lower = product.title | downcase
+  if title_lower contains 'hoodie'
+    assign subcategory = 'hoodie'
+  elsif title_lower contains 'set' or title_lower contains 'suit' or title_lower contains 'shirt'
+    assign subcategory = 'shirt'
+  elsif title_lower contains 'sweatshirt'
+    assign subcategory = 'sweatshirt'
+  elsif title_lower contains 't-shirt' or title_lower contains 'tee' or title_lower contains 'top'
+    assign subcategory = 't-shirt'
+  endif
+
+  # Check tags (overrides/complements title)
+  for tag in product.tags
+    assign tag_lower = tag | downcase
+    if tag_lower == 'men' or tag_lower == 'women'
+      assign category = tag_lower
+    elsif tag_lower contains 'hoodie'
+      assign subcategory = 'hoodie'
+    elsif tag_lower contains 'set' or tag_lower == 'shirt' or tag_lower == 'shirts'
+      assign subcategory = 'shirt'
+    elsif tag_lower contains 'sweatshirt'
+      assign subcategory = 'sweatshirt'
+    elsif tag_lower contains 't-shirt' or tag_lower contains 'tee' or tag_lower contains 'top'
+      assign subcategory = 't-shirt'
+    endif
+  endfor
+
+  # Gather collections handles
+  capture product_collections
+    for c in product.collections
+      echo c.handle
+      unless forloop.last
+        echo ','
+      endunless
+    endfor
+  endcapture
+-%}
+
+<div 
+  class="product-card group flex flex-col cursor-pointer relative" 
+  data-category="{{ category }}" 
+  data-subcategory="{{ subcategory }}" 
+  data-collections="{{ product_collections }}" 
+  data-on-sale="{{ is_on_sale }}"
+  data-oos="{% if is_out_of_stock %}true{% else %}false{% endif %}"
+  data-id="{{ stable_id }}"
+  data-url="{{ product.url }}"
+>
+  
+  <!-- Image Container -->
+  <div class="relative h-[220px] sm:h-[380px] w-full bg-[#f3f2f0] overflow-hidden mb-3 sm:mb-4">
+    {%- if is_out_of_stock -%}
+      <span class="absolute top-3 right-3 bg-red-600 text-white text-[9px] sm:text-[10px] font-mono-street font-extrabold uppercase tracking-widest px-2.5 py-1 z-20 rounded-sm">
+        Out of Stock
+      </span>
+    {%- endif -%}
+
+    {%- if is_on_sale and money_off > 0 -%}
+      <span class="absolute top-3 left-3 bg-[#1a1a1a] text-white text-[9px] sm:text-[10px] font-mono-street font-extrabold uppercase tracking-widest px-2.5 py-1 z-20 rounded-sm shadow-md">
+        {{ money_off | money_without_trailing_zeros }} OFF
+      </span>
+    {%- endif -%}
+
+    <!-- Main Product Image -->
+    {%- if product.featured_image != blank -%}
+      <img
+        src="{{ product.featured_image | image_url: width: 600 }}"
+        alt="{{ product.title | escape }}"
+        width="600"
+        height="800"
+        loading="lazy"
+        decoding="async"
+        class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0 will-change-opacity"
+      >
+    {%- endif -%}
+
+    <!-- Secondary Hover Image -->
+    {%- if product.images[1] != blank -%}
+      <img
+        src="{{ product.images[1] | image_url: width: 600 }}"
+        alt="{{ product.title | escape }} alternate view"
+        width="600"
+        height="800"
+        loading="lazy"
+        decoding="async"
+        class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-all duration-500 will-change-opacity"
+      >
+    {%- endif -%}
+
+    <!-- Quick Add Size Tray (Desktop only - slides up) -->
+    {%- unless is_out_of_stock -%}
+      <div 
+        class="absolute left-0 right-0 bottom-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 transform-gpu will-change-transform hidden lg:flex flex-col gap-1.5 z-10" 
+        onclick="event.stopPropagation();"
+      >
+        <p class="text-[9px] font-mono-street text-white/90 uppercase tracking-widest text-center mb-0.5">Quick Add Size</p>
+        <div class="flex gap-1.5 justify-center flex-wrap">
+          {%- for variant in product.variants -%}
+            {%- assign option_size = variant.title -%}
+            {%- for option in product.options_with_values -%}
+              {%- assign opt_name = option.name | downcase -%}
+              {%- if opt_name == 'size' or opt_name == 'sizes' -%}
+                {%- comment -%} Capture size title from option selection if multiple option values {%- endcomment -%}
+              {%- endif -%}
+            {%- endfor -%}
+            
+            <button
+              type="button"
+              {% unless variant.available %}disabled{% endunless %}
+              class="quick-add-size-btn px-3 py-1.5 text-[10px] font-bold rounded uppercase tracking-wider transition {% if variant.available %}bg-white text-zinc-950 hover:bg-zinc-950 hover:text-white shadow hover:scale-105 active:scale-95{% else %}bg-white/20 text-white/40 cursor-not-allowed line-through{% endif %}"
+              data-variant-id="{{ variant.id }}"
+            >
+              {{ variant.options[0] | default: variant.title }}
+            </button>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endunless -%}
+  </div>
+
+  <!-- Product Details -->
+  <div class="flex flex-col gap-1">
+    <span class="text-[9px] sm:text-[10px] font-mono-street text-zinc-400 uppercase tracking-[0.2em]">
+      {{ product.type | default: 'Collection' }}
+    </span>
+
+    <div class="flex items-center justify-between gap-2">
+      <h3 class="font-heading font-semibold text-[14px] sm:text-[15px] text-[#1a1a1a] group-hover:text-zinc-500 transition-colors leading-snug flex-1 min-w-0 truncate">
+        {{ product.title }}
+      </h3>
+      {%- unless is_out_of_stock -%}
+        <button
+          type="button"
+          class="mobile-quick-add-trigger flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full border border-zinc-200 bg-white hover:bg-zinc-950 hover:border-zinc-950 hover:text-white text-zinc-600 transition-all duration-200 shadow-sm"
+          title="Quick add to cart"
+          onclick="event.stopPropagation();"
+          data-id="{{ stable_id }}"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+        </button>
+      {%- endunless -%}
+    </div>
+
+    <!-- Mobile Size Picker Popup -->
+    <div
+      class="mobile-size-popup hidden absolute z-30 bg-white border border-zinc-200 rounded-xl shadow-xl p-3 left-0 right-0 mx-2"
+      style="bottom: calc(100% - 150px);"
+      onclick="event.stopPropagation();"
+      data-id="{{ stable_id }}"
+    >
+      <p class="text-[9px] font-mono-street uppercase tracking-widest text-zinc-400 text-center mb-2">Select Size</p>
+      <div class="flex flex-wrap gap-1.5 justify-center">
+        {%- for variant in product.variants -%}
+          <button
+            type="button"
+            {% unless variant.available %}disabled{% endunless %}
+            class="quick-add-size-btn px-3 py-1.5 text-[10px] font-bold rounded uppercase tracking-wider transition {% if variant.available %}bg-zinc-950 text-white hover:bg-zinc-700 shadow active:scale-95{% else %}bg-zinc-100 text-zinc-300 cursor-not-allowed line-through{% endif %}"
+            data-variant-id="{{ variant.id }}"
+          >
+            {{ variant.options[0] | default: variant.title }}
+          </button>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <!-- Price and Color Swatches -->
+    <div class="flex items-center justify-between mt-1 pt-2 border-t border-zinc-100">
+      <div class="flex items-center gap-2">
+        <span class="font-mono-street font-semibold text-[12px] tracking-wide text-zinc-900">
+          {{ product.price | money_without_trailing_zeros }}
+        </span>
+        {%- if is_on_sale -%}
+          <span class="font-mono-street text-[11px] tracking-wide text-zinc-400 line-through">
+            {{ first_variant.compare_at_price | money_without_trailing_zeros }}
+          </span>
+        {%- endif -%}
+      </div>
+
+      <!-- Color Swatches Mapping -->
+      <div class="flex items-center gap-1.5">
+        {%- liquid
+          assign color_values = ''
+          for option in product.options_with_values
+            assign option_name = option.name | downcase
+            if option_name == 'color' or option_name == 'colour'
+              assign color_values = option.values
+            endif
+          endfor
+        -%}
+        {%- if color_values != blank -%}
+          {%- for color in color_values limit: 4 -%}
+            {%- liquid
+              assign color_key = color | downcase | replace: ' ', ''
+              assign color_hex = '#9ca3af'
+              case color_key
+                when 'black' or 'onyx'
+                  assign color_hex = '#1a1a1a'
+                when 'white'
+                  assign color_hex = '#f5f5f5'
+                when 'offwhite'
+                  assign color_hex = '#f8f4ee'
+                when 'cream'
+                  assign color_hex = '#f5f0e8'
+                when 'ivory'
+                  assign color_hex = '#f8f4e8'
+                when 'ecru'
+                  assign color_hex = '#f0e6d3'
+                when 'beige'
+                  assign color_hex = '#d4b896'
+                when 'linen'
+                  assign color_hex = '#e8dcc8'
+                when 'sand'
+                  assign color_hex = '#c2a882'
+                when 'stone'
+                  assign color_hex = '#a8a29e'
+                when 'taupe'
+                  assign color_hex = '#b5a99a'
+                when 'nude'
+                  assign color_hex = '#e8c9a0'
+                when 'grey' or 'gray'
+                  assign color_hex = '#9ca3af'
+                when 'charcoal'
+                  assign color_hex = '#374151'
+                when 'slate'
+                  assign color_hex = '#64748b'
+                when 'brown'
+                  assign color_hex = '#6b4226'
+                when 'camel'
+                  assign color_hex = '#c19a6b'
+                when 'caramel'
+                  assign color_hex = '#c68642'
+                when 'khaki'
+                  assign color_hex = '#b8a87a'
+                when 'tan'
+                  assign color_hex = '#c4a882'
+                when 'chocolate'
+                  assign color_hex = '#3d1c02'
+                when 'mocha'
+                  assign color_hex = '#6b3a2a'
+                when 'walnut'
+                  assign color_hex = '#5c3317'
+                when 'yellow'
+                  assign color_hex = '#facc15'
+                when 'mustard'
+                  assign color_hex = '#d97706'
+                when 'gold'
+                  assign color_hex = '#d4af37'
+                when 'buttercream'
+                  assign color_hex = '#f5e6c8'
+                when 'butter'
+                  assign color_hex = '#f5e6a3'
+                when 'lemon'
+                  assign color_hex = '#fef08a'
+                when 'orange'
+                  assign color_hex = '#f97316'
+                when 'rust'
+                  assign color_hex = '#c2410c'
+                when 'coral'
+                  assign color_hex = '#fb7185'
+                when 'red'
+                  assign color_hex = '#dc2626'
+                when 'burgundy'
+                  assign color_hex = '#7f1d1d'
+                when 'wine'
+                  assign color_hex = '#6b1d2e'
+                when 'cherry'
+                  assign color_hex = '#990000'
+                when 'scarlet'
+                  assign color_hex = '#ff2400'
+                when 'tomato'
+                  assign color_hex = '#ff6347'
+                when 'pink'
+                  assign color_hex = '#f9a8d4'
+                when 'blush'
+                  assign color_hex = '#fbc8c8'
+                when 'blushpink'
+                  assign color_hex = '#f4b8c1'
+                when 'softpink'
+                  assign color_hex = '#f9c5ce'
+                when 'babypink'
+                  assign color_hex = '#f9c5d0'
+                when 'dustypink'
+                  assign color_hex = '#d4a0a0'
+                when 'rosepink'
+                  assign color_hex = '#f48fb1'
+                when 'hotpink'
+                  assign color_hex = '#ff69b4'
+                when 'mauve'
+                  assign color_hex = '#d4a5a5'
+                when 'rose'
+                  assign color_hex = '#f43f5e'
+                when 'fuchsia'
+                  assign color_hex = '#d946ef'
+                when 'magenta'
+                  assign color_hex = '#c026d3'
+                when 'purple'
+                  assign color_hex = '#7c3aed'
+                when 'lavender'
+                  assign color_hex = '#c4b5fd'
+                when 'violet'
+                  assign color_hex = '#7c3aed'
+                when 'lilac'
+                  assign color_hex = '#c8a2c8'
+                when 'plum'
+                  assign color_hex = '#673147'
+                when 'indigo'
+                  assign color_hex = '#4338ca'
+                when 'blue'
+                  assign color_hex = '#2563eb'
+                when 'navy'
+                  assign color_hex = '#1a2744'
+                when 'royal'
+                  assign color_hex = '#4169e1'
+                when 'cobalt'
+                  assign color_hex = '#0047ab'
+                when 'sky'
+                  assign color_hex = '#7dd3fc'
+                when 'lightblue'
+                  assign color_hex = '#93c5fd'
+                when 'babyblue'
+                  assign color_hex = '#89cff0'
+                when 'powder'
+                  assign color_hex = '#b0d4e8'
+                when 'denim'
+                  assign color_hex = '#1560bd'
+                when 'green'
+                  assign color_hex = '#16a34a'
+                when 'olive'
+                  assign color_hex = '#6b7c41'
+                when 'sage'
+                  assign color_hex = '#7c9e6e'
+                when 'mint'
+                  assign color_hex = '#a7f3d0'
+                when 'teal'
+                  assign color_hex = '#0d9488'
+                when 'forest'
+                  assign color_hex = '#228b22'
+                when 'emerald'
+                  assign color_hex = '#059669'
+                when 'hunter'
+                  assign color_hex = '#355e3b'
+                when 'army'
+                  assign color_hex = '#4b5320'
+              endcase
+            -%}
+            <span
+              class="w-4 h-4 rounded-full shadow-sm flex-shrink-0"
+              style="background-color: {{ color_hex }}; border: 1.5px solid #e4e4e7; outline: 1px solid rgba(0,0,0,0.06);"
+              title="{{ color }}"
+            ></span>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+</div>

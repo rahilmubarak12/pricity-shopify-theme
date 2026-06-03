@@ -1,0 +1,26 @@
+{
+  "sections": {
+    "hero_video": {
+      "type": "hero-video",
+      "settings": {}
+    },
+    "collections_grid": {
+      "type": "collections-grid",
+      "settings": {}
+    },
+    "fabric_detail": {
+      "type": "fabric-detail",
+      "settings": {}
+    },
+    "product_catalog": {
+      "type": "product-catalog",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero_video",
+    "collections_grid",
+    "fabric_detail",
+    "product_catalog"
+  ]
+}
