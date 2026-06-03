@@ -2989,3 +2989,96 @@ h1, h2, h3, h4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
+
+/* Policy & Generic Page Styling (Fixing Fixed Header overlap) */
+.shopify-policy__container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 120px 24px 80px 24px;
+}
+
+@media (min-width: 768px) {
+  .shopify-policy__container {
+    padding-top: 160px;
+    padding-bottom: 120px;
+  }
+}
+
+.shopify-policy__title {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.shopify-policy__title h1 {
+  font-family: 'Dream Avenue', 'Cormorant Garamond', 'Bodoni Moda', serif;
+  font-size: 2.25rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: #1a1a1a;
+  text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+  .shopify-policy__title h1 {
+    font-size: 3rem;
+  }
+}
+
+.shopify-policy__body {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #333333;
+  font-weight: 300;
+}
+
+.shopify-policy__body p, 
+.shopify-policy__body ul, 
+.shopify-policy__body ol {
+  margin-bottom: 1.5rem;
+}
+
+.shopify-policy__body h1, 
+.shopify-policy__body h2, 
+.shopify-policy__body h3, 
+.shopify-policy__body h4, 
+.shopify-policy__body h5, 
+.shopify-policy__body h6 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.shopify-policy__body h2 {
+  font-size: 1.25rem;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 0.5rem;
+}
+
+.shopify-policy__body h3 {
+  font-size: 1.1rem;
+}
+
+.shopify-policy__body ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.shopify-policy__body ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+}
+
+.shopify-policy__body li {
+  margin-bottom: 0.5rem;
+}
+
+.shopify-policy__body strong, 
+.shopify-policy__body b {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
