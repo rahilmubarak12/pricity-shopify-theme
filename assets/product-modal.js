@@ -392,14 +392,8 @@ function initProductDetailEngine(container) {
           svg.innerHTML = '<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>';
         }
 
-        // Dispatch update cart
+        // Dispatch update cart count
         document.dispatchEvent(new CustomEvent('cart:updated', { detail: { item: item } }));
-        
-        // Open the Cart Drawer
-        const cartDrawer = document.getElementById('CartDrawerSection');
-        if (cartDrawer) {
-          cartDrawer.dispatchEvent(new CustomEvent('cart:open'));
-        }
       })
       .catch(err => {
         console.error('Failed to add to cart:', err);
