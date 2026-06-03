@@ -465,6 +465,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  function openCartDrawerTriggerClose() {
+    const cart = document.getElementById('CartDrawerSection');
+    if (cart && cart.classList.contains('opacity-100')) {
+      const close = cart.querySelector('.cart-drawer-close');
+      if (close) close.click();
+    }
+  }
+
   // Intercept grid card click to open quickview instead of PDP
   document.addEventListener('click', (e) => {
     const card = e.target.closest('.product-card');
@@ -494,12 +502,4 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
-
-  const openCartDrawerTriggerClose = () => {
-    const cart = document.getElementById('CartDrawerSection');
-    if (cart && cart.classList.contains('opacity-100')) {
-      const close = cart.querySelector('.cart-drawer-close');
-      if (close) close.click();
-    }
-  };
 });
