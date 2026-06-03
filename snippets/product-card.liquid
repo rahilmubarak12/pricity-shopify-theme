@@ -60,10 +60,14 @@
     assign col_handle = c.handle | downcase
     if col_lower contains 't-shirt' or col_lower contains 'tee' or col_lower contains 'top' or col_handle contains 't-shirt' or col_handle contains 'tshirt' or col_handle contains 'tee'
       assign subcategory = 't-shirt'
-    elsif subcategory == 'all' and (col_lower contains 'sweatshirt' or col_handle contains 'sweatshirt')
-      assign subcategory = 'sweatshirt'
-    elsif subcategory == 'all' and (col_lower contains 'hoodie' or col_handle contains 'hoodie')
-      assign subcategory = 'hoodie'
+    elsif col_lower contains 'sweatshirt' or col_handle contains 'sweatshirt'
+      if subcategory == 'all'
+        assign subcategory = 'sweatshirt'
+      endif
+    elsif col_lower contains 'hoodie' or col_handle contains 'hoodie'
+      if subcategory == 'all'
+        assign subcategory = 'hoodie'
+      endif
     endif
   endfor
 
