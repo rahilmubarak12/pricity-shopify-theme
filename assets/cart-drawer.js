@@ -160,15 +160,12 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('cart:open', openCart);
   cartContainer.addEventListener('cart:open', openCart);
 
-  // Listen for cart:updated — refresh content AND open the drawer
-  // so that Quick Add always shows the updated cart
+  // Listen for cart:updated — refresh content only (don't auto-open)
   document.addEventListener('cart:updated', () => {
     refreshCart();
-    openCart();
   });
   cartContainer.addEventListener('cart:updated', () => {
     refreshCart();
-    openCart();
   });
 
   // Initial event binding
