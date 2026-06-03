@@ -290,6 +290,8 @@
       if (!isHomepage) return;
 
       let category = null;
+      const text = link.textContent.toLowerCase();
+      
       if (href.includes('/collections/men') || href.includes('filter=men') || href === '#men') {
         category = 'men';
       } else if (href.includes('/collections/women') || href.includes('filter=women') || href === '#women') {
@@ -298,9 +300,8 @@
         category = 'sale';
       } else if (href.includes('/collections/all') || href.includes('filter=all') || href === '#all') {
         category = 'all';
-      } else if (href.includes('#shop-catalog')) {
-        // Fallback: check link text if configured directly to #shop-catalog
-        const text = link.textContent.toLowerCase();
+      } else if (href.includes('#shop-catalog') || href === '#') {
+        // Fallback: check link text if configured directly to #shop-catalog or left as '#'
         if (text.includes('women')) {
           category = 'women';
         } else if (text.includes('men')) {
