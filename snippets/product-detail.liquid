@@ -98,8 +98,9 @@
             {%- assign option_name_lower = option.name | downcase -%}
             
             {%- if option_name_lower == 'color' or option_name_lower == 'colour' -%}
+              {%- assign color_option_index = forloop.index0 -%}
               <!-- Color Selector -->
-              <div class="option-color-container" data-option-index="{{ forloop.index0 }}">
+              <div class="option-color-container" data-option-index="{{ color_option_index }}">
                 <p class="text-[10px] uppercase tracking-[0.2em] text-zinc-400 mb-3 font-medium">
                   Colour — <span class="active-color-label text-zinc-600 normal-case tracking-normal">{{ option.selected_value }}</span>
                 </p>
@@ -109,7 +110,7 @@
                       # Simple color verification to see if at least one variant of this color is in stock
                       assign color_in_stock = false
                       for variant in product.variants
-                        if variant.options[forloop.parentloop.index0] == value and variant.available
+                        if variant.options[color_option_index] == value and variant.available
                           assign color_in_stock = true
                         endif
                       endfor
@@ -126,8 +127,9 @@
               </div>
 
             {%- elsif option_name_lower == 'size' or option_name_lower == 'sizes' -%}
+              {%- assign size_option_index = forloop.index0 -%}
               <!-- Size Selector -->
-              <div class="option-size-container rounded-2xl border border-zinc-100 bg-zinc-50/80 p-5" data-option-index="{{ forloop.index0 }}">
+              <div class="option-size-container rounded-2xl border border-zinc-100 bg-zinc-50/80 p-5" data-option-index="{{ size_option_index }}">
                 <div class="flex items-center justify-between mb-4">
                   <span class="text-[10px] uppercase tracking-[0.2em] text-zinc-400 font-medium">
                     Select Size
@@ -146,7 +148,7 @@
                       # Check if this size is available
                       assign size_variant = nil
                       for variant in product.variants
-                        if variant.options[forloop.parentloop.index0] == value
+                        if variant.options[size_option_index] == value
                           assign size_variant = variant
                         endif
                       endfor
