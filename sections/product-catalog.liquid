@@ -296,6 +296,8 @@
         category = 'women';
       } else if (href.includes('/collections/sale') || href.includes('filter=sale') || href === '#sale') {
         category = 'sale';
+      } else if (href.includes('/collections/all') || href.includes('filter=all') || href === '#all') {
+        category = 'all';
       } else if (href.includes('#shop-catalog')) {
         // Fallback: check link text if configured directly to #shop-catalog
         const text = link.textContent.toLowerCase();
@@ -305,6 +307,8 @@
           category = 'men';
         } else if (text.includes('sale')) {
           category = 'sale';
+        } else if (text.includes('shop now') || text.includes('all') || text.includes('shop')) {
+          category = 'all';
         }
       }
 
@@ -323,7 +327,14 @@
 
           btn.click();
           catalog.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          history.pushState(null, '', `?filter=${category}`);
+          
+          if (category === 'all') {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('filter');
+            history.pushState(null, '', url.pathname + url.search);
+          } else {
+            history.pushState(null, '', `?filter=${category}`);
+          }
         }
       }
     };
