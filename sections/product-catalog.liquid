@@ -62,19 +62,22 @@
 
   <!-- SUBCATEGORY PILLS -->
   <div class="subcategory-filters flex items-center gap-3 overflow-x-auto pb-6 scrollbar-none mb-12 select-none">
-    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] uppercase whitespace-nowrap border transition bg-[#1a1a1a] text-white" data-subcategory="all">
+    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-[#1a1a1a] text-white" data-subcategory="all">
       All
     </button>
-    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] uppercase whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="hoodie">
+    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="summer">
+      Summer Collection
+    </button>
+    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="hoodie">
       Hoodies
     </button>
-    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] uppercase whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="shirt">
+    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="shirt">
       Sets
     </button>
-    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] uppercase whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="sweatshirt">
+    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="sweatshirt">
       Sweatshirts
     </button>
-    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] uppercase whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="t-shirt">
+    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="t-shirt">
       T-Shirts & Tops
     </button>
   </div>
@@ -203,6 +206,9 @@
         let matchesSubcategory = false;
         if (activeSubcategory === 'all') {
           matchesSubcategory = true;
+        } else if (activeSubcategory === 'summer') {
+          // Summer = anything that's not a hoodie or sweatshirt
+          matchesSubcategory = (sub !== 'hoodie' && sub !== 'sweatshirt');
         } else {
           matchesSubcategory = (sub === activeSubcategory);
         }
