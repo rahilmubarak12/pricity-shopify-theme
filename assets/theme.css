@@ -3082,3 +3082,46 @@ h1, h2, h3, h4 {
   color: #1a1a1a;
 }
 
+/* Quickview Modal Layout Fixes */
+@media (min-width: 1024px) {
+  /* Ensure the modal content wrapper has a fixed height on desktop */
+  .modal-content-wrapper {
+    height: 85vh !important;
+    overflow: hidden !important;
+  }
+
+  /* Ensure the product detail wrapper occupies 100% height of the modal */
+  .product-detail-wrapper {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+  }
+
+  /* Left column (Image gallery) scrolls independently */
+  .product-detail-gallery {
+    height: 100% !important;
+    overflow-y: auto !important;
+  }
+
+  /* Right column (Product info) has fixed height to contain the scrollable details and sticky footer */
+  .product-detail-info {
+    height: 100% !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Scrollable details panel in the right column */
+  .product-detail-scrollable {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    min-height: 0 !important; /* Crucial for nested flexbox scrolling */
+  }
+
+  /* Sticky footer containing Add to Cart & Buy Now buttons */
+  .product-detail-cta-footer {
+    flex-shrink: 0 !important;
+  }
+}
+
+
