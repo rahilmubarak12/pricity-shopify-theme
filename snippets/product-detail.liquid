@@ -24,26 +24,106 @@
     assign is_on_sale = true
   endif
 
-  # Select size chart fallback based on product type
+  # Select size chart based on product title + type keywords
+  assign product_title_lower = product.title | downcase
   assign product_type_lower = product.type | downcase
-  assign size_chart_title = 'Unisex Size Chart'
-  assign size_chart_html = ''
+  assign combined_text = product_title_lower | append: ' ' | append: product_type_lower
+  assign size_chart_title = 'Size Chart'
+  assign size_chart_key = 'default'
 
-  if product_type_lower contains 'hoodie'
+  if combined_text contains 'a new era' and combined_text contains 'crop'
+    assign size_chart_key = 'a-new-era-cropped'
+    assign size_chart_title = 'A New Era Cropped Sweatshirt Size Chart'
+  elsif combined_text contains 'turtleneck'
+    assign size_chart_key = 'turtleneck'
+    assign size_chart_title = 'Oversized Sweatshirt Turtleneck Size Chart'
+  elsif combined_text contains 'double collar' and combined_text contains 'crop'
+    assign size_chart_key = 'women-cropped'
+    assign size_chart_title = 'Double Collar Cropped Sweatshirt Size Chart'
+  elsif combined_text contains 'hoodie'
+    assign size_chart_key = 'hoodie'
     assign size_chart_title = 'Unisex Hoodies Size Chart'
-    assign size_chart_html = '<table width="100%"><tbody><tr><td></td><td style="text-align: center;">Length</td><td style="text-align: center;">Sleeve</td><td style="text-align: center;">1/2 Chest</td><td style="text-align: center;">Shoulder</td></tr><tr style="text-align: center;"><td>S/M</td><td>69</td><td>54-56</td><td>62-63</td><td>65-67</td></tr><tr style="text-align: center;"><td>M/L</td><td>71</td><td>57-58</td><td>64-66</td><td>68-69</td></tr><tr style="text-align: center;"><td>L/XL</td><td>73</td><td>59</td><td>67-69</td><td>70-74</td></tr></tbody></table>'
-  elsif product_type_lower contains 't-shirt' or product_type_lower contains 'top' or product_type_lower contains 'tee'
+  elsif combined_text contains 't-shirt' or combined_text contains 'tshirt' or combined_text contains 't shirt' or combined_text contains 'tee' or combined_text contains 'top'
+    assign size_chart_key = 'tshirt'
     assign size_chart_title = 'Unisex T-Shirt Size Chart'
-    assign size_chart_html = '<table width="100%"><tbody><tr><td></td><td style="text-align: center;">Length</td><td style="text-align: center;">Sleeve</td><td style="text-align: center;">Chest</td><td style="text-align: center;">Shoulder</td></tr><tr style="text-align: center;"><td>S/M</td><td>70</td><td>23</td><td>55</td><td>48</td></tr><tr style="text-align: center;"><td>M/L</td><td>75</td><td>25.5</td><td>60</td><td>50</td></tr><tr style="text-align: center;"><td>L/XL</td><td>78</td><td>26.5</td><td>62</td><td>53</td></tr></tbody></table>'
-  elsif product_type_lower contains 'set' or product_type_lower contains 'linen'
+  elsif combined_text contains 'linen' or combined_text contains 'set'
+    assign size_chart_key = 'linen'
     assign size_chart_title = 'Linen Shirt & Shorts Size Chart'
-    assign size_chart_html = '<table width="100%"><tbody><tr><td></td><td style="text-align: center;">Waist (elastic)</td><td style="text-align: center;">Shorts Length</td><td style="text-align: center;">Shirt Length</td><td style="text-align: center;">Chest</td><td style="text-align: center;">Shoulder</td></tr><tr style="text-align: center;"><td>S/M</td><td>33</td><td>43</td><td>64</td><td>51</td><td>46</td></tr><tr style="text-align: center;"><td>M/L</td><td>37</td><td>48</td><td>67</td><td>54</td><td>48</td></tr><tr style="text-align: center;"><td>L/XL</td><td>43</td><td>50</td><td>70</td><td>57</td><td>50</td></tr></tbody></table>'
-  else
-    # Default to sweatshirt size chart
+  elsif combined_text contains 'staple' or combined_text contains 'sand'
+    assign size_chart_key = 'staple'
+    assign size_chart_title = 'Staple Sand Unisex Size Chart'
+  elsif combined_text contains 'crop'
+    assign size_chart_key = 'women-cropped'
+    assign size_chart_title = 'Double Collar Cropped Sweatshirt Size Chart'
+  elsif combined_text contains 'sweatshirt' or combined_text contains 'sweater'
+    assign size_chart_key = 'sweatshirt'
     assign size_chart_title = 'Unisex Sweatshirts Size Chart'
-    assign size_chart_html = '<table width="100%"><tbody><tr><td></td><td style="text-align: center;">Length</td><td style="text-align: center;">Sleeve</td><td style="text-align: center;">1/2 Chest</td><td style="text-align: center;">Shoulder</td></tr><tr style="text-align: center;"><td>S/M</td><td>69-70</td><td>54</td><td>66-67</td><td>68</td></tr><tr style="text-align: center;"><td>M/L</td><td>71-72</td><td>55-56</td><td>68-69</td><td>69-70</td></tr><tr style="text-align: center;"><td>L/XL</td><td>73</td><td>57</td><td>70</td><td>71</td></tr></tbody></table>'
+  else
+    assign size_chart_key = 'sweatshirt'
+    assign size_chart_title = 'Unisex Sweatshirts Size Chart'
   endif
 -%}
+
+{% capture size_chart_html %}
+  {% case size_chart_key %}
+    {% when 'turtleneck' %}
+      <table width="100%"><tbody>
+        <tr><td></td><td style="text-align:center">Length</td><td style="text-align:center">Sleeve</td><td style="text-align:center">1/2 Chest</td><td style="text-align:center">1/2 Bottom</td><td style="text-align:center">Shoulder</td></tr>
+        <tr style="text-align:center"><td>S/M</td><td>69</td><td>58</td><td>66</td><td>46</td><td>67</td></tr>
+        <tr style="text-align:center"><td>M/L</td><td>71</td><td>59</td><td>68</td><td>49</td><td>69</td></tr>
+        <tr style="text-align:center"><td>L/XL</td><td>73</td><td>60</td><td>71</td><td>51</td><td>71</td></tr>
+      </tbody></table>
+    {% when 'women-cropped' %}
+      <table width="100%"><tbody>
+        <tr><td></td><td style="text-align:center">Length</td><td style="text-align:center">Sleeve</td><td style="text-align:center">1/2 Chest</td><td style="text-align:center">1/2 Bottom</td><td style="text-align:center">Shoulder</td></tr>
+        <tr style="text-align:center"><td>XS/S</td><td>43</td><td>52</td><td>46</td><td>37</td><td>55</td></tr>
+        <tr style="text-align:center"><td>S/M</td><td>45</td><td>53</td><td>48.5</td><td>39.5</td><td>57</td></tr>
+        <tr style="text-align:center"><td>M/L</td><td>47</td><td>54</td><td>51</td><td>42</td><td>59</td></tr>
+      </tbody></table>
+    {% when 'a-new-era-cropped' %}
+      <table width="100%"><tbody>
+        <tr><td></td><td style="text-align:center">Length</td><td style="text-align:center">Sleeve</td><td style="text-align:center">1/2 Chest</td><td style="text-align:center">1/2 Bottom</td><td style="text-align:center">Shoulder</td></tr>
+        <tr style="text-align:center"><td>XS/S</td><td>44</td><td>59</td><td>52</td><td>43</td><td>59</td></tr>
+        <tr style="text-align:center"><td>S/M</td><td>46</td><td>60</td><td>53</td><td>44</td><td>60</td></tr>
+        <tr style="text-align:center"><td>M/L</td><td>48</td><td>61</td><td>54</td><td>45</td><td>62</td></tr>
+      </tbody></table>
+    {% when 'hoodie' %}
+      <table width="100%"><tbody>
+        <tr><td></td><td style="text-align:center">Length</td><td style="text-align:center">Sleeve</td><td style="text-align:center">1/2 Chest</td><td style="text-align:center">1/2 Bottom</td><td style="text-align:center">Shoulder</td></tr>
+        <tr style="text-align:center"><td>S/M</td><td>69</td><td>54-56</td><td>62-63</td><td>54-58</td><td>65-67</td></tr>
+        <tr style="text-align:center"><td>M/L</td><td>71</td><td>57-58</td><td>64-66</td><td>56-60</td><td>68-69</td></tr>
+        <tr style="text-align:center"><td>L/XL</td><td>73</td><td>59</td><td>67-69</td><td>59-64</td><td>70-74</td></tr>
+      </tbody></table>
+    {% when 'tshirt' %}
+      <table width="100%"><tbody>
+        <tr><td></td><td style="text-align:center">Length</td><td style="text-align:center">Sleeve</td><td style="text-align:center">Chest</td><td style="text-align:center">Shoulder</td></tr>
+        <tr style="text-align:center"><td>S/M</td><td>70</td><td>23</td><td>55</td><td>48</td></tr>
+        <tr style="text-align:center"><td>M/L</td><td>75</td><td>25.5</td><td>60</td><td>50</td></tr>
+        <tr style="text-align:center"><td>L/XL</td><td>78</td><td>26.5</td><td>62</td><td>53</td></tr>
+      </tbody></table>
+    {% when 'linen' %}
+      <table width="100%"><tbody>
+        <tr><td></td><td style="text-align:center">Waist (elastic)</td><td style="text-align:center">Shorts Length</td><td style="text-align:center">Shirt Length</td><td style="text-align:center">Chest</td><td style="text-align:center">Shoulder</td><td style="text-align:center">Sleeve Length</td></tr>
+        <tr style="text-align:center"><td>S/M</td><td>33</td><td>43</td><td>64</td><td>51</td><td>46</td><td>23</td></tr>
+        <tr style="text-align:center"><td>M/L</td><td>37</td><td>48</td><td>67</td><td>54</td><td>48</td><td>27</td></tr>
+        <tr style="text-align:center"><td>L/XL</td><td>43</td><td>50</td><td>70</td><td>57</td><td>50</td><td>30</td></tr>
+      </tbody></table>
+    {% when 'staple' %}
+      <table width="100%"><tbody>
+        <tr><td></td><td style="text-align:center">Length</td><td style="text-align:center">Sleeve</td><td style="text-align:center">Chest</td><td style="text-align:center">Shoulder</td></tr>
+        <tr style="text-align:center"><td>S/M</td><td>68</td><td>26.5</td><td>57</td><td>57</td></tr>
+        <tr style="text-align:center"><td>M/L</td><td>74</td><td>28</td><td>62</td><td>59</td></tr>
+        <tr style="text-align:center"><td>L/XL</td><td>76</td><td>29</td><td>66.5</td><td>62</td></tr>
+      </tbody></table>
+    {% else %}
+      <table width="100%"><tbody>
+        <tr><td></td><td style="text-align:center">Length</td><td style="text-align:center">Sleeve</td><td style="text-align:center">1/2 Chest</td><td style="text-align:center">1/2 Bottom</td><td style="text-align:center">Shoulder</td></tr>
+        <tr style="text-align:center"><td>S/M</td><td>69-70</td><td>54</td><td>66-67</td><td>58-59</td><td>68</td></tr>
+        <tr style="text-align:center"><td>M/L</td><td>71-72</td><td>55-56</td><td>68-69</td><td>60-61</td><td>69-70</td></tr>
+        <tr style="text-align:center"><td>L/XL</td><td>73</td><td>57</td><td>70</td><td>62</td><td>71</td></tr>
+      </tbody></table>
+  {% endcase %}
+{% endcapture %}
 
 <div class="product-detail-wrapper flex flex-col lg:flex-row w-full h-full" data-product-handle="{{ product.handle }}">
   
