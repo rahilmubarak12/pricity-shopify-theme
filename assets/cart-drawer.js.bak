@@ -23,10 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Refetch and Update the Cart Drawer DOM
-  // openAfterRefresh: if true, open the drawer once the new HTML is in place
-  const refreshCart = (openAfterRefresh = false) => {
-    // If the drawer is already open, keep it open after refresh
-    const shouldBeOpen = openAfterRefresh || cartContainer.classList.contains('opacity-100');
+  const refreshCart = () => {
+    // Remember whether the drawer was open before refresh
+    const wasOpen = cartContainer.classList.contains('opacity-100');
 
     fetch('/?sections=cart-drawer')
       .then(res => res.json())
@@ -43,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
           cartContainer.innerHTML = newSection.innerHTML;
           
           // Re-apply open state instantly so the drawer doesn't flash closed or animate slide-in
-          if (shouldBeOpen) {
+          if (wasOpen) {
             cartContainer.classList.remove('pointer-events-none', 'opacity-0');
             cartContainer.classList.add('opacity-100', 'pointer-events-auto');
             const newPanel = cartContainer.querySelector('.cart-drawer-panel');
@@ -54,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
               newPanel.offsetHeight; // Force reflow
               newPanel.style.transition = '';
             }
-            document.body.classList.add('overflow-hidden');
           }
 
           // Rebind event listeners
@@ -162,11 +160,12 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('cart:open', openCart);
   cartContainer.addEventListener('cart:open', openCart);
 
-  // Listen for cart:updated — refresh content and optionally open the drawer.
-  // Only attach to document (the element listener was redundant and caused double-refresh).
-  document.addEventListener('cart:updated', (e) => {
-    const shouldOpen = e.detail && e.detail.openDrawer;
-    refreshCart(shouldOpen);
+  // Listen for cart:updated — refresh content only (don't auto-open)
+  document.addEventListener('cart:updated', () => {
+    refreshCart();
+  });
+  cartContainer.addEventListener('cart:updated', () => {
+    refreshCart();
   });
 
   // Initial event binding

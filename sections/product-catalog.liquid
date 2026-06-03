@@ -417,16 +417,10 @@
         // Success
         sizeBtn.textContent = '✓';
         
-        // Dispatch custom cart update event to update the cart drawer (built in Phase 5)
+        // Dispatch custom cart update event — openDrawer:true tells the drawer to open after refresh
         document.dispatchEvent(new CustomEvent('cart:updated', {
-          detail: { item: item }
+          detail: { item: item, openDrawer: true }
         }));
-        
-        // Open the Cart Drawer globally
-        const cartDrawer = document.getElementById('CartDrawerSection') || document.querySelector('.cart-drawer-container');
-        if (cartDrawer) {
-          cartDrawer.dispatchEvent(new CustomEvent('cart:open'));
-        }
 
         setTimeout(() => {
           sizeBtn.disabled = false;
