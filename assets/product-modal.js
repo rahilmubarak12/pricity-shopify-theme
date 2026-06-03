@@ -35,7 +35,7 @@ function initProductDetailEngine(container) {
     addedToCart = false;
     addToCartBtn.disabled = false;
     addToCartBtn.querySelector('.btn-text').textContent = 'Add to Cart';
-    addToCartBtn.classList.remove('bg-emerald-600');
+    addToCartBtn.style.backgroundColor = '';
     addToCartBtn.classList.add('bg-zinc-900', 'hover:bg-zinc-700');
     // Restore bag icon
     const svg = addToCartBtn.querySelector('svg');
@@ -384,7 +384,7 @@ function initProductDetailEngine(container) {
         addToCartBtn.disabled = false;
         addToCartBtn.querySelector('.btn-text').textContent = 'Go to Cart';
         addToCartBtn.classList.remove('bg-zinc-900', 'hover:bg-zinc-700');
-        addToCartBtn.classList.add('bg-emerald-600');
+        addToCartBtn.style.backgroundColor = '#059669';
 
         // Swap icon to arrow-right
         const svg = addToCartBtn.querySelector('svg');
