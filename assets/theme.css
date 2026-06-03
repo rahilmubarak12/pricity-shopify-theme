@@ -501,7 +501,7 @@ video {
 }
 
 body {
-  font-family: Montserrat, sans-serif !important;
+  font-family: 'Jost', sans-serif !important;
   background-color: #faf9f7;
   color: #1a1a1a;
   font-weight: 300;
@@ -514,7 +514,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, li, button, input, label, td, th {
 }
 
 h1, h2, h3, h4 {
-  font-family: 'Dream Avenue', 'Cormorant Garamond', 'Bodoni Moda', 'Montserrat', serif !important;
+  font-family: 'Jost', sans-serif !important;
 }
 
 *, ::before, ::after{
@@ -2380,13 +2380,13 @@ h1, h2, h3, h4 {
 }
 
 .font-heading {
-  font-family: 'Dream Avenue', 'Cormorant Garamond', 'Bodoni Moda', 'Montserrat', serif !important;
+  font-family: 'Jost', sans-serif !important;
   font-weight: 800;
   letter-spacing: 0.04em;
 }
 
 .font-mono-street {
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: 'Jost', sans-serif !important;
   font-weight: 500;
   letter-spacing: 0.06em;
 }
