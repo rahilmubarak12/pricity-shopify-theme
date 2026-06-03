@@ -169,10 +169,10 @@ function initProductDetailEngine(container) {
       maxStock = activeVariant.inventory_quantity || 99;
       
       // Update Price
-      if (priceDisplay) priceDisplay.textContent = activeVariant.price;
+      if (priceDisplay) priceDisplay.innerHTML = activeVariant.price;
       if (compareDisplay) {
         if (activeVariant.compare_at_price) {
-          compareDisplay.textContent = activeVariant.compare_at_price;
+          compareDisplay.innerHTML = activeVariant.compare_at_price;
           compareDisplay.classList.remove('hidden');
         } else {
           compareDisplay.classList.add('hidden');
