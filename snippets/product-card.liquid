@@ -28,14 +28,14 @@
   
   # Check product title first for subcategory
   assign title_lower = product.title | downcase
-  if title_lower contains 'hoodie'
+  if title_lower contains 't-shirt' or title_lower contains 'tee' or title_lower contains 'top'
+    assign subcategory = 't-shirt'
+  elsif title_lower contains 'sweatshirt'
+    assign subcategory = 'sweatshirt'
+  elsif title_lower contains 'hoodie'
     assign subcategory = 'hoodie'
   elsif title_lower contains 'set' or title_lower contains 'suit' or title_lower contains 'shirt'
     assign subcategory = 'shirt'
-  elsif title_lower contains 'sweatshirt'
-    assign subcategory = 'sweatshirt'
-  elsif title_lower contains 't-shirt' or title_lower contains 'tee' or title_lower contains 'top'
-    assign subcategory = 't-shirt'
   endif
 
   # Check tags (overrides/complements title)
@@ -43,14 +43,14 @@
     assign tag_lower = tag | downcase
     if tag_lower == 'men' or tag_lower == 'women'
       assign category = tag_lower
+    elsif tag_lower contains 't-shirt' or tag_lower contains 'tee' or tag_lower contains 'top'
+      assign subcategory = 't-shirt'
+    elsif tag_lower contains 'sweatshirt'
+      assign subcategory = 'sweatshirt'
     elsif tag_lower contains 'hoodie'
       assign subcategory = 'hoodie'
     elsif tag_lower contains 'set' or tag_lower == 'shirt' or tag_lower == 'shirts'
       assign subcategory = 'shirt'
-    elsif tag_lower contains 'sweatshirt'
-      assign subcategory = 'sweatshirt'
-    elsif tag_lower contains 't-shirt' or tag_lower contains 'tee' or tag_lower contains 'top'
-      assign subcategory = 't-shirt'
     endif
   endfor
 
