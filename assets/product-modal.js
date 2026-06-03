@@ -166,6 +166,8 @@ function initProductDetailEngine(container) {
     activeVariant = getSelectedVariant();
     
     if (activeVariant) {
+      // Reset "Go to Cart" back to "Add to Cart" when variant changes
+      if (typeof resetAddToCartBtn === 'function') resetAddToCartBtn();
       maxStock = activeVariant.inventory_quantity || 99;
       
       // Update Price
@@ -337,13 +339,34 @@ function initProductDetailEngine(container) {
   }
 
   // Handle Add to Cart AJAX
+  let addedToCart = false;
+
+  const resetAddToCartBtn = () => {
+    if (!addToCartBtn) return;
+    addedToCart = false;
+    addToCartBtn.disabled = false;
+    addToCartBtn.querySelector('.btn-text').textContent = 'Add to Cart';
+    addToCartBtn.classList.remove('bg-emerald-600');
+    addToCartBtn.classList.add('bg-zinc-900', 'hover:bg-zinc-700');
+    // Restore bag icon
+    const svg = addToCartBtn.querySelector('svg');
+    if (svg) {
+      svg.innerHTML = '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>';
+    }
+  };
+
   if (addToCartBtn) {
     addToCartBtn.addEventListener('click', () => {
+      // If already added, go to cart
+      if (addedToCart) {
+        window.location.href = '/cart';
+        return;
+      }
+
       if (!activeVariant) return;
 
       const variantId = activeVariant.id;
       addToCartBtn.disabled = true;
-      const originText = addToCartBtn.querySelector('.btn-text').textContent;
       addToCartBtn.querySelector('.btn-text').textContent = 'Adding...';
 
       fetch('/cart/add.js', {
@@ -358,9 +381,17 @@ function initProductDetailEngine(container) {
       })
       .then(res => res.json())
       .then(item => {
-        addToCartBtn.querySelector('.btn-text').textContent = '✓ Added to Cart';
+        addedToCart = true;
+        addToCartBtn.disabled = false;
+        addToCartBtn.querySelector('.btn-text').textContent = 'Go to Cart';
         addToCartBtn.classList.remove('bg-zinc-900', 'hover:bg-zinc-700');
         addToCartBtn.classList.add('bg-emerald-600');
+
+        // Swap icon to arrow-right
+        const svg = addToCartBtn.querySelector('svg');
+        if (svg) {
+          svg.innerHTML = '<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>';
+        }
 
         // Dispatch update cart
         document.dispatchEvent(new CustomEvent('cart:updated', { detail: { item: item } }));
@@ -370,18 +401,11 @@ function initProductDetailEngine(container) {
         if (cartDrawer) {
           cartDrawer.dispatchEvent(new CustomEvent('cart:open'));
         }
-
-        setTimeout(() => {
-          addToCartBtn.disabled = false;
-          addToCartBtn.querySelector('.btn-text').textContent = originText;
-          addToCartBtn.classList.add('bg-zinc-900', 'hover:bg-zinc-700');
-          addToCartBtn.classList.remove('bg-emerald-600');
-        }, 2000);
       })
       .catch(err => {
         console.error('Failed to add to cart:', err);
         addToCartBtn.disabled = false;
-        addToCartBtn.querySelector('.btn-text').textContent = originText;
+        addToCartBtn.querySelector('.btn-text').textContent = 'Add to Cart';
       });
     });
   }
