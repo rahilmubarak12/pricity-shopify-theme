@@ -2,23 +2,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const cartContainer = document.getElementById('CartDrawerSection');
   if (!cartContainer) return;
 
-  const panel = cartContainer.querySelector('.cart-drawer-panel');
-
   // Open Drawer
   const openCart = () => {
+    const panel = cartContainer.querySelector('.cart-drawer-panel');
     cartContainer.classList.remove('pointer-events-none', 'opacity-0');
     cartContainer.classList.add('opacity-100', 'pointer-events-auto');
-    panel.classList.remove('translate-x-full');
-    panel.classList.add('translate-x-0');
+    if (panel) {
+      panel.classList.remove('translate-x-full');
+      panel.classList.add('translate-x-0');
+    }
     document.body.classList.add('overflow-hidden');
   };
 
   // Close Drawer
   const closeCart = () => {
+    const panel = cartContainer.querySelector('.cart-drawer-panel');
     cartContainer.classList.remove('opacity-100', 'pointer-events-auto');
     cartContainer.classList.add('pointer-events-none', 'opacity-0');
-    panel.classList.remove('translate-x-0');
-    panel.classList.add('translate-x-full');
+    if (panel) {
+      panel.classList.remove('translate-x-0');
+      panel.classList.add('translate-x-full');
+    }
     document.body.classList.remove('overflow-hidden');
   };
 
