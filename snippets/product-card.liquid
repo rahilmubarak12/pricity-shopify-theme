@@ -58,8 +58,10 @@
   for c in product.collections
     assign col_lower = c.title | downcase
     assign col_handle = c.handle | downcase
-    if col_lower contains 't-shirt' or col_lower contains 'tee' or col_lower contains 'top' or col_handle contains 't-shirt' or col_handle contains 'tshirt' or col_handle contains 'tee'
-      assign subcategory = 't-shirt'
+    if col_lower contains 't-shirt' or col_lower contains 'tee' or col_handle contains 't-shirt' or col_handle contains 'tshirt' or col_handle contains 'tee'
+      if subcategory == 'all'
+        assign subcategory = 't-shirt'
+      endif
     elsif col_lower contains 'sweatshirt' or col_handle contains 'sweatshirt'
       if subcategory == 'all'
         assign subcategory = 'sweatshirt'
