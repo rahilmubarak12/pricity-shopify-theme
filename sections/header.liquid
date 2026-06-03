@@ -27,7 +27,7 @@
           </svg>
         </button>
 
-        <div class="hidden lg:flex items-center gap-8 text-[17px] font-mono-street tracking-[0.06em] uppercase font-medium">
+        <div class="hidden lg:flex items-center gap-8 text-[17px] font-mono-street tracking-[0.06em] capitalize font-medium">
           {%- assign main_menu_links = linklists[section.settings.menu].links -%}
           {%- if main_menu_links == blank or main_menu_links.size == 0 -%}
             <a href="/collections/men" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">Men</a>
@@ -50,7 +50,7 @@
 
           <!-- Contact Dropdown -->
           <div class="relative group flex items-center contact-dropdown">
-            <button class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white outline-none cursor-pointer uppercase font-mono-street text-[17px] font-medium tracking-[0.06em]">
+            <button class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white outline-none cursor-pointer capitalize font-mono-street text-[17px] font-medium tracking-[0.06em]">
               Contact
             </button>
             <div class="absolute left-0 top-full mt-2 w-72 bg-black border border-zinc-800 text-white p-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.8)] z-50 rounded-sm">
@@ -91,7 +91,7 @@
       </a>
 
       <!-- RIGHT: Icons -->
-      <div class="flex items-center gap-3 sm:gap-6 lg:gap-8 justify-end text-sm sm:text-[17px] font-mono-street uppercase tracking-[0.1em] font-medium">
+      <div class="flex items-center gap-3 sm:gap-6 lg:gap-8 justify-end text-sm sm:text-[17px] font-mono-street capitalize tracking-[0.1em] font-medium">
         <button class="search-drawer-trigger transition-colors flex items-center gap-2 p-1 hover:opacity-80 text-current" aria-label="Search">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sm:w-[24px] sm:h-[24px]">
             <circle cx="11" cy="11" r="8"></circle>
@@ -117,7 +117,7 @@
 
   <!-- Mobile Drawer Overlay -->
   <div id="MobileNavDrawer" class="hidden lg:hidden fixed inset-0 bg-black/95 backdrop-blur-lg border-b border-zinc-800 h-screen w-full transition-all duration-300 flex flex-col z-50">
-    <div class="flex flex-col space-y-6 font-mono-street text-lg tracking-[0.25em] uppercase text-center pt-12 px-6 flex-1">
+    <div class="flex flex-col space-y-6 font-mono-street text-lg tracking-[0.25em] capitalize text-center pt-12 px-6 flex-1">
       {%- assign main_menu_links = linklists[section.settings.menu].links -%}
       {%- if main_menu_links == blank or main_menu_links.size == 0 -%}
         <a href="/collections/men" class="py-2 transition-colors text-zinc-400 hover:text-white">Men</a>
