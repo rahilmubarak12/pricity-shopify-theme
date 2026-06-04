@@ -1,0 +1,43 @@
+<section class="our-story-section bg-[#faf9f7] min-h-screen pt-24 pb-16 md:pt-28">
+  <div class="max-w-6xl mx-auto px-6 lg:px-12">
+
+    <div class="flex flex-col md:flex-row gap-10 lg:gap-16 items-start">
+
+      <!-- LEFT: Image -->
+      <div class="w-full md:w-[45%] flex-shrink-0">
+        <img
+          src="{{ 'rule.png' | asset_url }}"
+          alt="The Rule"
+          class="w-full h-auto object-cover rounded-sm"
+          style="max-height:80vh;object-position:center top;"
+        >
+      </div>
+
+      <!-- RIGHT: Text -->
+      <div class="w-full md:w-[55%] pt-2">
+        <h1 class="font-mono-street text-3xl md:text-4xl tracking-[0.15em] uppercase text-[#1a1a1a] mb-3">
+          The Three-Year Rule
+        </h1>
+        <p class="text-[11px] tracking-[0.2em] uppercase text-zinc-400 font-mono-street mb-8">APY</p>
+
+        <div class="flex flex-col gap-5 text-[15px] leading-relaxed text-zinc-700" style="font-family:'IBM Plex Serif',serif;">
+          <p>Apricity exists because we rarely agree. Unusual for a brand? Exactly. For years, our differences have shaped everything we build. One of us instinctively edits. The other instinctively pushes. We don't settle quickly. We don't meet in the middle just to move forward.</p>
+          <p>Most ideas don't survive that tension. They're questioned. Reduced. Challenged. Left alone. Revisited. If something feels obvious, it's gone. If it only works for the moment, it's gone.</p>
+          <p>And even if an idea survives us, it faces one final rule: The Three-Year Rule.</p>
+          <p>Before anything becomes APRICITY, we ask one question: Will this still make sense three years from now? Not next season. Not next drop. Three years.</p>
+          <p>If we can't see ourselves standing behind it with the same certainty, it doesn't exist. No trend protection. No hype insurance. No "it'll do for now."</p>
+          <p>If it survives disagreement — and it survives time — it earns the name.</p>
+          <p>APRICITY is not the result of agreement. It's the result of something harder. Something slower. Something that lasts.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Our Story",
+  "settings": []
+}
+{% endschema %}

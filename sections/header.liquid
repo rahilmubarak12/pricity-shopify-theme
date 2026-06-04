@@ -43,7 +43,7 @@
           {%- endif -%}
 
           {%- if section.settings.show_the_rule -%}
-            <a href="{{ section.settings.the_rule_link | default: '#' }}" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white no-underline normal-case the-rule-trigger">
+            <a href="{{ section.settings.the_rule_link | default: '/pages/our-story' }}" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white no-underline normal-case the-rule-trigger">
               {{ section.settings.the_rule_text | default: 'The Rule' }}
             </a>
           {%- endif -%}
@@ -173,7 +173,7 @@
       {%- endif -%}
 
       {%- if section.settings.show_the_rule -%}
-        <a href="{{ section.settings.the_rule_link | default: '#' }}" class="py-2 transition-colors text-zinc-400 hover:text-white no-underline normal-case the-rule-trigger-mobile">
+        <a href="{{ section.settings.the_rule_link | default: '/pages/our-story' }}" class="py-2 transition-colors text-zinc-400 hover:text-white no-underline normal-case the-rule-trigger-mobile">
           {{ section.settings.the_rule_text | default: 'The Rule' }}
         </a>
       {%- endif -%}
