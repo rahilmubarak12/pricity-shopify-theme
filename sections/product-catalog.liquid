@@ -264,11 +264,13 @@
     subcategoryBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         subcategoryBtns.forEach(b => {
-          b.classList.remove('bg-[#1a1a1a]', 'text-white');
-          b.classList.add('bg-white', 'text-zinc-400', 'border-zinc-200');
+          b.classList.remove('bg-[#1a1a1a]');
+          b.classList.add('bg-white', 'border-zinc-200');
+          b.style.color = '';
         });
-        btn.classList.remove('bg-white', 'text-zinc-400', 'border-zinc-200');
-        btn.classList.add('bg-[#1a1a1a]', 'text-white');
+        btn.classList.remove('bg-white', 'border-zinc-200');
+        btn.classList.add('bg-[#1a1a1a]');
+        btn.style.color = '#ffffff';
 
         activeSubcategory = btn.getAttribute('data-subcategory');
         filterGrid();
