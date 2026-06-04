@@ -116,8 +116,31 @@
   </nav>
 
   <!-- Mobile Drawer Overlay -->
-  <div id="MobileNavDrawer" class="hidden lg:hidden fixed inset-0 bg-black/95 backdrop-blur-lg border-b border-zinc-800 h-screen w-full transition-all duration-300 flex flex-col z-50">
-    <div class="flex flex-col space-y-6 font-mono-street text-lg tracking-[0.25em] capitalize text-center pt-12 px-6 flex-1">
+  <div id="MobileNavDrawer" class="hidden lg:hidden fixed inset-0 bg-black/95 backdrop-blur-lg h-screen w-full transition-all duration-300 flex flex-col z-50">
+    <!-- Mobile Menu Header -->
+    <div class="flex items-center justify-between px-4 py-4 border-b border-zinc-800">
+      <button class="mobile-menu-close p-2 text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <a href="{{ routes.root_url }}" class="flex items-center gap-2 no-underline">
+        {%- if section.settings.logo != blank -%}
+          <img src="{{ section.settings.logo | image_url: width: 50 }}" alt="Logo" class="h-10 w-10 object-contain" width="50" height="50">
+        {%- else -%}
+          <img src="{{ 'logo.png' | asset_url }}" alt="Logo" class="h-10 w-10 object-contain" onerror="this.style.display='none';" width="50" height="50">
+        {%- endif -%}
+        <span class="text-white font-mono-street tracking-[0.2em] text-sm uppercase">Apricity</span>
+      </a>
+      <div class="flex items-center gap-3">
+        <button class="search-drawer-trigger p-2 text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+        <a href="/cart" class="p-2 text-white relative cart-drawer-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="cart-count-badge absolute -top-1 -right-1 bg-white text-black text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center leading-none {% if cart.item_count == 0 %}hidden{% endif %}">{{ cart.item_count }}</span>
+        </a>
+      </div>
+    </div>
+    <div class="flex flex-col space-y-6 font-mono-street text-lg tracking-[0.25em] capitalize text-center pt-10 px-6 flex-1">
       {%- assign main_menu_links = linklists[section.settings.menu].links -%}
       {%- if main_menu_links == blank or main_menu_links.size == 0 -%}
         <a href="/?filter=men" class="py-2 transition-colors text-zinc-400 hover:text-white">Men</a>
