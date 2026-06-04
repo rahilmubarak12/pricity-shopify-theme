@@ -207,7 +207,7 @@
                 </div>
               </div>
 
-            {%- elsif option_name_lower == 'size' or option_name_lower == 'sizes' -%}
+            {%- elsif option_name_lower == 'size' or option_name_lower == 'sizes' or option_name_lower contains 'size' -%}
               {%- assign size_option_index = forloop.index0 -%}
               <!-- Size Selector -->
               <div class="option-size-container rounded-2xl border border-zinc-100 bg-zinc-50/80 p-5" data-option-index="{{ size_option_index }}">
