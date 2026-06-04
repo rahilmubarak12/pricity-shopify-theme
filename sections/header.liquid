@@ -30,10 +30,10 @@
         <div class="hidden lg:flex items-center gap-8 text-[17px] font-mono-street tracking-[0.06em] capitalize font-medium">
           {%- assign main_menu_links = linklists[section.settings.menu].links -%}
           {%- if main_menu_links == blank or main_menu_links.size == 0 -%}
-            <a href="/collections/men" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">Men</a>
-            <a href="/collections/women" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">Women</a>
-            <a href="/collections/new-drops" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">New Drops</a>
-            <a href="/collections/sale" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">Sale</a>
+            <a href="/?filter=men" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">Men</a>
+            <a href="/?filter=women" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">Women</a>
+            <a href="/?filter=new-drops" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">New Drops</a>
+            <a href="/?filter=sale" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">Sale</a>
           {%- else -%}
             {%- for link in main_menu_links -%}
               <a href="{{ link.url }}" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white {% if link.active %}font-bold border-b border-current text-white{% endif %}">
@@ -120,10 +120,10 @@
     <div class="flex flex-col space-y-6 font-mono-street text-lg tracking-[0.25em] capitalize text-center pt-12 px-6 flex-1">
       {%- assign main_menu_links = linklists[section.settings.menu].links -%}
       {%- if main_menu_links == blank or main_menu_links.size == 0 -%}
-        <a href="/collections/men" class="py-2 transition-colors text-zinc-400 hover:text-white">Men</a>
-        <a href="/collections/women" class="py-2 transition-colors text-zinc-400 hover:text-white">Women</a>
-        <a href="/collections/new-drops" class="py-2 transition-colors text-zinc-400 hover:text-white">New Drops</a>
-        <a href="/collections/sale" class="py-2 transition-colors text-zinc-400 hover:text-white">Sale</a>
+        <a href="/?filter=men" class="py-2 transition-colors text-zinc-400 hover:text-white">Men</a>
+        <a href="/?filter=women" class="py-2 transition-colors text-zinc-400 hover:text-white">Women</a>
+        <a href="/?filter=new-drops" class="py-2 transition-colors text-zinc-400 hover:text-white">New Drops</a>
+        <a href="/?filter=sale" class="py-2 transition-colors text-zinc-400 hover:text-white">Sale</a>
       {%- else -%}
         {%- for link in main_menu_links -%}
           <a href="{{ link.url }}" class="py-2 transition-colors text-zinc-400 hover:text-white {% if link.active %}text-white font-bold{% endif %}">
