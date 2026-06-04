@@ -1,38 +1,97 @@
-<section class="our-story-section bg-[#faf9f7] min-h-screen pt-24 pb-16 md:pt-28">
-  <div class="max-w-6xl mx-auto px-6 lg:px-16">
+<style>
+  .our-story-wrap {
+    background: #faf9f7;
+    min-height: 100vh;
+    padding-top: 100px;
+    padding-bottom: 64px;
+  }
+  .our-story-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .our-story-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 64px;
+    align-items: flex-start;
+  }
+  .our-story-img {
+    width: 42%;
+    flex-shrink: 0;
+  }
+  .our-story-img img {
+    width: 100%;
+    height: 620px;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: 4px;
+    display: block;
+  }
+  .our-story-text {
+    flex: 1;
+    padding-top: 8px;
+  }
+  .our-story-text h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    margin: 0 0 8px 0;
+    line-height: 1.2;
+  }
+  .our-story-text .subheading {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #aaa;
+    margin-bottom: 28px;
+  }
+  .our-story-text p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #444;
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    margin: 0 0 16px 0;
+  }
+  @media (max-width: 768px) {
+    .our-story-grid {
+      flex-direction: column;
+      gap: 32px;
+    }
+    .our-story-img {
+      width: 100%;
+    }
+    .our-story-img img {
+      height: 420px;
+    }
+  }
+</style>
 
-    <div class="flex flex-col md:flex-row gap-12 lg:gap-20 items-start">
+<div class="our-story-wrap">
+  <div class="our-story-inner">
+    <div class="our-story-grid">
 
-      <!-- LEFT: Image -->
-      <div class="w-full md:w-[42%] flex-shrink-0">
-        <img
-          src="{{ 'rule.png' | asset_url }}"
-          alt="The Rule"
-          style="width:100%;height:600px;object-fit:cover;object-position:center top;border-radius:4px;"
-        >
+      <div class="our-story-img">
+        <img src="{{ 'rule.png' | asset_url }}" alt="The Rule">
       </div>
 
-      <!-- RIGHT: Text -->
-      <div class="w-full md:w-[58%] pt-4 overflow-y-auto" style="max-height:600px;">
-        <h1 style="font-family:'Helvetica Neue',sans-serif;font-size:2rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#1a1a1a;margin-bottom:8px;line-height:1.2;">
-          The Three-Year Rule
-        </h1>
-        <p style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#aaa;margin-bottom:32px;">APY</p>
-
-        <div style="display:flex;flex-direction:column;gap:18px;font-size:15px;line-height:1.8;color:#444;font-family:'IBM Plex Serif',Georgia,serif;">
-          <p>Apricity exists because we rarely agree. Unusual for a brand? Exactly. For years, our differences have shaped everything we build. One of us instinctively edits. The other instinctively pushes. We don't settle quickly. We don't meet in the middle just to move forward.</p>
-          <p>Most ideas don't survive that tension. They're questioned. Reduced. Challenged. Left alone. Revisited. If something feels obvious, it's gone. If it only works for the moment, it's gone.</p>
-          <p>And even if an idea survives us, it faces one final rule: The Three-Year Rule.</p>
-          <p>Before anything becomes APRICITY, we ask one question: Will this still make sense three years from now? Not next season. Not next drop. Three years.</p>
-          <p>If we can't see ourselves standing behind it with the same certainty, it doesn't exist. No trend protection. No hype insurance. No "it'll do for now."</p>
-          <p>If it survives disagreement — and it survives time — it earns the name.</p>
-          <p>APRICITY is not the result of agreement. It's the result of something harder. Something slower. Something that lasts.</p>
-        </div>
+      <div class="our-story-text">
+        <h1>The Three-Year Rule</h1>
+        <p class="subheading">APY</p>
+        <p>Apricity exists because we rarely agree. Unusual for a brand? Exactly. For years, our differences have shaped everything we build. One of us instinctively edits. The other instinctively pushes. We don't settle quickly. We don't meet in the middle just to move forward.</p>
+        <p>Most ideas don't survive that tension. They're questioned. Reduced. Challenged. Left alone. Revisited. If something feels obvious, it's gone. If it only works for the moment, it's gone.</p>
+        <p>And even if an idea survives us, it faces one final rule: The Three-Year Rule.</p>
+        <p>Before anything becomes APRICITY, we ask one question: Will this still make sense three years from now? Not next season. Not next drop. Three years.</p>
+        <p>If we can't see ourselves standing behind it with the same certainty, it doesn't exist. No trend protection. No hype insurance. No "it'll do for now."</p>
+        <p>If it survives disagreement — and it survives time — it earns the name.</p>
+        <p>APRICITY is not the result of agreement. It's the result of something harder. Something slower. Something that lasts.</p>
       </div>
 
     </div>
   </div>
-</section>
+</div>
 
 {% schema %}
 {
