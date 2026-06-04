@@ -8,6 +8,7 @@
     position: relative;
     text-decoration: none !important;
     display: inline-block;
+    padding-bottom: 0 !important;
   }
   .nav-link-hover::after {
     content: '';
@@ -18,13 +19,14 @@
     height: 1.5px;
     background: currentColor;
     transition: width 0.25s ease;
+    max-width: 100%;
   }
-  .nav-link-hover:hover::after,
-  .nav-link-hover:hover {
+  .nav-link-hover:hover::after {
     width: 100%;
     color: inherit;
   }
   .nav-link-hover:hover {
+    color: inherit;
     opacity: 1 !important;
   }
   /* On hero (unscrolled) hover = white */
@@ -63,27 +65,27 @@
         <div class="hidden lg:flex items-center gap-8 text-[17px] font-mono-street tracking-[0.06em] capitalize font-medium">
           {%- assign main_menu_links = linklists[section.settings.menu].links -%}
           {%- if main_menu_links == blank or main_menu_links.size == 0 -%}
-            <a href="{{ shop.url }}/?filter=men" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">Men</a>
-            <a href="{{ shop.url }}/?filter=women" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">Women</a>
-            <a href="{{ shop.url }}/?filter=new-drops" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">New Drops</a>
-            <a href="{{ shop.url }}/?filter=sale" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white">Sale</a>
+            <a href="{{ shop.url }}/?filter=men" class="relative transition-colors nav-link-hover text-white/70 hover:text-white">Men</a>
+            <a href="{{ shop.url }}/?filter=women" class="relative transition-colors nav-link-hover text-white/70 hover:text-white">Women</a>
+            <a href="{{ shop.url }}/?filter=new-drops" class="relative transition-colors nav-link-hover text-white/70 hover:text-white">New Drops</a>
+            <a href="{{ shop.url }}/?filter=sale" class="relative transition-colors nav-link-hover text-white/70 hover:text-white">Sale</a>
           {%- else -%}
             {%- for link in main_menu_links -%}
-              <a href="{{ link.url }}" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white {% if link.active %}font-bold border-b border-current text-white{% endif %}">
+              <a href="{{ link.url }}" class="relative transition-colors nav-link-hover text-white/70 hover:text-white {% if link.active %}font-bold border-b border-current text-white{% endif %}">
                 {{ link.title }}
               </a>
             {%- endfor -%}
           {%- endif -%}
 
           {%- if section.settings.show_the_rule -%}
-            <a href="{{ section.settings.the_rule_link | default: '/pages/our-story' }}" class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white no-underline normal-case the-rule-trigger">
+            <a href="{{ section.settings.the_rule_link | default: '/pages/our-story' }}" class="relative transition-colors nav-link-hover text-white/70 hover:text-white no-underline normal-case the-rule-trigger">
               {{ section.settings.the_rule_text | default: 'The Rule' }}
             </a>
           {%- endif -%}
 
           <!-- Contact Dropdown -->
           <div class="relative group flex items-center contact-dropdown">
-            <button class="pb-1 relative transition-colors nav-link-hover text-white/70 hover:text-white outline-none cursor-pointer capitalize font-mono-street text-[17px] font-medium tracking-[0.06em]">
+            <button class="relative transition-colors nav-link-hover text-white/70 hover:text-white outline-none cursor-pointer capitalize font-mono-street text-[17px] font-medium tracking-[0.06em]">
               Contact
             </button>
             <div class="absolute left-0 top-full mt-2 w-72 bg-black border border-zinc-800 text-white p-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.8)] z-50 rounded-sm">
