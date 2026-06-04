@@ -26,10 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.remove('overflow-hidden');
   };
 
-  // Refetch and Update the Cart Drawer DOM
-  // openAfterRefresh: if true, open the drawer once the new HTML is in place
+  // Refetch and re-render the Cart Drawer DOM
   const refreshCart = (openAfterRefresh = false) => {
-    // If the drawer is already open, keep it open after refresh
     const shouldBeOpen = openAfterRefresh || cartContainer.classList.contains('opacity-100');
 
     fetch('/?sections=cart-drawer')
@@ -38,15 +36,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const html = sections['cart-drawer'];
         if (!html) return;
 
-        // Parse and replace content
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
         const newSection = doc.getElementById('CartDrawerSection');
-        
+
         if (newSection) {
           cartContainer.innerHTML = newSection.innerHTML;
-          
-          // Re-apply open state instantly so the drawer doesn't flash closed or animate slide-in
+
           if (shouldBeOpen) {
             cartContainer.classList.remove('pointer-events-none', 'opacity-0');
             cartContainer.classList.add('opacity-100', 'pointer-events-auto');
@@ -55,12 +51,11 @@ document.addEventListener('DOMContentLoaded', () => {
               newPanel.style.transition = 'none';
               newPanel.classList.remove('translate-x-full');
               newPanel.classList.add('translate-x-0');
-              newPanel.offsetHeight; // Force reflow
+              newPanel.offsetHeight;
               newPanel.style.transition = '';
             }
             document.body.classList.add('overflow-hidden');
           } else {
-            // Explicitly keep drawer hidden after DOM swap
             cartContainer.classList.add('pointer-events-none', 'opacity-0');
             cartContainer.classList.remove('opacity-100', 'pointer-events-auto');
             const newPanel = cartContainer.querySelector('.cart-drawer-panel');
@@ -71,10 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.remove('overflow-hidden');
           }
 
-          // Rebind event listeners
-          bindEvents();
-
-          // Sync cart counts in headers/footers
+          // Sync cart counts in navbar
           const newQty = doc.querySelector('.cart-total-qty');
           if (newQty) {
             const count = newQty.textContent.trim();
@@ -89,113 +81,103 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   };
 
-  // Bind Actions inside the Drawer
-  const bindEvents = () => {
-    const closeBtns = cartContainer.querySelectorAll('.cart-drawer-close');
-    closeBtns.forEach(btn => btn.addEventListener('click', closeCart));
-
-    // Handle quantity clicks & delete animation
-    cartContainer.addEventListener('click', (e) => {
-      const target = e.target;
-
-      // Quantity Minus Click
-      const minusBtn = target.closest('.cart-qty-minus');
-      if (minusBtn) {
-        const itemRow = minusBtn.closest('.cart-item');
-        const line = itemRow.getAttribute('data-line');
-        const display = itemRow.querySelector('.cart-qty-display');
-        const currentQty = parseInt(display.textContent.trim(), 10);
-        const newQty = currentQty - 1;
-        // Optimistically update displayed qty immediately
-        display.textContent = Math.max(0, newQty);
-        document.querySelectorAll('.cart-count').forEach(el => {
-          const c = parseInt(el.textContent.trim(), 10) || 0;
-          if (c > 0) el.textContent = c - 1;
-        });
-        const totalQtyEl = cartContainer.querySelector('.cart-total-qty');
-        if (totalQtyEl) {
-          const c = parseInt(totalQtyEl.textContent.trim(), 10) || 0;
-          if (c > 0) totalQtyEl.textContent = c - 1;
-        }
-        updateCartQty(line, newQty);
-      }
-
-      // Quantity Plus Click
-      const plusBtn = target.closest('.cart-qty-plus');
-      if (plusBtn) {
-        const itemRow = plusBtn.closest('.cart-item');
-        const line = itemRow.getAttribute('data-line');
-        const display = itemRow.querySelector('.cart-qty-display');
-        const currentQty = parseInt(display.textContent.trim(), 10);
-        const newQty = currentQty + 1;
-        // Optimistically update displayed qty immediately
-        display.textContent = newQty;
-        document.querySelectorAll('.cart-count').forEach(el => {
-          const c = parseInt(el.textContent.trim(), 10) || 0;
-          el.textContent = c + 1;
-        });
-        const totalQtyEl = cartContainer.querySelector('.cart-total-qty');
-        if (totalQtyEl) {
-          const c = parseInt(totalQtyEl.textContent.trim(), 10) || 0;
-          totalQtyEl.textContent = c + 1;
-        }
-        updateCartQty(line, newQty);
-      }
-
-      // Remove / Trash Click
-      const removeBtn = target.closest('.cart-item-remove');
-      if (removeBtn) {
-        const itemRow = removeBtn.closest('.cart-item');
-        const line = itemRow.getAttribute('data-line');
-
-        // Optimistically update cart count in the navbar immediately
-        const countEls = document.querySelectorAll('.cart-count');
-        countEls.forEach(el => {
-          const current = parseInt(el.textContent.trim(), 10) || 0;
-          if (current > 0) el.textContent = current - 1;
-        });
-        const totalQtyEl = cartContainer.querySelector('.cart-total-qty');
-        if (totalQtyEl) {
-          const current = parseInt(totalQtyEl.textContent.trim(), 10) || 0;
-          if (current > 0) totalQtyEl.textContent = current - 1;
-        }
-
-        // Trigger slide-out animation AND fire AJAX simultaneously
-        itemRow.classList.add('animate-slide-out');
-        updateCartQty(line, 0);
-      }
-    });
-
-    // Close on overlay background click
-    cartContainer.addEventListener('click', (e) => {
-      if (e.target === cartContainer) {
-        closeCart();
-      }
-    });
-  };
-
   // Perform Shopify AJAX cart quantity update
   const updateCartQty = (line, qty) => {
     fetch('/cart/change.js', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         line: parseInt(line, 10),
         quantity: parseInt(qty, 10)
       })
     })
     .then(res => res.json())
-    .then(() => {
-      refreshCart();
-    })
-    .catch(err => {
-      console.error('Error changing cart quantities:', err);
-    });
+    .then(() => refreshCart())
+    .catch(err => console.error('Error changing cart quantities:', err));
   };
 
-  // Bind cart header trigger buttons
+  // Single delegated click listener — attached ONCE, never re-bound
+  cartContainer.addEventListener('click', (e) => {
+    // Close on overlay click
+    if (e.target === cartContainer) {
+      closeCart();
+      return;
+    }
+
+    // Close buttons
+    if (e.target.closest('.cart-drawer-close')) {
+      closeCart();
+      return;
+    }
+
+    // Quantity Minus
+    const minusBtn = e.target.closest('.cart-qty-minus');
+    if (minusBtn && !minusBtn.disabled) {
+      const itemRow = minusBtn.closest('.cart-item');
+      const line = itemRow.getAttribute('data-line');
+      const display = itemRow.querySelector('.cart-qty-display');
+      const currentQty = parseInt(display.textContent.trim(), 10);
+      const newQty = currentQty - 1;
+      display.textContent = Math.max(0, newQty);
+      document.querySelectorAll('.cart-count').forEach(el => {
+        const c = parseInt(el.textContent.trim(), 10) || 0;
+        if (c > 0) el.textContent = c - 1;
+      });
+      const totalQtyEl = cartContainer.querySelector('.cart-total-qty');
+      if (totalQtyEl) {
+        const c = parseInt(totalQtyEl.textContent.trim(), 10) || 0;
+        if (c > 0) totalQtyEl.textContent = c - 1;
+      }
+      updateCartQty(line, newQty);
+      return;
+    }
+
+    // Quantity Plus
+    const plusBtn = e.target.closest('.cart-qty-plus');
+    if (plusBtn && !plusBtn.disabled) {
+      const itemRow = plusBtn.closest('.cart-item');
+      const line = itemRow.getAttribute('data-line');
+      const display = itemRow.querySelector('.cart-qty-display');
+      const currentQty = parseInt(display.textContent.trim(), 10);
+      const newQty = currentQty + 1;
+      display.textContent = newQty;
+      document.querySelectorAll('.cart-count').forEach(el => {
+        const c = parseInt(el.textContent.trim(), 10) || 0;
+        el.textContent = c + 1;
+      });
+      const totalQtyEl = cartContainer.querySelector('.cart-total-qty');
+      if (totalQtyEl) {
+        const c = parseInt(totalQtyEl.textContent.trim(), 10) || 0;
+        totalQtyEl.textContent = c + 1;
+      }
+      updateCartQty(line, newQty);
+      return;
+    }
+
+    // Remove item
+    const removeBtn = e.target.closest('.cart-item-remove');
+    if (removeBtn) {
+      const itemRow = removeBtn.closest('.cart-item');
+      const line = itemRow.getAttribute('data-line');
+
+      // Optimistically decrement counts immediately
+      document.querySelectorAll('.cart-count').forEach(el => {
+        const c = parseInt(el.textContent.trim(), 10) || 0;
+        if (c > 0) el.textContent = c - 1;
+      });
+      const totalQtyEl = cartContainer.querySelector('.cart-total-qty');
+      if (totalQtyEl) {
+        const c = parseInt(totalQtyEl.textContent.trim(), 10) || 0;
+        if (c > 0) totalQtyEl.textContent = c - 1;
+      }
+
+      itemRow.classList.add('animate-slide-out');
+      updateCartQty(line, 0);
+      return;
+    }
+  });
+
+  // Cart trigger buttons in header
   document.querySelectorAll('.cart-drawer-trigger').forEach(trigger => {
     trigger.addEventListener('click', (e) => {
       e.preventDefault();
@@ -203,18 +185,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Listen for cart:open on BOTH document AND the element itself
-  // (different parts of the theme may dispatch on either target)
   document.addEventListener('cart:open', openCart);
   cartContainer.addEventListener('cart:open', openCart);
 
-  // Listen for cart:updated — refresh content and optionally open the drawer.
-  // Only attach to document (the element listener was redundant and caused double-refresh).
   document.addEventListener('cart:updated', (e) => {
     const shouldOpen = e.detail && e.detail.openDrawer;
     refreshCart(shouldOpen);
   });
-
-  // Initial event binding
-  bindEvents();
 });
