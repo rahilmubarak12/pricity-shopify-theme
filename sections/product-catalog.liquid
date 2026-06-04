@@ -398,7 +398,7 @@
     });
 
     // Handle AJAX Add to Cart
-    catalog.addEventListener('click', (e) => {
+    document.addEventListener('click', (e) => {
       const sizeBtn = e.target.closest('.quick-add-size-btn');
       if (!sizeBtn || sizeBtn.disabled) return;
       e.preventDefault();
@@ -408,8 +408,10 @@
       if (!variantId) return;
       // Extract numeric ID if it's a Shopify GID
       if (variantId.includes('/')) variantId = variantId.split('/').pop();
+      variantId = parseInt(variantId, 10);
+      if (isNaN(variantId)) return;
 
-      const originalText = sizeBtn.textContent;
+      const originalText = sizeBtn.textContent.trim();
       sizeBtn.disabled = true;
       sizeBtn.textContent = '...';
 
@@ -417,19 +419,23 @@
       fetch('/cart/add.js', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify({
           id: variantId,
           quantity: 1
         })
       })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) return res.json().then(err => Promise.reject(err));
+        return res.json();
+      })
       .then(item => {
         // Success
-        sizeBtn.textContent = '✓';
-        
-        // Dispatch custom cart update event — openDrawer:true tells the drawer to open after refresh
+        sizeBtn.textContent = '\u2713';
+
+        // Dispatch custom cart update event
         document.dispatchEvent(new CustomEvent('cart:updated', {
           detail: { item: item, openDrawer: true }
         }));

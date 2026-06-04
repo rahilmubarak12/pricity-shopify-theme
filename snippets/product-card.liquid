@@ -216,7 +216,6 @@
             {% unless variant.available %}disabled{% endunless %}
             class="quick-add-size-btn px-3 py-1.5 text-[10px] font-bold rounded uppercase tracking-wider transition {% if variant.available %}bg-zinc-950 text-white hover:bg-zinc-700 shadow active:scale-95{% else %}bg-zinc-100 text-zinc-300 cursor-not-allowed line-through{% endif %}"
             data-variant-id="{{ variant.id }}"
-            onclick="event.stopPropagation();"
           >
             {{ variant.options[0] | default: variant.title }}
           </button>
