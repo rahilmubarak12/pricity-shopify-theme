@@ -365,6 +365,8 @@ function initProductDetailEngine(container) {
       if (!activeVariant) return;
 
       const variantId = activeVariant.id;
+      // Extract numeric ID if it's a Shopify GID string
+      const numericVariantId = variantId.toString().includes('/') ? variantId.split('/').pop() : variantId;
       addToCartBtn.disabled = true;
       addToCartBtn.querySelector('.btn-text').textContent = 'Adding...';
 
@@ -374,7 +376,7 @@ function initProductDetailEngine(container) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          id: variantId,
+          id: numericVariantId,
           quantity: quantity
         })
       })
