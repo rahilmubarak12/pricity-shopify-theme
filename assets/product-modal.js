@@ -356,9 +356,9 @@ function initProductDetailEngine(container) {
   // Handle Add to Cart AJAX
   if (addToCartBtn) {
     addToCartBtn.addEventListener('click', () => {
-      // If already added, go to cart
+      // If already added, open cart drawer
       if (addedToCart) {
-        window.location.href = '/cart';
+        document.dispatchEvent(new CustomEvent('cart:open'));
         return;
       }
 
