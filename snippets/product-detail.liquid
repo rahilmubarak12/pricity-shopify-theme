@@ -124,6 +124,7 @@
       </tbody></table>
   {% endcase %}
 {% endcapture %}
+{%- assign size_chart_html = size_chart_html | strip -%}
 
 <div class="product-detail-wrapper flex flex-col lg:flex-row w-full h-full" data-product-handle="{{ product.handle }}">
   
@@ -303,11 +304,56 @@
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
           <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed prose prose-sm max-w-none prose-zinc whitespace-pre-line">
-            {%- if product.metafields.custom.attention_seekers != blank -%}
-              {{ product.metafields.custom.attention_seekers }}
-            {%- else -%}
-              Designed for those who move between worlds — from quiet confidence to bold statements. Apricity Officials speaks to the individual who appreciates quality without compromise. This piece is made for you.
-            {%- endif -%}
+            {% case product.handle %}
+              {% when 'oversized-dual-tone-sweatshirt' %}
+                <p>Blue and orange, bold and bright, get ready to stand out!</p>
+              {% when 'oversized-sweatshirt-turtleneck' %}
+                <p>Slip me on, and let comfort lead the way!</p>
+              {% when 'overlap-neck-sweatshirt' %}
+                <p>You want your wardrobe to level up, try this soft scuba sweatshirt</p>
+              {% when 'crewneck-oversized-sweatshirt' %}
+                <p>Grab this piece, and let your style do the talking </p>
+              {% when 'hoodie-with-burgundy-piping' %}
+                <p>For comfort and boldness in one, this hoodie has you covered</p>
+              {% when 'hoodie-with-leather-piped-detailing' %}
+                <p>This hoodie doesn't follow trend, it sets them </p>
+              {% when 'all-in-well-hoodie' %}
+                <p>Take the lead, wear the vibe</p>
+              {% when 'apricity-leather-patch-hoodie' %}
+                <p>Own the Look in Brown</p>
+              {% when 'double-collar-cropped-sweatshirt' %}
+                <p>Own the spotlight with a sweatshirt as bold as you are</p>
+              {% when 'a-new-era-cropped-sweatshirt' %}
+                <p>Be the change. Be the era. Wear it like you mean it</p>
+              {% when 'indulge-in-self-love-hoodie' %}
+                <p>Dare to be different. Own the look. Own the moment</p>
+              {% when '3d-apricity-hoodie' %}
+                <p>Own your look, own your day, Midnight Navy never fails</p>
+              {% when 'bayview-linen-set' %}
+                <p>Light linen, heavy presence. Walk freely and let Bay View BLVD. make the world notice you</p>
+              {% when 'club-1932-t-shirt' %}
+                <p>Carrying the emblem of our homeland in our hearts, we walk boldly, proudly, and endlessly Saudi</p>
+              {% when 'onyx-black' %}
+                <p>Strong and silent, they never chase attention, ONYX is the power they wear</p>
+              {% when 'onyx-gray' %}
+                <p>Strong and silent, they never chase attention, ONYX is the power they wear</p>
+              {% when 'echoes-of-silence-green' %}
+                <p>A perfect blend of power, style, and confidence for anyone who isn't afraid to be noticed</p>
+              {% when 'echoes-of-silence-white' %}
+                <p>A perfect blend of power, style, and confidence for anyone who isn't afraid to be noticed</p>
+              {% when 'staple-sand' %}
+                <p>Where minimal meets meaning</p>
+              {% when 'apricity-blush' %}
+                <p>Soft enough to blush. Bold enough to own it</p>
+              {% when 'apy-butter-set' %}
+                <p>Soft like butter. Sharp like attitude</p>
+              {% else %}
+                {%- if product.metafields.custom.attention_seekers != blank -%}
+                  {{ product.metafields.custom.attention_seekers }}
+                {%- else -%}
+                  Designed for those who move between worlds — from quiet confidence to bold statements. Apricity Officials speaks to the individual who appreciates quality without compromise. This piece is made for you.
+                {%- endif -%}
+            {% endcase %}
           </div>
         </div>
 
@@ -321,7 +367,52 @@
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
           <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed prose prose-sm max-w-none prose-zinc">
-            {{ product.description }}
+            {% case product.handle %}
+              {% when 'oversized-dual-tone-sweatshirt' %}
+                <p>Brighten up your wardrobe with this eye-catching sweatshirt. The rich blue base is complemented by vibrant orange accents on the neckline and cuffs, giving it a sporty, dynamic feel. A fun and energetic addition to your style!</p><ul><li>Color : Cobalt Blue </li><li>Material: Soft Scuba & Cotton Blend – smooth, breathable</li><li>Bold 3D embossed text – Apricity is like a warm affection that wraps around your soul – bringing an inspiring message to life in striking texture.</li><li>Back 3D embossed 'APRICITY'</li><li>Double Collar Neck & Cuffs</li></ul>
+              {% when 'oversized-sweatshirt-turtleneck' %}
+                <p>This cozy and stylish, uniquely gray sweatshirt is a must-have for you! Made from soft, high-quality fabric, it offers warmth and comfort. Featuring unique neck details and thumb holes for added flair, its combination of style and coziness is unmatched</p><ul><li>Color: Charcoal Gray </li><li>Material: A premium blend of fleece, cotton, and polyester, offering ultimate warmth softness</li><li>Embroidery logo on the turtleneck for a stylish touch</li><li>Back embroidery of 'APRICITY' </li><li>Two-tone grey cuffs, featuring a lighter grey accent at the thumb hole</li></ul>
+              {% when 'overlap-neck-sweatshirt' %}
+                <p>This soft black sweatshirt boasts stylish elbow line details and bold blue overlapping neck accents for a modern edge. Its clean black base and unique design make it a must-have for those who value fashion-forward yet comfortable pieces.</p><ul><li>Color : Black</li><li>Material : Soft Scuba & Cotton Blend – smooth, breathable</li><li>Two-tone overlapping neck for a modern, stylish look</li><li>Front leather patch logo</li><li>Back 3D embossed logo </li><li>Around elbow line details</li></ul>
+              {% when 'crewneck-oversized-sweatshirt' %}
+                <p>Step up your style game with the Apricity Chili Red Sweatshirt. This statement piece features a bold black logo on the back that's sure to turn heads. Perfect for those who aren't afraid to be noticed, this sweatshirt combines comfort, quality, and a daring style that says "look at me"</p><ul><li>Color : Chili Red</li><li>Material : Soft Scuba & Cotton Blend – smooth, breathable</li><li>Debossed 'APRICITY'on the turtleneck for a stylish touch</li><li>Back embroidery 'APRICITY'</li><li>Front embroidery Text – shine so brightly that others can't escape the warmth of your presence –</li></ul>
+              {% when 'hoodie-with-burgundy-piping' %}
+                <p>This brown hoodie redefines casual wear with a refined design. It features a textured look, a leather patch on the front, and double-line details in brown and burgundy, complemented by a burgundy inner pocket. Unique line details around the hood add a sharp, dynamic touch</p><ul><li>Color : Coffee Brown</li><li>Material : Soft Scuba & Cotton Blend – smooth, breathable</li><li>Front leather patch 'APRICITY'</li><li>Double-line details in brown and burgundy on the shoulders and hood create a modern, refined look</li><li>Burgundy inner pocket</li></ul>
+              {% when 'hoodie-with-leather-piped-detailing' %}
+                <p>Black hoodie from Apricity brings together luxury and edge. The embossed leather logo patch on the front exudes sophistication, while the metal leather patch and sleek leather piping add a modern, industrial twist. Crafted for ultimate comfort, this hoodie is designed for those who demand style with substance</p><ul><li>Color : Black</li><li>Material : Soft Scuba & Cotton Blend – smooth, breathable</li><li>Bold, large leather patch with 'APRICITY' on the front for a standout look</li><li>Leather line details on the shoulders, hood and back </li><li>Back leather metal patch 'APRICITY'</li></ul>
+              {% when 'all-in-well-hoodie' %}
+                <p>This ivory cream hoodie blends elegance and trendiness with subtle blue details for a twist. The soft cream fabric provides a cozy base, while the blue accents offer a stylish contrast, making it a standout and versatile piece for any casual outfit</p><ul><li>Color: Ivory Cream</li><li>Material: A premium blend of fleece, cotton, and polyester, offering ultimate warmth softness</li><li>Vibrant blue inner neck layer, adding a bold, refreshing contrast</li><li>Embroidery 'All in well' </li><li>Cuff patch text – Apricity (n.) The warmth of the sun in the winter –</li><li>Under the hood Embroidery 'APRICITY' </li></ul>
+              {% when 'apricity-leather-patch-hoodie' %}
+                <p>The Brown Hoodie That Speaks Volumes—crafted in rich brown, featuring a leather patch and the Apricity logo on the back. Soft, comfortable, and full of unique details, it's the perfect blend of luxury and style.</p><ul><li>Color: Coffee Brown</li><li>Material: A premium blend of fleece, cotton, and polyester, offering ultimate warmth softness</li><li>Bold, large leather patch with text – Apricity (n.) The warmth of the sun in the winter – </li><li>Back embroidery 'APRICITY' </li></ul>
+              {% when 'double-collar-cropped-sweatshirt' %}
+                <p>Get ready to make a statement! This Ivory Cream Cropped Sweatshirt with a bold Green Double collar is designed for the trendsetter in you. With its fresh, eye-catching color combination, this piece brings comfort and style together effortlessly</p><ul><li>Color: Ivory Cream</li><li>Material: A premium blend of fleece, cotton, and polyester, offering ultimate warmth softness</li><li>Front embroidery 'APRICITY' </li><li>shoulder double pocket—one with a sleek zipper, and one open for easy access. Perfect for storing your lipstick while hanging out!</li><li>Double collar featuring green accents</li></ul>
+              {% when 'a-new-era-cropped-sweatshirt' %}
+                <p>Bring a fresh vibe to your look with this cropped sweatshirt. The soft sky blue tone pairs with bold embroidery details, making it the perfect mix of comfort and statement style. A new era, your way.</p><ul><li>Color: Sky Blue</li><li>Material: Material: Blend of french terry and cotton, for ultimate comfort </li><li>Front embroidery 'APRICITY' </li><li>Back embroidery text – A New Era of Me –</li></ul>
+              {% when 'indulge-in-self-love-hoodie' %}
+                <p>Stay cozy and stylish in our Blissful Blue hoodie, designed for comfort and a contemporary aesthetic. Combining urban edge with premium craftsmanship, it offers an elevated look that's impossible to miss! Thumbhole cuffs add a touch of flair, while the leather patch on the pocket and hood adds a refined, high-end feel</p><ul><li>Color: Blissful Blue</li><li>Material: A premium blend of fleece, cotton, and polyester, offering ultimate warmth softness</li><li>Front embroidery logo</li><li>Front pocket leather patch 'APRICITY' </li><li>two-tone cuffs with a cream accent at the thumb hole for added style</li><li>leather and embroidered logos on the hood add standout style</li><li>Back embroidery text – Indulge in Selflove –</li></ul>
+              {% when '3d-apricity-hoodie' %}
+                <p>Discover effortless style with our Midnight Navy Hoodie. Crafted in rich navy, it combines comfort and sophistication, with subtle embossed branding and a dark purple hood lining for a unique pop of color an essential wardrobe addition</p><ul><li>Color : Midnight Navy</li><li>Material : Soft Scuba & Cotton Blend – smooth, breathable</li><li>Front embossed 'APRICITY'</li><li>Two-tone cuffs with a dark purple accent at the thumb hole for added style</li><li>Bold, large text embossed with 'APRICITY' on the back for a standout look</li><li>Vibrant purple inner hood</li></ul>
+              {% when 'bayview-linen-set' %}
+                <p>A breezy buttercream linen set featuring a relaxed-fit shirt with an embroidered sketch of a surfer holding a board, paired with matching comfy shorts. Perfect for sunny days, beach strolls, or chilled weekends</p><ul><li>Color: Buttercream</li><li>Material: Premium Poly Linen Orbit, lightweight, breathable</li><li>Front Print: embroidery of a minimalist surfer figure holding a board, adding a playful, artistic</li><li>Back Print: Printed text on the back: "the summer nights when everything comes alive – by APY" Evoking the magic and energy of summer evenings</li><li>Bottoms Design: Coordinated shorts with an elastic waistband for ease and comfort. Finished with the distinctive APRICITY logo, adding a touch of signature style</li></ul>
+              {% when 'club-1932-t-shirt' %}
+                <p>This meaningful and stylish cream-colored T-shirt is a must-have for anyone proud of their Saudi identity. Featuring a clean front design with the refined "CLUB 1932" print, a tribute to the founding year of Saudi Arabia, and a bold message on the back, this piece blends heritage with modern style. A statement of pride, unity, and timeless identity</p><ul><li>Color: Cream</li><li>Material: Premium Lycra – breathable, stretchy, and soft to the touch</li><li>Front Print: "CLUB 1932" with a minimalist sword graphic, symbolizing pride and legacy</li><li>Back Print: "I'M SAUDI ENOUGH – to be the strength behind the flag" in deep maroon</li></ul>
+              {% when 'onyx-black' %}
+                <p>Unleash your inner power with this black T-shirt, designed for those who carry strength silently and style boldly</p><ul><li>Color: Black</li><li>Material: Premium Lycra – breathable, stretchy, and soft to the touch</li><li>Front Print: A clean and minimal APRICITY logo that adds a sleek, modern touch to the design</li><li>Back Print: Features "APRICITY" boldly written across the back in a handwritten</li></ul><p>Patch: A distinctive woven patch with the phrases: "FEAR NONE – ONYX – POWER RUNS DEEP, SO DO YOU"</p>
+              {% when 'onyx-gray' %}
+                <p>Unleash your inner power with this black T-shirt, designed for those who carry strength silently and style boldly.</p><ul><li>Color: Gray</li><li>Material: Premium Lycra – breathable, stretchy, and soft to the touch</li><li>Front Print: A clean and minimal APRICITY logo that adds a sleek, modern touch to the design</li><li>Back Print: Features "APRICITY" boldly written across the back in a handwritten</li><li>Patch: A distinctive woven patch with the phrases: "FEAR NONE – ONYX – POWER RUNS DEEP, SO DO YOU"</li></ul>
+              {% when 'echoes-of-silence-green' %}
+                <p>Showcase your style with this classic green T-shirt, crafted for those who appreciate simplicity and strength.</p><ul><li>Color: Green</li><li>Material: Single heavy jersey, 100% cotton – offering a durable, soft, and comfortable fit. </li><li>Front Print: Simple and sleek with the "APRICITY" logo, reflecting a modern, stylish design.</li><li>Back Print: A unique design that features vertically reversed text, drawing attention. The quote at the bottom adds depth: "I no longer fear the silence. It speaks now in echoes, in buried truths, in the language of quiet survival."</li></ul>
+              {% when 'echoes-of-silence-white' %}
+                <p>Showcase your style with this classic white T-shirt, crafted for those who appreciate simplicity and strength.</p><ul><li>Color: White</li><li>Material: Single heavy jersey, 100% cotton – offering a durable, soft, and comfortable fit. </li><li>Front Print: Simple and sleek with the "APRICITY" logo, reflecting a modern, stylish design.</li><li>Back Print: A unique design that features vertically reversed text, drawing attention. The quote at the bottom adds depth: "I no longer fear the silence. It speaks now in echoes, in buried truths, in the language of quiet survival."</li></ul>
+              {% when 'staple-sand' %}
+                <p>A clean staple piece redefined with subtle statement details. Crafted from soft French Terry fabric, this sand-beige T-shirt delivers structure with comfort. Designed with a relaxed silhouette and refined crew neck, it's elevated by subtle line detailing across the back and sleeves that adds depth and quiet character. Understated, yet intentional.</p><ul><li>Color: Sand Beige</li><li>Material: French Terry – soft, breathable, structured, and comfortable</li><li>Front Detail: Minimal patch with brown "apricity" embroidery</li></ul>
+              {% when 'apricity-blush' %}
+                <p>Feminine essential designed to elevate everyday styling. This soft blush-pink top is crafted to contour the body with a clean, flattering silhouette while maintaining a minimal aesthetic. Delicate logo metal detailing at the shoulder adds a refined statement touch. </p><p>Features a soft blush pink tone with subtle variations between front and back, creating added depth, and may appear slightly different due to lighting and photography.</p><ul><li>Color: Blush Pink</li><li>Material: Jersey fabric (95% cotton, 5% lycra) – soft, breathable, and comfortable</li><li>Shoulder Detail: Gold-tone logo metal accent</li><li>Back Detail: White "APRICITY" embroidery</li></ul>
+              {% when 'apy-butter-set' %}
+                <p>A butter-cream set that plays on contrast — clean lines, defined shape, and unapologetic presence. Soft in tone yet striking in attitude, it's designed to sculpt, define, and quietly command attention with every movement.</p><p>Note: The pants feature a soft tonal shift between front and back, creating a subtle contrast that adds depth and dimension for a naturally dynamic summer look. Colors may appear slightly different due to lighting and photography.</p><ul><li>Color: Butter Cream</li><li>Top Material: Jersey fabric (95% cotton, 5% lycra)</li><li>Pants Material: French Terry (100% cotton)</li><li>Front Embroidery: "APY"</li><li>Back Closure: Gold-tone logo metal accent</li><li>Back Pockets: Two pockets with embroidered logo</li></ul>
+              {% else %}
+                {{ product.description }}
+            {% endcase %}
           </div>
         </div>
 
@@ -335,12 +426,57 @@
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
           <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed prose prose-sm max-w-none prose-zinc">
-            {%- if product.metafields.custom.size_fit != blank -%}
-              {{ product.metafields.custom.size_fit }}
-            {%- else -%}
-              Designed for a versatile unisex fit, it looks great on everyone.
-              <p class="text-xs text-zinc-400 mt-2">Recommended: Go for your normal size for a relaxed standard fit, or size up for an oversized streetwear look.</p>
-            {%- endif -%}
+            {% case product.handle %}
+              {% when 'oversized-dual-tone-sweatshirt' %}
+                <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+              {% when 'oversized-sweatshirt-turtleneck' %}
+                <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL </p>
+              {% when 'overlap-neck-sweatshirt' %}
+                <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+              {% when 'crewneck-oversized-sweatshirt' %}
+                <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+              {% when 'hoodie-with-burgundy-piping' %}
+                <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+              {% when 'hoodie-with-leather-piped-detailing' %}
+                <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+              {% when 'all-in-well-hoodie' %}
+                <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+              {% when 'apricity-leather-patch-hoodie' %}
+                <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+              {% when 'double-collar-cropped-sweatshirt' %}
+                <p>Designed for a flattering and comfortable fit</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p>
+              {% when 'a-new-era-cropped-sweatshirt' %}
+                <p>Designed for a flattering and comfortable fit</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p>
+              {% when 'indulge-in-self-love-hoodie' %}
+                <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+              {% when '3d-apricity-hoodie' %}
+                <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+              {% when 'bayview-linen-set' %}
+                <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+              {% when 'club-1932-t-shirt' %}
+                <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+              {% when 'onyx-black' %}
+                <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+              {% when 'onyx-gray' %}
+                <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+              {% when 'echoes-of-silence-green' %}
+                <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+              {% when 'echoes-of-silence-white' %}
+                <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+              {% when 'staple-sand' %}
+                <p>Designed for a relaxed oversized look that suits everyone</p><p>Female model is 5'4" (163 cm) and wears size S/M</p><p>Male model is 6'1" (185 cm) and wears size M/L</p>
+              {% when 'apricity-blush' %}
+                <p>Designed exclusively for women, offering a flattering close-to-body fit</p><p>Model is 5'4" (163 cm) and wears size S/M</p>
+              {% when 'apy-butter-set' %}
+                <p>Designed exclusively for women, offering a flattering close-to-body fit</p><p>Model is 5'4" (163 cm) and wears size S/M</p>
+              {% else %}
+                {%- if product.metafields.custom.size_fit != blank -%}
+                  {{ product.metafields.custom.size_fit }}
+                {%- else -%}
+                  Designed for a versatile unisex fit, it looks great on everyone.
+                  <p class="text-xs text-zinc-400 mt-2">Recommended: Go for your normal size for a relaxed standard fit, or size up for an oversized streetwear look.</p>
+                {%- endif -%}
+            {% endcase %}
           </div>
         </div>
 
@@ -354,17 +490,62 @@
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
           <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed prose prose-sm max-w-none prose-zinc">
-            {%- if product.metafields.custom.care_instructions != blank -%}
-              {{ product.metafields.custom.care_instructions }}
-            {%- else -%}
-              <ul class="space-y-1.5">
-                <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Machine wash cold at 30°C, inside out</li>
-                <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Do not tumble dry — hang to dry</li>
-                <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Iron on low heat, inside out only</li>
-                <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Do not bleach</li>
-                <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Store folded to preserve shape</li>
-              </ul>
-            {%- endif -%}
+            {% case product.handle %}
+              {% when 'oversized-dual-tone-sweatshirt' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+              {% when 'oversized-sweatshirt-turtleneck' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+              {% when 'overlap-neck-sweatshirt' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+              {% when 'crewneck-oversized-sweatshirt' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
+              {% when 'hoodie-with-burgundy-piping' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not saline soak, bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
+              {% when 'hoodie-with-leather-piped-detailing' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not saline soak, bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
+              {% when 'all-in-well-hoodie' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not saline soak, bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
+              {% when 'apricity-leather-patch-hoodie' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not saline soak, bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
+              {% when 'double-collar-cropped-sweatshirt' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+              {% when 'a-new-era-cropped-sweatshirt' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
+              {% when 'indulge-in-self-love-hoodie' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+              {% when '3d-apricity-hoodie' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
+              {% when 'bayview-linen-set' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+              {% when 'club-1932-t-shirt' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+              {% when 'onyx-black' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+              {% when 'onyx-gray' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+              {% when 'echoes-of-silence-green' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+              {% when 'echoes-of-silence-white' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+              {% when 'staple-sand' %}
+                <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+              {% when 'apricity-blush' %}
+                <p>Machine wash at 86°F / 30°C</p><p>Do not use chlorine bleach</p><p>Do not tumble dry</p><p>Maximum iron at 230°F / 110°C</p><p>Do not dry clean </p><p>Wash inside out. Dry separately </p>
+              {% when 'apy-butter-set' %}
+                <p>Machine wash at 86°F / 30°C</p><p>Do not use chlorine bleach</p><p>Do not tumble dry</p><p>Maximum iron at 230°F / 110°C</p><p>Do not dry clean </p><p>Wash inside out. Dry separately </p>
+              {% else %}
+                {%- if product.metafields.custom.care_instructions != blank -%}
+                  {{ product.metafields.custom.care_instructions }}
+                {%- else -%}
+                  <ul class="space-y-1.5">
+                    <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Machine wash cold at 30°C, inside out</li>
+                    <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Do not tumble dry — hang to dry</li>
+                    <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Iron on low heat, inside out only</li>
+                    <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Do not bleach</li>
+                    <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Store folded to preserve shape</li>
+                  </ul>
+                {%- endif -%}
+            {% endcase %}
           </div>
         </div>
 
