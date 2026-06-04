@@ -404,8 +404,10 @@
       e.preventDefault();
       e.stopPropagation();
 
-      const variantId = sizeBtn.getAttribute('data-variant-id');
+      let variantId = sizeBtn.getAttribute('data-variant-id');
       if (!variantId) return;
+      // Extract numeric ID if it's a Shopify GID
+      if (variantId.includes('/')) variantId = variantId.split('/').pop();
 
       const originalText = sizeBtn.textContent;
       sizeBtn.disabled = true;
