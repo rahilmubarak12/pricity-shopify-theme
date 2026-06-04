@@ -68,6 +68,11 @@
             <a href="{{ shop.url }}/?filter=men" class="relative transition-colors nav-link-hover text-white/70 hover:text-white">Men</a>
             <a href="{{ shop.url }}/?filter=women" class="relative transition-colors nav-link-hover text-white/70 hover:text-white">Women</a>
             <a href="{{ shop.url }}/?filter=new-drops" class="relative transition-colors nav-link-hover text-white/70 hover:text-white">New Drops</a>
+            {%- if section.settings.show_the_rule -%}
+              <a href="{{ section.settings.the_rule_link | default: '/pages/our-story' }}" class="relative transition-colors nav-link-hover text-white/70 hover:text-white no-underline normal-case the-rule-trigger">
+                {{ section.settings.the_rule_text | default: 'The Rule' }}
+              </a>
+            {%- endif -%}
             <a href="{{ shop.url }}/?filter=sale" class="relative transition-colors nav-link-hover text-white/70 hover:text-white">Sale</a>
           {%- else -%}
             {%- for link in main_menu_links -%}
@@ -75,12 +80,11 @@
                 {{ link.title }}
               </a>
             {%- endfor -%}
-          {%- endif -%}
-
-          {%- if section.settings.show_the_rule -%}
-            <a href="{{ section.settings.the_rule_link | default: '/pages/our-story' }}" class="relative transition-colors nav-link-hover text-white/70 hover:text-white no-underline normal-case the-rule-trigger">
-              {{ section.settings.the_rule_text | default: 'The Rule' }}
-            </a>
+            {%- if section.settings.show_the_rule -%}
+              <a href="{{ section.settings.the_rule_link | default: '/pages/our-story' }}" class="relative transition-colors nav-link-hover text-white/70 hover:text-white no-underline normal-case the-rule-trigger">
+                {{ section.settings.the_rule_text | default: 'The Rule' }}
+              </a>
+            {%- endif -%}
           {%- endif -%}
 
           <!-- Contact Dropdown -->
@@ -198,6 +202,11 @@
         <a href="{{ shop.url }}/?filter=men" class="py-2 transition-colors text-zinc-400 hover:text-white">Men</a>
         <a href="{{ shop.url }}/?filter=women" class="py-2 transition-colors text-zinc-400 hover:text-white">Women</a>
         <a href="{{ shop.url }}/?filter=new-drops" class="py-2 transition-colors text-zinc-400 hover:text-white">New Drops</a>
+        {%- if section.settings.show_the_rule -%}
+          <a href="{{ section.settings.the_rule_link | default: '/pages/our-story' }}" class="py-2 transition-colors text-zinc-400 hover:text-white no-underline normal-case the-rule-trigger-mobile">
+            {{ section.settings.the_rule_text | default: 'The Rule' }}
+          </a>
+        {%- endif -%}
         <a href="{{ shop.url }}/?filter=sale" class="py-2 transition-colors text-zinc-400 hover:text-white">Sale</a>
       {%- else -%}
         {%- for link in main_menu_links -%}
@@ -205,12 +214,11 @@
             {{ link.title }}
           </a>
         {%- endfor -%}
-      {%- endif -%}
-
-      {%- if section.settings.show_the_rule -%}
-        <a href="{{ section.settings.the_rule_link | default: '/pages/our-story' }}" class="py-2 transition-colors text-zinc-400 hover:text-white no-underline normal-case the-rule-trigger-mobile">
-          {{ section.settings.the_rule_text | default: 'The Rule' }}
-        </a>
+        {%- if section.settings.show_the_rule -%}
+          <a href="{{ section.settings.the_rule_link | default: '/pages/our-story' }}" class="py-2 transition-colors text-zinc-400 hover:text-white no-underline normal-case the-rule-trigger-mobile">
+            {{ section.settings.the_rule_text | default: 'The Rule' }}
+          </a>
+        {%- endif -%}
       {%- endif -%}
 
       <!-- Currency/Country Selector -->
