@@ -105,7 +105,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const line = itemRow.getAttribute('data-line');
         const display = itemRow.querySelector('.cart-qty-display');
         const currentQty = parseInt(display.textContent.trim(), 10);
-        updateCartQty(line, currentQty - 1);
+        const newQty = currentQty - 1;
+        // Optimistically update displayed qty immediately
+        display.textContent = Math.max(0, newQty);
+        document.querySelectorAll('.cart-count').forEach(el => {
+          const c = parseInt(el.textContent.trim(), 10) || 0;
+          if (c > 0) el.textContent = c - 1;
+        });
+        const totalQtyEl = cartContainer.querySelector('.cart-total-qty');
+        if (totalQtyEl) {
+          const c = parseInt(totalQtyEl.textContent.trim(), 10) || 0;
+          if (c > 0) totalQtyEl.textContent = c - 1;
+        }
+        updateCartQty(line, newQty);
       }
 
       // Quantity Plus Click
@@ -115,7 +127,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const line = itemRow.getAttribute('data-line');
         const display = itemRow.querySelector('.cart-qty-display');
         const currentQty = parseInt(display.textContent.trim(), 10);
-        updateCartQty(line, currentQty + 1);
+        const newQty = currentQty + 1;
+        // Optimistically update displayed qty immediately
+        display.textContent = newQty;
+        document.querySelectorAll('.cart-count').forEach(el => {
+          const c = parseInt(el.textContent.trim(), 10) || 0;
+          el.textContent = c + 1;
+        });
+        const totalQtyEl = cartContainer.querySelector('.cart-total-qty');
+        if (totalQtyEl) {
+          const c = parseInt(totalQtyEl.textContent.trim(), 10) || 0;
+          totalQtyEl.textContent = c + 1;
+        }
+        updateCartQty(line, newQty);
       }
 
       // Remove / Trash Click
@@ -123,14 +147,22 @@ document.addEventListener('DOMContentLoaded', () => {
       if (removeBtn) {
         const itemRow = removeBtn.closest('.cart-item');
         const line = itemRow.getAttribute('data-line');
-        
-        // Trigger slide-out animation
+
+        // Optimistically update cart count in the navbar immediately
+        const countEls = document.querySelectorAll('.cart-count');
+        countEls.forEach(el => {
+          const current = parseInt(el.textContent.trim(), 10) || 0;
+          if (current > 0) el.textContent = current - 1;
+        });
+        const totalQtyEl = cartContainer.querySelector('.cart-total-qty');
+        if (totalQtyEl) {
+          const current = parseInt(totalQtyEl.textContent.trim(), 10) || 0;
+          if (current > 0) totalQtyEl.textContent = current - 1;
+        }
+
+        // Trigger slide-out animation AND fire AJAX simultaneously
         itemRow.classList.add('animate-slide-out');
-        
-        // Wait for the slideOut keyframe to complete before sending AJAX
-        setTimeout(() => {
-          updateCartQty(line, 0);
-        }, 250);
+        updateCartQty(line, 0);
       }
     });
 
