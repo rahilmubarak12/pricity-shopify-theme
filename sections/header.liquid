@@ -3,6 +3,38 @@
   Frosted glass scrolling navbar and mobile navigation drawer.
 {% endcomment %}
 
+<style>
+  .nav-link-hover {
+    position: relative;
+    text-decoration: none !important;
+  }
+  .nav-link-hover::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background: currentColor;
+    transition: width 0.25s ease;
+  }
+  .nav-link-hover:hover::after,
+  .nav-link-hover:hover {
+    width: 100%;
+    color: inherit;
+  }
+  .nav-link-hover:hover {
+    opacity: 1 !important;
+  }
+  /* On hero (unscrolled) hover = white */
+  .main-navbar.text-white .nav-link-hover:hover {
+    color: #ffffff !important;
+  }
+  /* On scrolled navbar hover = dark */
+  .main-navbar.text-\[\#1a1a1a\] .nav-link-hover:hover {
+    color: #1a1a1a !important;
+  }
+</style>
 <header class="fixed top-0 left-0 right-0 z-40">
   <!-- Announcement Bar -->
   {%- if section.settings.show_announcement and section.settings.announcement_text != blank -%}
