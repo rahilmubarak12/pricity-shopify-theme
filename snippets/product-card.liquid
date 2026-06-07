@@ -146,42 +146,7 @@
       >
     {%- endif -%}
 
-    <!-- Quick Add Size Tray (Desktop only - slides up) -->
-    {%- unless is_out_of_stock -%}
-      <div 
-        class="absolute left-0 right-0 bottom-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 transform-gpu will-change-transform hidden lg:flex flex-col gap-1.5 z-10"
-      >
-        <p class="text-[9px] font-mono-street text-white/90 uppercase tracking-widest text-center mb-0.5">Quick Add Size</p>
-        <div class="flex gap-1.5 justify-center flex-wrap">
-          {%- liquid
-            assign size_option_index = nil
-            for option in product.options_with_values
-              assign opt_name = option.name | downcase
-              if opt_name == 'size' or opt_name == 'sizes'
-                assign size_option_index = forloop.index0
-              endif
-            endfor
-          -%}
-          {%- for variant in product.variants -%}
-            {%- liquid
-              if size_option_index != nil
-                assign size_label = variant.options[size_option_index]
-              else
-                assign size_label = variant.title
-              endif
-            -%}
-            <button
-              type="button"
-              {% unless variant.available %}disabled{% endunless %}
-              class="quick-add-size-btn px-3 py-1.5 text-[10px] font-bold rounded uppercase tracking-wider transition {% if variant.available %}bg-white text-zinc-950 hover:bg-zinc-950 hover:text-white shadow hover:scale-105 active:scale-95{% else %}bg-white/20 text-white/40 cursor-not-allowed line-through{% endif %}"
-              data-variant-id="{{ variant.id }}"
-            >
-              {{ size_label }}
-            </button>
-          {%- endfor -%}
-        </div>
-      </div>
-    {%- endunless -%}
+    <!-- Quick Add Size Tray (Desktop) removed -->
   </div>
 
   <!-- Product Details -->
