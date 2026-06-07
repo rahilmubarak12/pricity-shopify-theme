@@ -153,22 +153,30 @@
       >
         <p class="text-[9px] font-mono-street text-white/90 uppercase tracking-widest text-center mb-0.5">Quick Add Size</p>
         <div class="flex gap-1.5 justify-center flex-wrap">
+          {%- liquid
+            assign size_option_index = nil
+            for option in product.options_with_values
+              assign opt_name = option.name | downcase
+              if opt_name == 'size' or opt_name == 'sizes'
+                assign size_option_index = forloop.index0
+              endif
+            endfor
+          -%}
           {%- for variant in product.variants -%}
-            {%- assign option_size = variant.title -%}
-            {%- for option in product.options_with_values -%}
-              {%- assign opt_name = option.name | downcase -%}
-              {%- if opt_name == 'size' or opt_name == 'sizes' -%}
-                {%- comment -%} Capture size title from option selection if multiple option values {%- endcomment -%}
-              {%- endif -%}
-            {%- endfor -%}
-            
+            {%- liquid
+              if size_option_index != nil
+                assign size_label = variant.options[size_option_index]
+              else
+                assign size_label = variant.title
+              endif
+            -%}
             <button
               type="button"
               {% unless variant.available %}disabled{% endunless %}
               class="quick-add-size-btn px-3 py-1.5 text-[10px] font-bold rounded uppercase tracking-wider transition {% if variant.available %}bg-white text-zinc-950 hover:bg-zinc-950 hover:text-white shadow hover:scale-105 active:scale-95{% else %}bg-white/20 text-white/40 cursor-not-allowed line-through{% endif %}"
               data-variant-id="{{ variant.id }}"
             >
-              {{ variant.options[0] | default: variant.title }}
+              {{ size_label }}
             </button>
           {%- endfor -%}
         </div>
@@ -209,14 +217,30 @@
     >
       <p class="text-[9px] font-mono-street uppercase tracking-widest text-zinc-400 text-center mb-2">Select Size</p>
       <div class="flex flex-wrap gap-1.5 justify-center">
+        {%- liquid
+          assign size_option_index = nil
+          for option in product.options_with_values
+            assign opt_name = option.name | downcase
+            if opt_name == 'size' or opt_name == 'sizes'
+              assign size_option_index = forloop.index0
+            endif
+          endfor
+        -%}
         {%- for variant in product.variants -%}
+          {%- liquid
+            if size_option_index != nil
+              assign size_label = variant.options[size_option_index]
+            else
+              assign size_label = variant.title
+            endif
+          -%}
           <button
             type="button"
             {% unless variant.available %}disabled{% endunless %}
             class="quick-add-size-btn px-3 py-1.5 text-[10px] font-bold rounded uppercase tracking-wider transition {% if variant.available %}bg-zinc-950 text-white hover:bg-zinc-700 shadow active:scale-95{% else %}bg-zinc-100 text-zinc-300 cursor-not-allowed line-through{% endif %}"
             data-variant-id="{{ variant.id }}"
           >
-            {{ variant.options[0] | default: variant.title }}
+            {{ size_label }}
           </button>
         {%- endfor -%}
       </div>
