@@ -647,6 +647,15 @@
 
 {%- unless is_modal -%}
 <!-- Sticky Add to Cart Bar (main product page only) -->
+<style>
+  body.sticky-atc-active .chat-toggle,
+  body.sticky-atc-active #shopify-chat,
+  body.sticky-atc-active [data-spec="toggle-button"] {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+</style>
 <div id="StickyATC" class="fixed bottom-0 left-0 right-0 z-[9999] translate-y-full transition-transform duration-300 ease-in-out" style="background:#fff; border-top:1px solid #e5e7eb; box-shadow:0 -4px 24px rgba(0,0,0,0.08);">
   <div class="flex items-center gap-3 px-4 py-3">
     <div class="flex-1 min-w-0">
@@ -673,16 +682,14 @@
   if (!stickyBar || !stickyBtn || !mainAtc) return;
 
   // Show/hide based on scroll position of main ATC button
-  const shopifyChat = document.querySelector('.chat-toggle');
-
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         stickyBar.classList.add('translate-y-full');
-        if (shopifyChat) shopifyChat.style.display = '';
+        document.body.classList.remove('sticky-atc-active');
       } else {
         stickyBar.classList.remove('translate-y-full');
-        if (shopifyChat) shopifyChat.style.display = 'none';
+        document.body.classList.add('sticky-atc-active');
       }
     });
   }, { threshold: 0.1 });
