@@ -123,6 +123,39 @@
       {%- endif -%}
     </div>
 
+
+    <!-- Cart Upsell -->
+    {%- if cart.item_count > 0 -%}
+      {%- assign upsell_product = nil -%}
+      {%- for product in collections['all'].products limit: 10 -%}
+        {%- assign already_in_cart = false -%}
+        {%- for item in cart.items -%}
+          {%- if item.product.id == product.id -%}
+            {%- assign already_in_cart = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- unless already_in_cart -%}
+          {%- assign upsell_product = product -%}
+          {%- break -%}
+        {%- endunless -%}
+      {%- endfor -%}
+      {%- if upsell_product -%}
+        <div class="px-8 pt-4 pb-2">
+          <p class="text-[9px] uppercase tracking-[0.2em] text-zinc-400 font-mono-street mb-3">You May Also Like</p>
+          <div class="flex items-center gap-4 bg-white border border-zinc-100 rounded-xl p-3">
+            <img src="{{ upsell_product.featured_image | image_url: width: 120 }}" alt="{{ upsell_product.title | escape }}" class="w-16 h-20 object-cover rounded-lg bg-zinc-50 shrink-0" width="120" height="150" />
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-semibold text-zinc-900 uppercase tracking-wide truncate">{{ upsell_product.title }}</p>
+              <p class="text-xs text-zinc-500 font-mono-street mt-0.5">{{ upsell_product.price | money_without_trailing_zeros }}</p>
+            </div>
+            <a href="{{ upsell_product.url }}" class="shrink-0 px-3 py-2 text-white text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all" style="background-color:#006039;">
+              View
+            </a>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+
     <!-- Footer Summary -->
     {%- if cart.item_count > 0 -%}
       <div class="cart-drawer-footer p-8 bg-[#f3f2f0] border-t border-zinc-200 space-y-4">

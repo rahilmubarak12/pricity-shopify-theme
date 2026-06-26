@@ -382,7 +382,7 @@ function initProductDetailEngine(container) {
         addToCartBtn.disabled = false;
         addToCartBtn.querySelector('.btn-text').textContent = 'Go to Cart';
         addToCartBtn.classList.remove('bg-zinc-900', 'hover:bg-zinc-700');
-        addToCartBtn.style.backgroundColor = '#059669';
+        addToCartBtn.style.backgroundColor = '#006039';
 
         // Swap icon to arrow-right
         const svg = addToCartBtn.querySelector('svg');
@@ -391,7 +391,7 @@ function initProductDetailEngine(container) {
         }
 
         // Refresh cart drawer content (without opening it)
-        document.dispatchEvent(new CustomEvent('cart:updated', { detail: { item: item, openDrawer: false } }));
+        document.dispatchEvent(new CustomEvent('cart:updated', { detail: { item: item, openDrawer: true } }));
       })
       .catch(err => {
         console.error('Failed to add to cart:', err);

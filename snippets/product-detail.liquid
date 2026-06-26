@@ -603,7 +603,7 @@
       <div class="flex gap-2.5">
         <button
           type="button"
-          class="product-add-to-cart flex-1 py-4 rounded-xl text-sm font-semibold tracking-[0.1em] uppercase flex items-center justify-center gap-2.5 transition-all duration-300 bg-zinc-900 text-white hover:bg-zinc-700 shadow-lg shadow-zinc-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-zinc-900 disabled:text-white"
+          class="product-add-to-cart flex-1 py-4 rounded-xl text-sm font-semibold tracking-[0.1em] uppercase flex items-center justify-center gap-2.5 transition-all duration-300 text-white shadow-lg shadow-zinc-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:text-white" style="background-color:#006039;"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
@@ -618,9 +618,95 @@
           Quick Buy
         </button>
       </div>
+      <!-- Trust Badges -->
+      <div class="flex items-center justify-center gap-4 pt-1 pb-1">
+        <div class="flex flex-col items-center gap-1 text-zinc-400">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span class="text-[9px] uppercase tracking-wider font-medium">Secure Pay</span>
+        </div>
+        <div class="w-px h-8 bg-zinc-100"></div>
+        <div class="flex flex-col items-center gap-1 text-zinc-400">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <span class="text-[9px] uppercase tracking-wider font-medium">Free Delivery</span>
+        </div>
+        <div class="w-px h-8 bg-zinc-100"></div>
+        <div class="flex flex-col items-center gap-1 text-zinc-400">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          <span class="text-[9px] uppercase tracking-wider font-medium">Easy Returns</span>
+        </div>
+        <div class="w-px h-8 bg-zinc-100"></div>
+        <div class="flex flex-col items-center gap-1 text-zinc-400">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="text-[9px] uppercase tracking-wider font-medium">Premium</span>
+        </div>
+      </div>
     </div>
 
   </div>
+
+
+{%- unless is_modal -%}
+<!-- Sticky Add to Cart Bar (main product page only) -->
+<div id="StickyATC" class="fixed bottom-0 left-0 right-0 z-[9999] translate-y-full transition-transform duration-300 ease-in-out" style="background:#fff; border-top:1px solid #e5e7eb; box-shadow:0 -4px 24px rgba(0,0,0,0.08);">
+  <div class="flex items-center gap-3 px-4 py-3">
+    <div class="flex-1 min-w-0">
+      <p class="text-xs font-semibold text-zinc-900 uppercase tracking-wide truncate sticky-atc-title">{{ product.title }}</p>
+      <p class="text-xs text-zinc-500 font-mono-street sticky-atc-price">{{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }}</p>
+    </div>
+    <button
+      type="button"
+      id="StickyATCBtn"
+      class="shrink-0 px-6 py-3 text-white text-xs font-bold uppercase tracking-widest rounded-xl transition-all disabled:opacity-50"
+      style="background-color:#006039;"
+    >
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+<script>
+(function() {
+  const stickyBar = document.getElementById('StickyATC');
+  const stickyBtn = document.getElementById('StickyATCBtn');
+  const mainAtc = document.querySelector('.product-add-to-cart');
+
+  if (!stickyBar || !stickyBtn || !mainAtc) return;
+
+  // Show/hide based on scroll position of main ATC button
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        stickyBar.classList.add('translate-y-full');
+      } else {
+        stickyBar.classList.remove('translate-y-full');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  observer.observe(mainAtc);
+
+  // Proxy click to the main ATC button
+  stickyBtn.addEventListener('click', () => {
+    mainAtc.click();
+  });
+
+  // Mirror disabled state from main ATC
+  const mirrorState = () => {
+    stickyBtn.disabled = mainAtc.disabled;
+    const btnText = mainAtc.querySelector('.btn-text');
+    if (btnText) stickyBtn.textContent = btnText.textContent;
+    if (mainAtc.style.backgroundColor) {
+      stickyBtn.style.backgroundColor = mainAtc.style.backgroundColor;
+    } else {
+      stickyBtn.style.backgroundColor = '#006039';
+    }
+  };
+
+  new MutationObserver(mirrorState).observe(mainAtc, { attributes: true, subtree: true, childList: true });
+  mirrorState();
+})();
+</script>
+{%- endunless -%}
 
   <!-- Size Chart Sub-Modal -->
   {%- if size_chart_html != blank -%}
