@@ -126,10 +126,6 @@ function initProductDetailEngine(container) {
       stockIndicator.textContent = `Only ${qty} left`;
       stockIndicator.className = 'stock-status-indicator text-[10px] font-semibold tracking-wide uppercase flex items-center gap-1.5 text-red-500';
       if (legend) legend.classList.remove('hidden');
-    } else if (qty <= 10) {
-      stockIndicator.textContent = `${qty} remaining`;
-      stockIndicator.className = 'stock-status-indicator text-[10px] font-semibold tracking-wide uppercase flex items-center gap-1.5 text-amber-500';
-      if (legend) legend.classList.remove('hidden');
     } else {
       stockIndicator.textContent = 'In Stock';
       stockIndicator.className = 'stock-status-indicator text-[10px] font-semibold tracking-wide uppercase flex items-center gap-1.5 text-emerald-600';
