@@ -673,12 +673,16 @@
   if (!stickyBar || !stickyBtn || !mainAtc) return;
 
   // Show/hide based on scroll position of main ATC button
+  const shopifyChat = document.getElementById('shopify-chat');
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         stickyBar.classList.add('translate-y-full');
+        if (shopifyChat) shopifyChat.style.display = '';
       } else {
         stickyBar.classList.remove('translate-y-full');
+        if (shopifyChat) shopifyChat.style.display = 'none';
       }
     });
   }, { threshold: 0.1 });
