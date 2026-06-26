@@ -673,7 +673,7 @@
   if (!stickyBar || !stickyBtn || !mainAtc) return;
 
   // Show/hide based on scroll position of main ATC button
-  const shopifyChat = document.getElementById('shopify-chat');
+  const shopifyChat = document.querySelector('.chat-toggle');
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
