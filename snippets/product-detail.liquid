@@ -68,7 +68,7 @@
     assign size_chart_title = 'Unisex Sweatshirts Size Chart'
   endif
 
-  if product.handle == 'apricity-blush' or product.handle == 'apy-butter-set'
+  if product.handle == 'apricity-blush' or product.handle == 'apy-butter-set' or combined_text contains 'yellow' or combined_text contains 'pink' or combined_text contains 'blush' or product.handle contains 'yellow' or product.handle contains 'pink' or product.handle contains 'blush'
     assign size_chart_key = 'none'
   endif
 -%}
