@@ -103,10 +103,11 @@
   {%- assign size_chart_html = '' -%}
 {%- endif -%}
 
-{%- comment -%} Metafield override: if custom.size_chart is set, use it instead {%- endcomment -%}
 {%- if product.metafields.custom.size_chart != blank -%}
   {%- assign size_chart_html = product.metafields.custom.size_chart.value -%}
-  {%- assign size_chart_title = 'Size Chart' -%}
+  {%- if size_chart_title == blank or size_chart_title == 'Size Chart' -%}
+    {%- assign size_chart_title = 'Size Chart' -%}
+  {%- endif -%}
 {%- endif -%}
 
 <div class="product-detail-wrapper flex flex-col lg:flex-row w-full h-full" data-product-handle="{{ product.handle }}">
