@@ -27,7 +27,8 @@
   # Select size chart based on product title + type keywords
   assign product_title_lower = product.title | downcase
   assign product_type_lower = product.type | downcase
-  assign combined_text = product_title_lower | append: ' ' | append: product_type_lower
+  assign product_tags_string = product.tags | join: ' ' | downcase
+  assign combined_text = product_title_lower | append: ' ' | append: product_type_lower | append: ' ' | append: product_tags_string | append: ' ' | append: product.handle
   assign size_chart_title = 'Size Chart'
   assign size_chart_key = 'default'
 
