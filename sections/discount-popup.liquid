@@ -32,10 +32,10 @@
           <img src="{{ 'logo.png' | asset_url }}" alt="Logo" class="h-10 w-10 object-contain mx-auto mb-3 opacity-80" onerror="this.style.display='none';" width="1000" height="1000">
         {%- endif -%}
         <p class="font-mono-street text-[10px] tracking-[0.3em] text-zinc-400 uppercase mb-1">
-          Welcome to
+          {{ section.settings.welcome_text | default: 'Welcome to' }}
         </p>
         <h2 class="text-white font-heading font-extrabold text-2xl tracking-[0.2em] uppercase">
-          APRICITY
+          {{ section.settings.brand_text | default: 'APRICITY' }}
         </h2>
       </div>
 
@@ -54,14 +54,14 @@
 
         <!-- Offer 2 -->
         <div class="w-full border border-zinc-100 rounded-xl px-6 py-4 bg-zinc-50 flex items-center justify-center gap-3">
-          <span class="text-2xl">🇸🇦</span>
+          <span class="text-2xl">{{ section.settings.offer_2_flag | default: '🇸🇦' }}</span>
           <p class="text-zinc-700 text-sm font-light">
             {{ section.settings.offer_2_text | default: 'Free shipping with no minimum order' }}
           </p>
         </div>
 
         <p class="text-zinc-400 text-xs font-mono-street tracking-wider uppercase leading-relaxed">
-          Apply code at checkout
+          {{ section.settings.apply_code_text | default: 'Apply code at checkout' }}
         </p>
 
         <!-- Code Box -->
@@ -69,19 +69,21 @@
           <span class="discount-code-text font-mono-street font-bold text-xl tracking-[0.3em] text-[#1a1a1a] group-hover:text-zinc-600 transition-colors">
             {{ section.settings.coupon_code | default: 'APY-15' }}
           </span>
-          <p class="copy-status-text text-[10px] text-zinc-400 mt-1 font-mono-street tracking-widest uppercase">
-            Tap to copy
+          <p class="copy-status-text text-[10px] text-zinc-400 mt-1 font-mono-street tracking-widest uppercase"
+             data-tap-to-copy="{{ section.settings.tap_to_copy_text | default: 'Tap to copy' | escape }}"
+             data-copied="{{ section.settings.copied_text | default: '✓ Copied!' | escape }}">
+            {{ section.settings.tap_to_copy_text | default: 'Tap to copy' }}
           </p>
         </button>
 
         <!-- Action Button -->
         <button class="discount-shop-now w-full bg-[#1a1a1a] text-white font-mono-street text-xs uppercase tracking-[0.2em] py-4 rounded-xl hover:bg-zinc-700 transition-colors">
-          Shop Now
+          {{ section.settings.shop_now_text | default: 'Shop Now' }}
         </button>
 
         <!-- Dismiss Button -->
         <button class="discount-dismiss text-[11px] text-zinc-400 font-mono-street uppercase tracking-widest hover:text-zinc-600 transition-colors">
-          No thanks
+          {{ section.settings.no_thanks_text | default: 'No thanks' }}
         </button>
       </div>
 
@@ -142,12 +144,12 @@
 
     // Copy to clipboard function
     const showCopied = () => {
-      statusText.textContent = '✓ Copied!';
+      statusText.textContent = statusText.getAttribute('data-copied') || '✓ Copied!';
       statusText.classList.remove('text-zinc-400');
       statusText.classList.add('text-green-500');
       
       setTimeout(() => {
-        statusText.textContent = 'Tap to copy';
+        statusText.textContent = statusText.getAttribute('data-tap-to-copy') || 'Tap to copy';
         statusText.classList.remove('text-green-500');
         statusText.classList.add('text-zinc-400');
       }, 2000);
@@ -229,6 +231,58 @@
       "id": "offer_2_text",
       "label": "Offer 2 Details",
       "default": "Free shipping with no minimum order"
+    },
+    {
+      "type": "header",
+      "content": "Labels & Localization"
+    },
+    {
+      "type": "text",
+      "id": "welcome_text",
+      "label": "Welcome Banner text",
+      "default": "Welcome to"
+    },
+    {
+      "type": "text",
+      "id": "brand_text",
+      "label": "Brand Header Name",
+      "default": "APRICITY"
+    },
+    {
+      "type": "text",
+      "id": "offer_2_flag",
+      "label": "Offer 2 Country Flag Emoji",
+      "default": "🇸🇦"
+    },
+    {
+      "type": "text",
+      "id": "apply_code_text",
+      "label": "Apply Code Footnote",
+      "default": "Apply code at checkout"
+    },
+    {
+      "type": "text",
+      "id": "tap_to_copy_text",
+      "label": "Copy Instruction label",
+      "default": "Tap to copy"
+    },
+    {
+      "type": "text",
+      "id": "copied_text",
+      "label": "Copied Success notice",
+      "default": "✓ Copied!"
+    },
+    {
+      "type": "text",
+      "id": "shop_now_text",
+      "label": "Shop Button Label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "text",
+      "id": "no_thanks_text",
+      "label": "Dismiss Link Label",
+      "default": "No thanks"
     }
   ],
   "presets": [

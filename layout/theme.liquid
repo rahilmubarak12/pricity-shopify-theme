@@ -5,7 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="theme-color" content="{{ settings.color_background }}">
-    <meta name="msvalidate.01" content="A352E6A0AF9A652267361BBB572B8468">
+    {%- if settings.bing_site_verification != blank -%}
+      <meta name="msvalidate.01" content="{{ settings.bing_site_verification }}">
+    {%- endif -%}
+    {%- if settings.google_site_verification != blank -%}
+      <meta name="google-site-verification" content="{{ settings.google_site_verification }}">
+    {%- endif -%}
     <link rel="canonical" href="{{ canonical_url }}">
 
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>

@@ -88,32 +88,34 @@
           {%- endif -%}
 
           <!-- Contact Dropdown -->
-          <div class="relative group flex items-center contact-dropdown">
-            <button class="relative transition-colors nav-link-hover text-white/70 hover:text-white outline-none cursor-pointer capitalize font-mono-street text-[17px] font-medium tracking-[0.06em]">
-              Contact
-            </button>
-            <div class="absolute left-0 top-full mt-2 w-72 bg-black border border-zinc-800 text-white p-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.8)] z-50 rounded-sm">
-              <div class="flex flex-col space-y-4 text-[10px] tracking-[0.15em] font-mono-street uppercase text-left">
-                <span class="text-zinc-500 border-b border-zinc-800 pb-1.5 block font-bold text-[11px] tracking-widest">Contact Details</span>
-                {%- if section.settings.whatsapp_number != blank -%}
-                  <div class="space-y-1">
-                    <span class="text-zinc-600 block text-[8px] font-bold">WhatsApp Support</span>
-                    <a href="{{ section.settings.whatsapp_url | default: 'https://wa.me/966536470644' }}" target="_blank" rel="noopener noreferrer" class="text-white hover:text-zinc-300 transition-colors block text-[11px] font-semibold">
-                      {{ section.settings.whatsapp_number }}
-                    </a>
-                  </div>
-                {%- endif -%}
-                {%- if section.settings.email_address != blank -%}
-                  <div class="space-y-1">
-                    <span class="text-zinc-600 block text-[8px] font-bold">Email Inquiry</span>
-                    <a href="mailto:{{ section.settings.email_address }}" class="text-white hover:text-zinc-300 transition-colors block text-[10px] lowercase tracking-normal font-semibold break-all">
-                      {{ section.settings.email_address }}
-                    </a>
-                  </div>
-                {%- endif -%}
+          {%- if section.settings.show_contact != false -%}
+            <div class="relative group flex items-center contact-dropdown">
+              <button class="relative transition-colors nav-link-hover text-white/70 hover:text-white outline-none cursor-pointer capitalize font-mono-street text-[17px] font-medium tracking-[0.06em]">
+                {{ section.settings.contact_trigger_label | default: 'Contact' }}
+              </button>
+              <div class="absolute left-0 top-full mt-2 w-72 bg-black border border-zinc-800 text-white p-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.8)] z-50 rounded-sm">
+                <div class="flex flex-col space-y-4 text-[10px] tracking-[0.15em] font-mono-street uppercase text-left">
+                  <span class="text-zinc-500 border-b border-zinc-800 pb-1.5 block font-bold text-[11px] tracking-widest">{{ section.settings.contact_details_label | default: 'Contact Details' }}</span>
+                  {%- if section.settings.whatsapp_number != blank -%}
+                    <div class="space-y-1">
+                      <span class="text-zinc-600 block text-[8px] font-bold">{{ section.settings.whatsapp_label | default: 'WhatsApp Support' }}</span>
+                      <a href="{{ section.settings.whatsapp_url | default: 'https://wa.me/966536470644' }}" target="_blank" rel="noopener noreferrer" class="text-white hover:text-zinc-300 transition-colors block text-[11px] font-semibold">
+                        {{ section.settings.whatsapp_number }}
+                      </a>
+                    </div>
+                  {%- endif -%}
+                  {%- if section.settings.email_address != blank -%}
+                    <div class="space-y-1">
+                      <span class="text-zinc-600 block text-[8px] font-bold">{{ section.settings.email_label | default: 'Email Inquiry' }}</span>
+                      <a href="mailto:{{ section.settings.email_address }}" class="text-white hover:text-zinc-300 transition-colors block text-[10px] lowercase tracking-normal font-semibold break-all">
+                        {{ section.settings.email_address }}
+                      </a>
+                    </div>
+                  {%- endif -%}
+                </div>
               </div>
             </div>
-          </div>
+          {%- endif -%}
         </div>
       </div>
 
@@ -124,8 +126,8 @@
         {%- else -%}
           <img src="{{ 'logo.png' | asset_url }}" alt="Logo" class="h-10 w-10 sm:h-14 sm:w-14 lg:h-16 lg:w-16 object-contain transition-all" onerror="this.style.display='none';" width="1000" height="1000">
         {%- endif -%}
-        <span class="transition-all leading-none text-2xl sm:text-3xl lg:text-4xl apricity-wordmark text-[#3d4a6b]">
-          APRICITY
+        <span class="transition-all leading-none text-2xl sm:text-3xl lg:text-4xl apricity-wordmark" style="color: {{ section.settings.wordmark_color | default: '#3d4a6b' }};">
+          {{ section.settings.wordmark_text | default: 'APRICITY' }}
         </span>
       </a>
 
@@ -153,7 +155,7 @@
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
           </svg>
-          <span class="hidden md:inline">Search</span>
+          <span class="hidden md:inline">{{ section.settings.search_label | default: 'Search' }}</span>
         </button>
 
         <button class="cart-drawer-trigger relative transition-all flex items-center gap-1.5 p-1 hover:opacity-80 text-current" aria-label="Bag">
@@ -163,7 +165,7 @@
             <path d="M16 10a4 4 0 0 1-8 0"></path>
           </svg>
           <span class="text-sm sm:text-base">
-            <span class="hidden sm:inline">Cart </span>(<span class="cart-count">{{ cart.item_count }}</span>)
+            <span class="hidden sm:inline">{{ section.settings.cart_label | default: 'Cart' }} </span>(<span class="cart-count">{{ cart.item_count }}</span>)
           </span>
         </button>
       </div>
@@ -184,7 +186,7 @@
         {%- else -%}
           <img src="{{ 'logo.png' | asset_url }}" alt="Logo" class="h-10 w-10 object-contain" onerror="this.style.display='none';" width="50" height="50">
         {%- endif -%}
-        <span class="text-white font-mono-street tracking-[0.2em] text-sm uppercase">Apricity</span>
+        <span class="text-white font-mono-street tracking-[0.2em] text-sm uppercase">{{ section.settings.wordmark_text | default: 'Apricity' }}</span>
       </a>
       <div class="flex items-center gap-3">
         <button class="search-drawer-trigger p-2 text-white">
@@ -247,21 +249,23 @@
       {%- endif -%}
 
       <!-- Mobile Contact Info -->
-      <div class="pt-6 border-t border-zinc-800 flex flex-col items-center gap-3">
-        <span class="text-zinc-500 text-[10px] tracking-[0.2em] font-bold">Contact Us</span>
-        <div class="flex flex-col items-center gap-2">
-          {%- if section.settings.whatsapp_number != blank -%}
-            <a href="{{ section.settings.whatsapp_url | default: 'https://wa.me/966536470644' }}" target="_blank" rel="noopener noreferrer" class="text-white hover:text-zinc-300 font-semibold text-xs tracking-wider">
-              WhatsApp: {{ section.settings.whatsapp_number }}
-            </a>
-          {%- endif -%}
-          {%- if section.settings.email_address != blank -%}
-            <a href="mailto:{{ section.settings.email_address }}" class="text-white hover:text-zinc-300 font-semibold text-[11px] lowercase tracking-normal">
-              {{ section.settings.email_address }}
-            </a>
-          {%- endif -%}
+      {%- if section.settings.show_contact != false -%}
+        <div class="pt-6 border-t border-zinc-800 flex flex-col items-center gap-3">
+          <span class="text-zinc-500 text-[10px] tracking-[0.2em] font-bold">{{ section.settings.contact_us_label | default: 'Contact Us' }}</span>
+          <div class="flex flex-col items-center gap-2">
+            {%- if section.settings.whatsapp_number != blank -%}
+              <a href="{{ section.settings.whatsapp_url | default: 'https://wa.me/966536470644' }}" target="_blank" rel="noopener noreferrer" class="text-white hover:text-zinc-300 font-semibold text-xs tracking-wider">
+                WhatsApp: {{ section.settings.whatsapp_number }}
+              </a>
+            {%- endif -%}
+            {%- if section.settings.email_address != blank -%}
+              <a href="mailto:{{ section.settings.email_address }}" class="text-white hover:text-zinc-300 font-semibold text-[11px] lowercase tracking-normal">
+                {{ section.settings.email_address }}
+              </a>
+            {%- endif -%}
+          </div>
         </div>
-      </div>
+      {%- endif -%}
     </div>
 
     <!-- Close button anchored at the bottom of the drawer -->
@@ -270,7 +274,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" x2="6" y1="6" y2="18"></line>
           <line x1="6" x2="18" y1="6" y2="18"></line>
-        </svg> Close
+        </svg> {{ section.settings.close_label | default: 'Close' }}
       </button>
     </div>
   </div>
@@ -429,6 +433,84 @@
       "id": "email_address",
       "label": "Contact Email",
       "default": "theapricity.officials@gmail.com"
+    },
+    {
+      "type": "header",
+      "content": "Custom Brand Text & Colors"
+    },
+    {
+      "type": "text",
+      "id": "wordmark_text",
+      "label": "Brand Name Wordmark",
+      "default": "APRICITY"
+    },
+    {
+      "type": "color",
+      "id": "wordmark_color",
+      "label": "Brand Name Text Color",
+      "default": "#3d4a6b"
+    },
+    {
+      "type": "header",
+      "content": "Contact Dropdown Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_contact",
+      "label": "Enable Contact Dropdown Menu",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "contact_trigger_label",
+      "label": "Dropdown Menu Trigger Label",
+      "default": "Contact"
+    },
+    {
+      "type": "text",
+      "id": "contact_details_label",
+      "label": "Details Header",
+      "default": "Contact Details"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_label",
+      "label": "WhatsApp Label",
+      "default": "WhatsApp Support"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Email Label",
+      "default": "Email Inquiry"
+    },
+    {
+      "type": "text",
+      "id": "contact_us_label",
+      "label": "Mobile Footer Header",
+      "default": "Contact Us"
+    },
+    {
+      "type": "header",
+      "content": "Header Actions Labels"
+    },
+    {
+      "type": "text",
+      "id": "search_label",
+      "label": "Search Button Label",
+      "default": "Search"
+    },
+    {
+      "type": "text",
+      "id": "cart_label",
+      "label": "Cart Button Label",
+      "default": "Cart"
+    },
+    {
+      "type": "text",
+      "id": "close_label",
+      "label": "Mobile Drawer Close Label",
+      "default": "Close"
     }
   ]
 }

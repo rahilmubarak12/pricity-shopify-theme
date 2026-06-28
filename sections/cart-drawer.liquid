@@ -28,8 +28,8 @@
 
     <!-- Free Shipping Notice -->
     <div class="bg-[#f3f2f0] border-b border-zinc-200 py-2.5 px-8 flex items-center justify-between text-[11px] font-mono-street text-zinc-500 uppercase tracking-wider">
-      <span>🇸🇦 Free KSA Express Shipping</span>
-      <span>{{ 0 | money_without_trailing_zeros }}</span>
+      <span>{{ section.settings.shipping_notice_text | default: '🇸🇦 Free KSA Express Shipping' }}</span>
+      <span>{{ section.settings.shipping_notice_threshold | default: 0 | times: 100 | money_without_trailing_zeros }}</span>
     </div>
 
     <!-- Cart Contents -->
@@ -167,22 +167,25 @@
           </span>
         </div>
         
-        <!-- Tabby calculations -->
-        <div class="py-2.5 px-3 bg-white border border-zinc-200 flex items-center justify-between text-[11px] font-mono-street text-zinc-500 uppercase">
-          <span class="text-[#1a1a1a] font-bold">Tabby 4×</span>
-          <span>
-            4 payments of 
-            <span class="tabby-split-price">
-              {{ cart.total_price | divided_by: 4 | money_without_trailing_zeros }}
+        <!-- Installments calculations -->
+        {%- if section.settings.enable_installments != false -%}
+          {%- assign split_parts = section.settings.installments_split | default: 4 -%}
+          <div class="py-2.5 px-3 bg-white border border-zinc-200 flex items-center justify-between text-[11px] font-mono-street text-zinc-500 uppercase">
+            <span class="text-[#1a1a1a] font-bold">{{ section.settings.installments_provider | default: 'Tabby' }} {{ split_parts }}×</span>
+            <span>
+              {{ section.settings.installments_text | default: '4 payments of' }} 
+              <span class="tabby-split-price">
+                {{ cart.total_price | divided_by: split_parts | money_without_trailing_zeros }}
+              </span>
             </span>
-          </span>
-        </div>
+          </div>
+        {%- endif -%}
 
         <a 
           href="/checkout" 
           class="w-full py-4 text-white font-mono-street text-[11px] font-extrabold uppercase tracking-[0.2em] bg-[#0B3D2E] hover:bg-[#07402A] hover:shadow-lg hover:shadow-[#0B3D2E]/30 active:scale-[0.99] transition-all duration-300 ease-in-out flex items-center justify-center gap-2 no-underline"
         >
-          <span>Guest Checkout</span>
+          <span>{{ section.settings.checkout_button_text | default: 'Guest Checkout' }}</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" x2="19" y1="12" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
@@ -193,7 +196,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
           </svg> 
-          Secure Checkout
+          {{ section.settings.secure_checkout_text | default: 'Secure Checkout' }}
         </div>
       </div>
     {%- endif -%}
@@ -236,6 +239,69 @@
       "type": "collection",
       "id": "cart_upsell_collection",
       "label": "Upsell Products Collection"
+    },
+    {
+      "type": "header",
+      "content": "Free Shipping Progress"
+    },
+    {
+      "type": "text",
+      "id": "shipping_notice_text",
+      "label": "Shipping Announcement Label",
+      "default": "🇸🇦 Free KSA Express Shipping"
+    },
+    {
+      "type": "number",
+      "id": "shipping_notice_threshold",
+      "label": "Free Shipping Threshold (Amount in Store Currency)",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Installments configuration"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_installments",
+      "label": "Enable Installments calculation",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "installments_provider",
+      "label": "Installment Provider Name",
+      "default": "Tabby"
+    },
+    {
+      "type": "text",
+      "id": "installments_text",
+      "label": "Split installments descriptive label",
+      "default": "4 payments of"
+    },
+    {
+      "type": "range",
+      "id": "installments_split",
+      "label": "Installment split parts count",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Checkout buttons labels"
+    },
+    {
+      "type": "text",
+      "id": "checkout_button_text",
+      "label": "Checkout Button label",
+      "default": "Guest Checkout"
+    },
+    {
+      "type": "text",
+      "id": "secure_checkout_text",
+      "label": "Secure Checkout subtitle label",
+      "default": "Secure Checkout"
     }
   ]
 }

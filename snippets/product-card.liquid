@@ -240,7 +240,24 @@
             {%- liquid
               assign color_key = color | downcase | replace: ' ', ''
               assign color_hex = '#9ca3af'
-              case color_key
+              
+              if settings.custom_color_swatches != blank
+                assign custom_colors = settings.custom_color_swatches | newline_to_br | split: '<br />'
+                for line in custom_colors
+                  assign clean_line = line | strip | replace: '<br>', '' | replace: '<br/>', '' | replace: '\r', '' | replace: '\n', ''
+                  assign parts = clean_line | split: ':'
+                  if parts.size == 2
+                    assign swatch_name = parts[0] | strip | downcase | replace: ' ', ''
+                    if swatch_name == color_key
+                      assign color_hex = parts[1] | strip
+                      break
+                    endif
+                  endif
+                endfor
+              endif
+
+              if color_hex == '#9ca3af'
+                case color_key
                 when 'black' or 'onyx'
                   assign color_hex = '#1a1a1a'
                 when 'white'

@@ -184,5 +184,35 @@
         "default": "#141414"
       }
     ]
+  },
+  {
+    "name": "Custom Color Swatches",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "custom_color_swatches",
+        "label": "Color Name → Hex Mapping",
+        "info": "One mapping per line, format: color_name:#hex. Example:\ndesert rose:#d4a0a0\npistachio:#93c572",
+        "default": "black:#1a1a1a\ncream:#f5e6c8\necru:#f0e6d3\nwhite:#ffffff\nnavy:#1b2a4a\nolive:#556b2f\nsand:#c2b280\ncharcoal:#36454f\nburgundy:#800020\nforest:#228b22\nstone:#918e85\ncamel:#c19a6b\nslate:#708090\nrust:#b7410e\nivory:#fffff0\ntaupe:#483c32\nkhaki:#c3b091\nmaroon:#800000\nmustard:#ffdb58\nblush:#de5d83\ncoral:#ff7f50\nteal:#008080\nlavender:#e6e6fa\nmint:#98ff98\nmauve:#e0b0ff\nchocolate:#7b3f00"
+      }
+    ]
+  },
+  {
+    "name": "SEO & Verification Tags",
+    "settings": [
+      {
+        "type": "text",
+        "id": "bing_site_verification",
+        "label": "Bing Site Verification Code",
+        "info": "The content value from your Bing msvalidate.01 meta tag",
+        "default": "A352E6A0AF9A652267361BBB572B8468"
+      },
+      {
+        "type": "text",
+        "id": "google_site_verification",
+        "label": "Google Search Console Verification Code",
+        "info": "The content value from your Google site verification meta tag"
+      }
+    ]
   }
 ]

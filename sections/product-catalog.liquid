@@ -65,21 +65,13 @@
     <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-[#1a1a1a] text-white" data-subcategory="all">
       All
     </button>
-    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="summer">
-      Summer Collection
-    </button>
-    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="hoodie">
-      Hoodies
-    </button>
-    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="shirt">
-      Sets
-    </button>
-    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="sweatshirt">
-      Sweatshirts
-    </button>
-    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="t-shirt">
-      T-Shirts & Tops
-    </button>
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'subcategory_filter' -%}
+        <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="{{ block.settings.key | escape }}" {{ block.shopify_attributes }}>
+          {{ block.settings.label | escape }}
+        </button>
+      {%- endif -%}
+    {%- endfor -%}
   </div>
 
   <!-- EMPTY STATE -->
@@ -493,9 +485,67 @@
       "default": 24
     }
   ],
+  "blocks": [
+    {
+      "type": "subcategory_filter",
+      "name": "Subcategory Filter",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Filter Label",
+          "default": "Summer Collection"
+        },
+        {
+          "type": "text",
+          "id": "key",
+          "label": "Filter Key (Matching subcategory tag)",
+          "default": "summer",
+          "info": "Values like: all, summer, hoodie, shirt, sweatshirt, t-shirt. The 'summer' key is treated as anything that is not a hoodie or sweatshirt."
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "Product Catalog Grid"
+      "name": "Product Catalog Grid",
+      "blocks": [
+        {
+          "type": "subcategory_filter",
+          "settings": {
+            "label": "Summer Collection",
+            "key": "summer"
+          }
+        },
+        {
+          "type": "subcategory_filter",
+          "settings": {
+            "label": "Hoodies",
+            "key": "hoodie"
+          }
+        },
+        {
+          "type": "subcategory_filter",
+          "settings": {
+            "label": "Sets",
+            "key": "shirt"
+          }
+        },
+        {
+          "type": "subcategory_filter",
+          "settings": {
+            "label": "Sweatshirts",
+            "key": "sweatshirt"
+          }
+        },
+        {
+          "type": "subcategory_filter",
+          "settings": {
+            "label": "T-Shirts & Tops",
+            "key": "t-shirt"
+          }
+        }
+      ]
     }
   ]
 }
