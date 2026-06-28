@@ -31,7 +31,9 @@
   assign size_chart_title = 'Size Chart'
   assign size_chart_key = 'default'
 
-  if combined_text contains 'a new era' and combined_text contains 'crop'
+  if combined_text contains 'yellow' or combined_text contains 'pink top'
+    assign size_chart_key = 'none'
+  elsif combined_text contains 'a new era' and combined_text contains 'crop'
     assign size_chart_key = 'a-new-era-cropped'
     assign size_chart_title = 'A New Era Cropped Sweatshirt Size Chart'
   elsif combined_text contains 'turtleneck'
@@ -43,15 +45,18 @@
   elsif combined_text contains 'hoodie'
     assign size_chart_key = 'hoodie'
     assign size_chart_title = 'Unisex Hoodies Size Chart'
-  elsif combined_text contains 't-shirt' or combined_text contains 'tshirt' or combined_text contains 't shirt' or combined_text contains 'tee' or combined_text contains 'top'
-    assign size_chart_key = 'tshirt'
-    assign size_chart_title = 'Unisex T-Shirt Size Chart'
-  elsif combined_text contains 'linen' or combined_text contains 'set'
-    assign size_chart_key = 'linen'
-    assign size_chart_title = 'Linen Shirt & Shorts Size Chart'
   elsif combined_text contains 'staple' or combined_text contains 'sand'
     assign size_chart_key = 'staple'
     assign size_chart_title = 'Staple Sand Unisex Size Chart'
+  elsif combined_text contains 'linen'
+    assign size_chart_key = 'linen'
+    assign size_chart_title = 'Linen Shirt & Shorts Size Chart'
+  elsif combined_text contains 't-shirt' or combined_text contains 'tshirt' or combined_text contains 't shirt' or combined_text contains 'tee' or combined_text contains 'top'
+    assign size_chart_key = 'tshirt'
+    assign size_chart_title = 'Unisex T-Shirt Size Chart'
+  elsif combined_text contains 'set'
+    assign size_chart_key = 'linen'
+    assign size_chart_title = 'Linen Shirt & Shorts Size Chart'
   elsif combined_text contains 'crop'
     assign size_chart_key = 'women-cropped'
     assign size_chart_title = 'Double Collar Cropped Sweatshirt Size Chart'
@@ -125,6 +130,11 @@
   {% endcase %}
 {% endcapture %}
 {%- assign size_chart_html = size_chart_html | strip -%}
+
+{%- comment -%} If key is 'none', clear the chart {%- endcomment -%}
+{%- if size_chart_key == 'none' -%}
+  {%- assign size_chart_html = '' -%}
+{%- endif -%}
 
 {%- comment -%} Metafield override: if custom.size_chart is set, use it instead {%- endcomment -%}
 {%- if product.metafields.custom.size_chart != blank -%}
