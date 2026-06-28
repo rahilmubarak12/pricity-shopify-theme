@@ -48,7 +48,8 @@
     color: #aaa;
     margin-bottom: 28px;
   }
-  .our-story-text p {
+  .our-story-text p,
+  .story-content-richtext p {
     font-size: 15px;
     line-height: 1.8;
     color: #444;
@@ -74,19 +75,25 @@
     <div class="our-story-grid">
 
       <div class="our-story-img">
-        <img src="{{ 'rule.png' | asset_url }}" alt="The Rule">
+        {%- if section.settings.image != blank -%}
+          <img src="{{ section.settings.image | image_url: width: 1000 }}" alt="{{ section.settings.title | escape }}">
+        {%- else -%}
+          <img src="{{ 'rule.png' | asset_url }}" alt="The Rule">
+        {%- endif -%}
       </div>
 
       <div class="our-story-text">
-        <h1>The Three-Year Rule</h1>
-        <p class="subheading">APY</p>
-        <p>Apricity exists because we rarely agree. Unusual for a brand? Exactly. For years, our differences have shaped everything we build. One of us instinctively edits. The other instinctively pushes. We don't settle quickly. We don't meet in the middle just to move forward.</p>
-        <p>Most ideas don't survive that tension. They're questioned. Reduced. Challenged. Left alone. Revisited. If something feels obvious, it's gone. If it only works for the moment, it's gone.</p>
-        <p>And even if an idea survives us, it faces one final rule: The Three-Year Rule.</p>
-        <p>Before anything becomes APRICITY, we ask one question: Will this still make sense three years from now? Not next season. Not next drop. Three years.</p>
-        <p>If we can't see ourselves standing behind it with the same certainty, it doesn't exist. No trend protection. No hype insurance. No "it'll do for now."</p>
-        <p>If it survives disagreement — and it survives time — it earns the name.</p>
-        <p>APRICITY is not the result of agreement. It's the result of something harder. Something slower. Something that lasts.</p>
+        {%- if section.settings.title != blank -%}
+          <h1>{{ section.settings.title }}</h1>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="subheading">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+        {%- if section.settings.content != blank -%}
+          <div class="story-content-richtext">
+            {{ section.settings.content }}
+          </div>
+        {%- endif -%}
       </div>
 
     </div>
@@ -96,6 +103,30 @@
 {% schema %}
 {
   "name": "Our Story",
-  "settings": []
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Story Image"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "The Three-Year Rule"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "APY"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Story Content",
+      "default": "<p>Apricity exists because we rarely agree. Unusual for a brand? Exactly. For years, our differences have shaped everything we build. One of us instinctively edits. The other instinctively pushes. We don't settle quickly. We don't meet in the middle just to move forward.</p><p>Most ideas don't survive that tension. They're questioned. Reduced. Challenged. Left alone. Revisited. If something feels obvious, it's gone. If it only works for the moment, it's gone.</p><p>And even if an idea survives us, it faces one final rule: The Three-Year Rule.</p><p>Before anything becomes APRICITY, we ask one question: Will this still make sense three years from now? Not next season. Not next drop. Three years.</p><p>If we can't see ourselves standing behind it with the same certainty, it doesn't exist. No trend protection. No hype insurance. No \"it'll do for now.\"</p><p>If it survives disagreement — and it survives time — it earns the name.</p><p>APRICITY is not the result of agreement. It's the result of something harder. Something slower. Something that lasts.</p>"
+    }
+  ]
 }
 {% endschema %}
