@@ -5,7 +5,18 @@
 
 <div class="main-product-section-wrapper pt-24 pb-12 md:pt-28 md:pb-16 bg-[#faf9f7]">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    {% render 'product-detail', product: product, is_modal: false %}
+    {% render 'product-detail',
+      product: product,
+      is_modal: false,
+      atc_color: section.settings.atc_button_color,
+      sticky_atc_enabled: section.settings.sticky_atc_enabled,
+      trust_badges_enabled: section.settings.trust_badges_enabled,
+      trust_badge_1: section.settings.trust_badge_1_text,
+      trust_badge_2: section.settings.trust_badge_2_text,
+      trust_badge_3: section.settings.trust_badge_3_text,
+      trust_badge_4: section.settings.trust_badge_4_text,
+      low_stock_threshold: section.settings.low_stock_threshold
+    %}
   </div>
 </div>
 
@@ -15,7 +26,6 @@
     if (pdpContainer && typeof initProductDetailEngine === 'function') {
       initProductDetailEngine(pdpContainer);
     } else {
-      // Fallback in case defer script executes slightly later or earlier
       const checkInterval = setInterval(() => {
         const container = document.querySelector('.main-product-section-wrapper .product-detail-wrapper');
         if (container && typeof initProductDetailEngine === 'function') {
@@ -23,7 +33,6 @@
           clearInterval(checkInterval);
         }
       }, 50);
-      // Timeout after 3 seconds
       setTimeout(() => clearInterval(checkInterval), 3000);
     }
   });
@@ -32,6 +41,74 @@
 {% schema %}
 {
   "name": "Product Details",
-  "settings": []
+  "settings": [
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "color",
+      "id": "atc_button_color",
+      "label": "Add to Cart Button Color",
+      "default": "#006039"
+    },
+    {
+      "type": "header",
+      "content": "Sticky Add to Cart"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_atc_enabled",
+      "label": "Enable Sticky Add to Cart Bar",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Trust Badges"
+    },
+    {
+      "type": "checkbox",
+      "id": "trust_badges_enabled",
+      "label": "Show Trust Badges",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_1_text",
+      "label": "Badge 1 Text",
+      "default": "Secure Pay"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_2_text",
+      "label": "Badge 2 Text",
+      "default": "Free Delivery"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_3_text",
+      "label": "Badge 3 Text",
+      "default": "Easy Returns"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_4_text",
+      "label": "Badge 4 Text",
+      "default": "Premium"
+    },
+    {
+      "type": "header",
+      "content": "Low Stock Warning"
+    },
+    {
+      "type": "range",
+      "id": "low_stock_threshold",
+      "label": "Show low stock warning when quantity is at or below",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 3
+    }
+  ]
 }
 {% endschema %}

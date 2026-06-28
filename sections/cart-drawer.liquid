@@ -125,9 +125,10 @@
 
 
     <!-- Cart Upsell -->
-    {%- if cart.item_count > 0 -%}
+    {%- if cart.item_count > 0 and section.settings.cart_upsell_enabled != false -%}
+      {%- assign upsell_collection = collections[section.settings.cart_upsell_collection] | default: collections['all'] -%}
       {%- assign upsell_product = nil -%}
-      {%- for product in collections['all'].products limit: 10 -%}
+      {%- for product in upsell_collection.products limit: 10 -%}
         {%- assign already_in_cart = false -%}
         {%- for item in cart.items -%}
           {%- if item.product.id == product.id -%}
@@ -141,14 +142,14 @@
       {%- endfor -%}
       {%- if upsell_product -%}
         <div class="px-8 pt-4 pb-2">
-          <p class="text-[9px] uppercase tracking-[0.2em] text-zinc-400 font-mono-street mb-3">You May Also Like</p>
+          <p class="text-[9px] uppercase tracking-[0.2em] text-zinc-400 font-mono-street mb-3">{{ section.settings.cart_upsell_title | default: 'You May Also Like' }}</p>
           <div class="flex items-center gap-4 bg-white border border-zinc-100 rounded-xl p-3">
             <img src="{{ upsell_product.featured_image | image_url: width: 120 }}" alt="{{ upsell_product.title | escape }}" class="w-16 h-20 object-cover rounded-lg bg-zinc-50 shrink-0" width="120" height="150" />
             <div class="flex-1 min-w-0">
               <p class="text-xs font-semibold text-zinc-900 uppercase tracking-wide truncate">{{ upsell_product.title }}</p>
               <p class="text-xs text-zinc-500 font-mono-street mt-0.5">{{ upsell_product.price | money_without_trailing_zeros }}</p>
             </div>
-            <a href="{{ upsell_product.url }}" class="shrink-0 px-3 py-2 text-white text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all" style="background-color:#006039;">
+            <a href="{{ upsell_product.url }}" class="shrink-0 px-3 py-2 text-white text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all" style="background-color:{{ settings.atc_button_color | default: '#006039' }};">
               View
             </a>
           </div>
@@ -214,6 +215,28 @@
 {% schema %}
 {
   "name": "Cart Drawer",
-  "settings": []
+  "settings": [
+    {
+      "type": "header",
+      "content": "Upsell"
+    },
+    {
+      "type": "checkbox",
+      "id": "cart_upsell_enabled",
+      "label": "Show Upsell in Cart",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cart_upsell_title",
+      "label": "Upsell Section Title",
+      "default": "You May Also Like"
+    },
+    {
+      "type": "collection",
+      "id": "cart_upsell_collection",
+      "label": "Upsell Products Collection"
+    }
+  ]
 }
 {% endschema %}
