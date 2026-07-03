@@ -121,9 +121,12 @@
 
   {%- assign sc_columns_raw = size_chart_object.column_headers.value | default: size_chart_object.column_headers -%}
   {%- if sc_columns_raw.first -%}
-    {%- assign sc_columns = sc_columns_raw -%}
-  {%- elsif sc_columns_raw != blank -%}
-    {%- assign sc_columns_clean = sc_columns_raw | newline_to_br | strip_newlines | replace: '<br />', '|||' | replace: '<br>', '|||' -%}
+    {%- assign sc_columns_str = sc_columns_raw | join: '|||' -%}
+  {%- else -%}
+    {%- assign sc_columns_str = sc_columns_raw -%}
+  {%- endif -%}
+  {%- if sc_columns_str != blank -%}
+    {%- assign sc_columns_clean = sc_columns_str | newline_to_br | strip_newlines | replace: '<br />', '|||' | replace: '<br>', '|||' -%}
     {%- assign sc_columns = sc_columns_clean | split: '|||' -%}
   {%- else -%}
     {%- assign sc_columns = '' | split: ',' -%}
@@ -131,9 +134,12 @@
 
   {%- assign sc_rows_raw = size_chart_object.rows.value | default: size_chart_object.rows -%}
   {%- if sc_rows_raw.first -%}
-    {%- assign sc_rows = sc_rows_raw -%}
-  {%- elsif sc_rows_raw != blank -%}
-    {%- assign sc_rows_clean = sc_rows_raw | newline_to_br | strip_newlines | replace: '<br />', '|||' | replace: '<br>', '|||' -%}
+    {%- assign sc_rows_str = sc_rows_raw | join: '|||' -%}
+  {%- else -%}
+    {%- assign sc_rows_str = sc_rows_raw -%}
+  {%- endif -%}
+  {%- if sc_rows_str != blank -%}
+    {%- assign sc_rows_clean = sc_rows_str | newline_to_br | strip_newlines | replace: '<br />', '|||' | replace: '<br>', '|||' -%}
     {%- assign sc_rows = sc_rows_clean | split: '|||' -%}
   {%- else -%}
     {%- assign sc_rows = '' | split: ',' -%}
