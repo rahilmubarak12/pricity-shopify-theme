@@ -134,12 +134,12 @@
   {%- endif -%}
 
   {%- capture size_chart_html -%}
-    <table width="100%"><tbody>
-      <tr><td></td>
+    <table width="100%" style="width:100%;border-collapse:collapse;font-size:0.8125rem;line-height:1.4;table-layout:auto;"><tbody>
+      <tr style="background-color:#f5f4f2;"><td style="border:1px solid #e4e4e7;padding:8px 10px;text-align:center;font-weight:600;color:#3f3f46;"></td>
         {%- for col in sc_columns -%}
           {%- assign col = col | strip -%}
           {%- if col != blank -%}
-            <td style="text-align:center">{{ col }}</td>
+            <td style="border:1px solid #e4e4e7;padding:8px 10px;text-align:center;font-weight:600;color:#3f3f46;">{{ col }}</td>
           {%- endif -%}
         {%- endfor -%}
       </tr>
@@ -147,9 +147,9 @@
         {%- assign row = row | strip -%}
         {%- if row != blank -%}
           {%- assign row_parts = row | split: ',' -%}
-          <tr style="text-align:center">
+          <tr>
             {%- for part in row_parts -%}
-              <td>{{ part | strip }}</td>
+              <td style="border:1px solid #e4e4e7;padding:8px 10px;text-align:center;{% if forloop.first %}font-weight:600;color:#3f3f46;{% endif %}">{{ part | strip }}</td>
             {%- endfor -%}
           </tr>
         {%- endif -%}
