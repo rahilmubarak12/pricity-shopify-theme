@@ -112,22 +112,47 @@
 {%- assign size_chart_object = product.metafields.custom.size_chart_ref.value -%}
 {%- if size_chart_object -%}
   {%- assign size_chart_title = size_chart_object.title.value | default: 'Size Chart' -%}
-  {%- assign sc_columns = size_chart_object.column_headers.value -%}
-  {%- assign sc_rows = size_chart_object.rows.value -%}
+
+  {%- comment -%}
+    Normalize column_headers and rows into real arrays whether Admin stored them as
+    a true "list of single line text" (already an array) or as a single multi-line
+    text blob (one string with embedded line breaks) — both look identical in the
+    Admin UI box, so handle either case here rather than relying on field type.
+  {%- endcomment -%}
+  {%- assign sc_columns_raw = size_chart_object.column_headers.value -%}
+  {%- if sc_columns_raw.first -%}
+    {%- assign sc_columns = sc_columns_raw -%}
+  {%- else -%}
+    {%- assign sc_columns = sc_columns_raw | newline_to_br | split: '<br />' -%}
+  {%- endif -%}
+
+  {%- assign sc_rows_raw = size_chart_object.rows.value -%}
+  {%- if sc_rows_raw.first -%}
+    {%- assign sc_rows = sc_rows_raw -%}
+  {%- else -%}
+    {%- assign sc_rows = sc_rows_raw | newline_to_br | split: '<br />' -%}
+  {%- endif -%}
+
   {%- capture size_chart_html -%}
     <table width="100%"><tbody>
       <tr><td></td>
         {%- for col in sc_columns -%}
-          <td style="text-align:center">{{ col }}</td>
+          {%- assign col = col | strip -%}
+          {%- if col != blank -%}
+            <td style="text-align:center">{{ col }}</td>
+          {%- endif -%}
         {%- endfor -%}
       </tr>
       {%- for row in sc_rows -%}
-        {%- assign row_parts = row | split: ',' -%}
-        <tr style="text-align:center">
-          {%- for part in row_parts -%}
-            <td>{{ part | strip }}</td>
-          {%- endfor -%}
-        </tr>
+        {%- assign row = row | strip -%}
+        {%- if row != blank -%}
+          {%- assign row_parts = row | split: ',' -%}
+          <tr style="text-align:center">
+            {%- for part in row_parts -%}
+              <td>{{ part | strip }}</td>
+            {%- endfor -%}
+          </tr>
+        {%- endif -%}
       {%- endfor -%}
     </tbody></table>
   {%- endcapture -%}
