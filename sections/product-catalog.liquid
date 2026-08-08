@@ -62,7 +62,7 @@
 
   <!-- SUBCATEGORY PILLS -->
   <div class="subcategory-filters flex items-center gap-3 overflow-x-auto pb-6 scrollbar-none mb-12 select-none">
-    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-[#1a1a1a] text-white" data-subcategory="all">
+    <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-[#1a1a1a] text-white border-[#1a1a1a]" data-subcategory="all">
       All
     </button>
     {%- assign subcat_blocks = section.blocks | where: 'type', 'subcategory_filter' -%}
@@ -184,6 +184,20 @@
 
     const getSubcategoryBtns = () => catalog.querySelectorAll('.subcategory-filter-btn');
 
+    const updateSubcategoryPillsUI = (activeKey) => {
+      getSubcategoryBtns().forEach(b => {
+        const isSelected = b.getAttribute('data-subcategory') === activeKey;
+        b.style.color = '';
+        if (isSelected) {
+          b.classList.remove('bg-white', 'text-zinc-400', 'border-zinc-200', 'hover:text-[#1a1a1a]');
+          b.classList.add('bg-[#1a1a1a]', 'text-white', 'border-[#1a1a1a]');
+        } else {
+          b.classList.remove('bg-[#1a1a1a]', 'text-white', 'border-[#1a1a1a]');
+          b.classList.add('bg-white', 'text-zinc-400', 'border-zinc-200', 'hover:text-[#1a1a1a]');
+        }
+      });
+    };
+
     // Update Filter Visibility
     const filterGrid = () => {
       let visibleCount = 0;
@@ -269,17 +283,7 @@
         
         // Reset subcategory selection to "All" when switching main categories
         activeSubcategory = 'all';
-        getSubcategoryBtns().forEach(b => {
-          if (b.getAttribute('data-subcategory') === 'all') {
-            b.classList.remove('bg-white', 'border-zinc-200', 'text-zinc-400');
-            b.classList.add('bg-[#1a1a1a]', 'text-white');
-            b.style.color = '#ffffff';
-          } else {
-            b.classList.remove('bg-[#1a1a1a]');
-            b.classList.add('bg-white', 'border-zinc-200', 'text-zinc-400');
-            b.style.color = '';
-          }
-        });
+        updateSubcategoryPillsUI('all');
 
         filterGrid();
       });
@@ -290,16 +294,8 @@
       const subcategoryBtns = getSubcategoryBtns();
       subcategoryBtns.forEach(btn => {
         btn.onclick = () => {
-          subcategoryBtns.forEach(b => {
-            b.classList.remove('bg-[#1a1a1a]');
-            b.classList.add('bg-white', 'border-zinc-200');
-            b.style.color = '';
-          });
-          btn.classList.remove('bg-white', 'border-zinc-200');
-          btn.classList.add('bg-[#1a1a1a]');
-          btn.style.color = '#ffffff';
-
           activeSubcategory = btn.getAttribute('data-subcategory');
+          updateSubcategoryPillsUI(activeSubcategory);
           filterGrid();
         };
       });
