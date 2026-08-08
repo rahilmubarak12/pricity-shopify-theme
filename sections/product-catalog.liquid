@@ -65,13 +65,30 @@
     <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-[#1a1a1a] text-white" data-subcategory="all">
       All
     </button>
-    {%- for block in section.blocks -%}
-      {%- if block.type == 'subcategory_filter' -%}
+    {%- assign subcat_blocks = section.blocks | where: 'type', 'subcategory_filter' -%}
+    {%- if subcat_blocks.size > 0 -%}
+      {%- for block in subcat_blocks -%}
         <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="{{ block.settings.key | escape }}" {{ block.shopify_attributes }}>
           {{ block.settings.label | escape }}
         </button>
-      {%- endif -%}
-    {%- endfor -%}
+      {%- endfor -%}
+    {%- else -%}
+      <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="summer">
+        Summer Collection
+      </button>
+      <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="hoodie">
+        Hoodies
+      </button>
+      <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="shirt">
+        Sets
+      </button>
+      <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="sweatshirt">
+        Sweatshirts
+      </button>
+      <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="t-shirt">
+        T-Shirts & Tops
+      </button>
+    {%- endif -%}
   </div>
 
   <!-- EMPTY STATE -->
@@ -156,7 +173,6 @@
 
     const cards = catalog.querySelectorAll('.product-card');
     const categoryBtns = catalog.querySelectorAll('.category-filter-btn');
-    const subcategoryBtns = catalog.querySelectorAll('.subcategory-filter-btn');
     const emptyState = catalog.querySelector('.catalog-empty-state');
     const countText = catalog.querySelector('.catalog-count');
     const titleText = catalog.querySelector('.catalog-title');
@@ -165,6 +181,8 @@
 
     let activeCategory = 'all';
     let activeSubcategory = 'all';
+
+    const getSubcategoryBtns = () => catalog.querySelectorAll('.subcategory-filter-btn');
 
     // Update Filter Visibility
     const filterGrid = () => {
@@ -248,26 +266,45 @@
         btn.classList.remove('text-zinc-400');
 
         activeCategory = btn.getAttribute('data-category');
+        
+        // Reset subcategory selection to "All" when switching main categories
+        activeSubcategory = 'all';
+        getSubcategoryBtns().forEach(b => {
+          if (b.getAttribute('data-subcategory') === 'all') {
+            b.classList.remove('bg-white', 'border-zinc-200', 'text-zinc-400');
+            b.classList.add('bg-[#1a1a1a]', 'text-white');
+            b.style.color = '#ffffff';
+          } else {
+            b.classList.remove('bg-[#1a1a1a]');
+            b.classList.add('bg-white', 'border-zinc-200', 'text-zinc-400');
+            b.style.color = '';
+          }
+        });
+
         filterGrid();
       });
     });
 
     // Subcategory click handler
-    subcategoryBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        subcategoryBtns.forEach(b => {
-          b.classList.remove('bg-[#1a1a1a]');
-          b.classList.add('bg-white', 'border-zinc-200');
-          b.style.color = '';
-        });
-        btn.classList.remove('bg-white', 'border-zinc-200');
-        btn.classList.add('bg-[#1a1a1a]');
-        btn.style.color = '#ffffff';
+    const setupSubcategoryHandlers = () => {
+      const subcategoryBtns = getSubcategoryBtns();
+      subcategoryBtns.forEach(btn => {
+        btn.onclick = () => {
+          subcategoryBtns.forEach(b => {
+            b.classList.remove('bg-[#1a1a1a]');
+            b.classList.add('bg-white', 'border-zinc-200');
+            b.style.color = '';
+          });
+          btn.classList.remove('bg-white', 'border-zinc-200');
+          btn.classList.add('bg-[#1a1a1a]');
+          btn.style.color = '#ffffff';
 
-        activeSubcategory = btn.getAttribute('data-subcategory');
-        filterGrid();
+          activeSubcategory = btn.getAttribute('data-subcategory');
+          filterGrid();
+        };
       });
-    });
+    };
+    setupSubcategoryHandlers();
 
     // Reset Filter Button
     if (resetBtn) {

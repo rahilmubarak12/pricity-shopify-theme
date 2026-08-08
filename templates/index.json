@@ -14,7 +14,51 @@
     },
     "product_catalog": {
       "type": "product-catalog",
-      "settings": {}
+      "settings": {},
+      "blocks": {
+        "sub_summer": {
+          "type": "subcategory_filter",
+          "settings": {
+            "label": "Summer Collection",
+            "key": "summer"
+          }
+        },
+        "sub_hoodie": {
+          "type": "subcategory_filter",
+          "settings": {
+            "label": "Hoodies",
+            "key": "hoodie"
+          }
+        },
+        "sub_shirt": {
+          "type": "subcategory_filter",
+          "settings": {
+            "label": "Sets",
+            "key": "shirt"
+          }
+        },
+        "sub_sweatshirt": {
+          "type": "subcategory_filter",
+          "settings": {
+            "label": "Sweatshirts",
+            "key": "sweatshirt"
+          }
+        },
+        "sub_tshirt": {
+          "type": "subcategory_filter",
+          "settings": {
+            "label": "T-Shirts & Tops",
+            "key": "t-shirt"
+          }
+        }
+      },
+      "block_order": [
+        "sub_summer",
+        "sub_hoodie",
+        "sub_shirt",
+        "sub_sweatshirt",
+        "sub_tshirt"
+      ]
     }
   },
   "order": [
