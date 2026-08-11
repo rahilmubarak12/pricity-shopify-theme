@@ -34,12 +34,35 @@
           "the_rule_link": "",
           "whatsapp_number": "+966 53 647 0644",
           "whatsapp_url": "",
-          "email_address": "theapricity.officials@gmail.com"
+          "email_address": "theapricity.officials@gmail.com",
+          "wordmark_text": "APRICITY",
+          "wordmark_color": "#3d4a6b",
+          "show_contact": true,
+          "contact_trigger_label": "Contact",
+          "contact_details_label": "Contact Details",
+          "whatsapp_label": "WhatsApp Support",
+          "email_label": "Email Inquiry",
+          "contact_us_label": "Contact Us",
+          "search_label": "Search",
+          "cart_label": "Cart",
+          "close_label": "Close"
         }
       },
       "cart-drawer": {
         "type": "cart-drawer",
-        "settings": {}
+        "settings": {
+          "cart_upsell_enabled": true,
+          "cart_upsell_title": "You May Also Like",
+          "cart_upsell_collection": "",
+          "shipping_notice_text": "🇸🇦 Free KSA Express Shipping",
+          "shipping_notice_threshold": 0,
+          "enable_installments": true,
+          "installments_provider": "Tabby",
+          "installments_text": "4 payments of",
+          "installments_split": 4,
+          "checkout_button_text": "Guest Checkout",
+          "secure_checkout_text": "Secure Checkout"
+        }
       },
       "product-modal": {
         "type": "product-modal",
@@ -52,7 +75,15 @@
           "coupon_code": "APY-15",
           "offer_1_title": "15% Off",
           "offer_1_description": "when you purchase two or more items",
-          "offer_2_text": "Free shipping with no minimum order"
+          "offer_2_text": "Free shipping with no minimum order",
+          "welcome_text": "Welcome to",
+          "brand_text": "APRICITY",
+          "offer_2_flag": "🇸🇦",
+          "apply_code_text": "Apply code at checkout",
+          "tap_to_copy_text": "Tap to copy",
+          "copied_text": "✓ Copied!",
+          "shop_now_text": "Shop Now",
+          "no_thanks_text": "No thanks"
         }
       },
       "footer": {
@@ -62,13 +93,20 @@
           "newsletter_title": "Join the Drop Notification List",
           "newsletter_description": "Our limited pieces sell out rapidly. Subscribe for early private access 24 hours before public release.",
           "newsletter_placeholder": "Enter your email...",
+          "newsletter_submit_label": "Notify Me",
+          "newsletter_success_text": "Successfully joined the drops notification list!",
+          "newsletter_disclaimer_text": "Zero spam. Unsubscribe anytime.",
           "about_title": "About Us",
           "about_content": "<p>Apricity is built through tension and refined over time.</p><p>Guided by the Three-Year Rule, we release only what proves its place. now and years from now.</p><p>Quietly considered. Meant to last.</p>",
           "services_title": "Client Services",
           "services_menu": "",
+          "socials_title": "Socials",
+          "social_instagram_label": "Instagram",
+          "social_tiktok_label": "TikTok",
           "instagram_url": "",
           "tiktok_url": "",
           "copyright_text": "Apricity Officials",
+          "copyright_trailing_text": "All Rights Reserved.",
           "designed_text": "Designed in Saudi Arabia 🇸🇦"
         }
       }
@@ -79,15 +117,18 @@
         "type": "shopify://apps/inbox/blocks/chat/841fc607-4181-4ad1-842d-e24d7f8bad6b",
         "disabled": false,
         "settings": {
+          "greeting_message": "",
           "button_color": "#FFFFFF",
-          "secondary_color": "#6A6A6A",
-          "ternary_color": "#6A6A6A",
           "button_icon": "chat_bubble",
           "button_text": "chat_with_us",
           "button_horizontal_position": "bottom_right",
-          "button_vertical_position": "lowest",
-          "greeting_message": ""
+          "button_vertical_position": "lowest"
         }
+      },
+      "2931641061697400762": {
+        "type": "shopify://apps/google-search-console-by-mp/blocks/head-meta/019c4b41-f7c5-7366-86bc-ac95bf831b40",
+        "disabled": false,
+        "settings": {}
       }
     }
   },
