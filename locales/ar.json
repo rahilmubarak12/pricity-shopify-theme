@@ -612,7 +612,43 @@
         "company_location_changed_product_removed": "تم تحديث عربة التسوق الخاصة بك لأن بعض المنتجات غير متوفرة في هذا الموقع. يرجى مراجعة طلبك قبل إرساله.",
         "violations_title": "{{violation}} مفقود أو غير صالح",
         "individual_violations_title": {
-          "DeliveryViolations": "عنوان الشحن"
+          "DeliveryViolations": "عنوان الشحن",
+          "PaymentViolations": "عنوان الفواتير",
+          "OtherViolations": "معلومات الطلب",
+          "UnhandledViolations": "معلومات الطلب"
+        },
+        "all_violations_content": "اتصل بنا أو {{emailLink}} لتحديث هذه المعلومات وإكمال طلبك:",
+        "all_violations_email_link": "بريد إلكتروني",
+        "editable_shipping_address_violations_message_title": "أضف هذه المعلومات لإتمام طلبك:",
+        "editable_shipping_address_violations_message_footer": "لتحديث العنوان لهذا الموقع بشكل دائم، {{emailLink}}.",
+        "editable_shipping_address_violations_email_link": "اتصل بنا",
+        "shipping_address_incomplete_title": "عنوان الشحن غير مكتمل",
+        "calculating_shipping": "جاري حساب تكلفة الشحن. حاول مرة أخرى خلال بضع ثوانٍ. لم يتم تحصيل أي رسوم منك.",
+        "calculating_taxes": "لا يزال يجري احتساب الضرائب. حاول مرة أخرى في غضون ثوانٍ قليلة. لم يتم تحصيل أي رسوم منك.",
+        "generic_processing_error": {
+          "title": "حدثت مشكلة في معالجة طلبك",
+          "body": "لم يتم خصم المبلغ. حاول مرة أخرى أو استخدم طريقة دفع مختلفة."
+        },
+        "payment_method_not_available_with_payment_terms": "طريقة الدفع التي حددتها لم تعد متاحة لأن دفع هذا الطلب أصبح الآن بشروط {{paymentTerms}}",
+        "payment_method_not_available_with_fulfillment_terms": "طريقة الدفع التي حددتها لم تعد متاحة لأن الدفع لهذا الطلب مستحق الآن عند التسليم",
+        "payment_method_not_available_with_fixed_terms": "طريقة الدفع التي اخترتها غير متاحة لأن دفع هذا الطلب مستحق لاحقًا",
+        "payment_method_not_available_with_review_requirement": "وسيلة الدفع التي اخترتها لم تعد متاحة، لأن الدفع سيكون مستحقًا بمجرد تأكيد طلبك.",
+        "contact_information": {
+          "title": "معلومات الاتصال غير صالحة",
+          "header": "لتحديث معلوماتك، {{emailLink}}.",
+          "email_link": "اتصل بنا"
+        },
+        "validation_errors_banner": {
+          "heading": {
+            "one": "يوجد {{count}} خطأ:",
+            "other": "يوجد {{count}} أخطاء:"
+          },
+          "section_label": {
+            "delivery": "توصيل",
+            "contact": "جهات الاتصال",
+            "payment": "الدفع",
+            "billing": "الفواتير"
+          }
         }
       },
       "localized_fields": {
@@ -1533,6 +1569,132 @@
       "vaulted": {
         "change_button": "تغيير",
         "loading_section": "تحميل {{section}}…"
+      },
+      "review_address_modal": {
+        "title": "عنوان المراجعة",
+        "subtitle": {
+          "one": "سيتم شحن هذا الطلب إلى العنوان الذي قدمه {{merchant}}.",
+          "other": "سيتم شحن هذا الطلب إلى عنوان قدمه {{merchant}}. حدد عنوان الشحن."
+        },
+        "subtitle_no_match": "هذا العنوان لا يتطابق مع أي من عناوينك المحفوظة.",
+        "subtitle_must_use": "سيتم شحن طلبك إلى هذا العنوان.",
+        "continue": "أكمل باستخدام هذا العنوان",
+        "use_saved_address": "استخدم عنواناً مختلفاً",
+        "return_to_cart": "العودة إلى عربة التسوق"
+      },
+      "marketplaces": {
+        "legal_notice": {
+          "legal_text": "مراجعة",
+          "link_label": "{{partnerDisplayName}} الشروط والأحكام"
+        }
+      },
+      "online_store_chat": {
+        "title": "أسئلة؟ تحدث معنا"
+      },
+      "local_pickup": {
+        "title": "الموقع",
+        "location_address_search_label": "العنوان",
+        "location_address_search_placeholder": "%{postal_code_label} أو العنوان",
+        "location_closest": "أقرب موقع يتوفر فيه منتجك",
+        "location_closest_one_item": "أقرب موقع يتوفر فيه منتجك",
+        "location_closest_other_items": "أقرب موقع يحتوي على أغراضك",
+        "location_selected": "الموقع المحدد",
+        "location_information": {
+          "one": "يوجد موقع واحد %{count} به مخزون قريب منك",
+          "other": "يوجد %{count} موقع به مخزون قريب منك."
+        },
+        "location_information_far_away": {
+          "one": "هناك موقع واحد يحوي العنصر الخاص بك",
+          "other": "هناك %{count} مواقع تحتوي على السلعة الخاصة بك"
+        },
+        "location_information_far_away_one_item": {
+          "one": "هناك موقع واحد يحوي العنصر الخاص بك",
+          "other": "هناك %{count} مواقع تحتوي على السلعة الخاصة بك"
+        },
+        "location_information_far_away_other_items": {
+          "one": "يوجد موقع واحد به عناصرك",
+          "other": "يوجد %{count} موقع تحتوي على أغراضك"
+        },
+        "location_nearby": {
+          "one": "يوجد موقع واحد قريب يتوفر به منتجك.",
+          "other": "توجد %{count} مواقع قريبة تحتوي على المنتج الذي تبحث عنه."
+        },
+        "location_nearby_one_item": {
+          "one": "يوجد موقع واحد قريب يتوفر به منتجك.",
+          "other": "توجد %{count} مواقع قريبة تحتوي على المنتج الذي تبحث عنه."
+        },
+        "location_nearby_other_items": {
+          "one": "يوجد موقع واحد قريب يتوفر به أغراضك",
+          "other": "يوجد %{count} موقع قريب تحتوي على أغراضك"
+        },
+        "location_nearby_short": {
+          "one": "موقع واحد قريب تتوفر فيه سلعتك",
+          "other": "%{count} مواقع قريبة تحتوي على المنتج الذي تبحث عنه"
+        },
+        "location_nearby_short_one_item": {
+          "one": "موقع واحد قريب تتوفر فيه سلعتك",
+          "other": "%{count} مواقع قريبة تحتوي على المنتج الذي تبحث عنه"
+        },
+        "location_nearby_short_other_items": {
+          "one": "%{count} موقع قريب به أغراضك",
+          "other": "%{count} مواقع قريبة تحتوي على أغراضك"
+        },
+        "location_far_away": {
+          "one": "%{count} موقع يتضمن سلعتك",
+          "other": "%{count} مواقع تتوفر فيها سلعتك"
+        },
+        "location_far_away_one_item": {
+          "one": "%{count} موقع يتضمن سلعتك",
+          "other": "%{count} مواقع تتوفر فيها سلعتك"
+        },
+        "location_far_away_other_items": {
+          "one": "%{count} موقع يحتوي على أغراضك",
+          "other": "%{count} مواقع تحتوي على عناصرك"
+        },
+        "toggle_location": "تغيير الموقع",
+        "toggle_more_locations": {
+          "one": "موقع آخر",
+          "other": "%{count} مواقع إضافية"
+        },
+        "toggle_multiple_locations": "%{count}+ مواقع أخرى",
+        "pick_up_location": "موقع الالتقاء",
+        "or": "أو",
+        "cancel": "إلغاء",
+        "your_location": "موقعك",
+        "search_button": "البحث عن المتاجر",
+        "no_stores_found": "لم يتم العثور على أي متاجر",
+        "all_stores_far_away": {
+          "title": "أقرب المواقع تبعد أكثر من %{distance}",
+          "title_with_item": {
+            "one": "أقرب موقع يتوفر به المنتج على بُعد أكثر من %{distance} من %{location}",
+            "other": "الموقع الأقرب الذي يحتوي على طلبك يبعد أكثر من %{distance} عن %{location}"
+          },
+          "title_with_location": "الموقع الأقرب يبعد أكثر من %{distance} عن %{location}",
+          "title_with_specific_location": "أقرب موقع يتوفر به العنصر الذي طلبته يبعد أكثر من %{distance} عن %{location}",
+          "description": "حدد موقعًا أو %{ship_to_address_link}",
+          "description_with_location": "%{change_location_link} أو %{ship_to_address_link}",
+          "ship_to_address_link": "الشحن إلى العنوان",
+          "change_location_link": "تغيير موقعك"
+        },
+        "selected_pickup_option_no_longer_available": {
+          "title": "موقعك الذي حددته سابقًا لم يعد متوفرًا",
+          "description": "لقد اخترنا أقرب موقع تتوفر فيه منتجاتك"
+        },
+        "could_not_resolve_address": "تعذر تحديد موقع عنوانك. حاول مرة أخرى أو استخدم عنوانًا مختلفًا.",
+        "paginator": {
+          "accessibility_label": "ترقيم صفحات الاستلام المحلي",
+          "previous": "الصفحة السابقة",
+          "next": "الصفحة التالية",
+          "label": {
+            "one": "%{first} - %{last} من %{count} متجر",
+            "other": "%{first} - %{last} من %{count} متجر"
+          }
+        },
+        "reveal_more_label": {
+          "one": "عرض %{count} موقع آخر",
+          "other": "عرض %{count} مواقع إضافية"
+        },
+        "no_pickup_locations_found": "لم يتم العثور على مواقع للاستلام"
       }
     },
     "errors": {
@@ -1678,159 +1840,7 @@
         "only_one_added_to_cart": "تمت إضافة سلعة واحدة فقط إلى سلة التسوق الخاصة بك نظرًا لتوافرها.",
         "only_n_added_to_cart": "تمت إضافة %{quantity} من العناصر إلى سلة التسوّق الخاصة بك بسبب توفّرها فقط.",
         "maximum_available_quantity_reached": "لقد بلغتَ الحد الأقصى من كمية هذا المنتج في سلة التسوق الخاصة بك.",
-        "less_than_minimum": "الحد الأدنى لهذا العنصر هو %{min}.",
-        "more_than_maximum": "الحد الأقصى لهذا العنصر هو %{max}.",
-        "not_respect_step": "لا يمكنك إضافة هذا العنصر إلا بزيادات قدرها %{step}.",
-        "all_items_in_cart": "كل %{count} من %{name} موجودة في سلة مشترياتك.",
-        "empty_update": "لا يمكن تحديث سلة التسوق الفارغة",
-        "missing_parameters": "لا يوجد معرّف صالح أو معلمة سطر",
-        "generic_error": "خطأ في سلة التسوق",
-        "invalid_input": "المعلمة %{parameter} غير صالحة.",
-        "product_not_available": "المنتج غير متوفر",
-        "too_many_line_items_error": "لا يمكن أن تحتوي سلتك على أكثر من %{max} من العناصر.",
-        "link_expired": "الرابط منتهي الصلاحية",
-        "link_no_longer_exists": "الرابط لم يعد موجوداً.",
-        "stock_problems_html": "واحد أو أكثر من المنتجات غير متوفرة. لقد قمنا بتوفير <a href=\"%{link}\">عربة تسوق محدثة</a>.",
-        "changed": "تم تغيير سلة التسوق",
-        "items_changed": "لقد تغير عنصر واحد أو أكثر.",
-        "product_sold_out": "المنتج '%{name}' تم بيعه بالكامل.",
-        "variant_not_found": "تعذر العثور على المتغير",
-        "variant_requires_selling_plan": "لا يمكن شراء المتغير إلا من خلال خطة بيع.",
-        "selling_plan_not_available_for_company_locations": "تتوفر للطلبات بين الشركات (B2B) عملية شراء لمرة واحدة فقط",
-        "digital_product_not_available_for_company_locations": "لا يمكن إضافة هذا العنصر إلى طلب B2B.",
-        "buyer_cannot_purchase_for_company_locations": "لا يمكنك الشراء لهذا الموقع",
-        "selling_plan_not_applicable": "لا يمكن تطبيق خطة البيع على هذا المتغير",
-        "shipping_address_not_required": "هذه العربة لا تتطلب الشحن",
-        "shipping_address_invalid": "حدثت مشكلة أثناء حساب تكاليف الشحن. تابع عملية الدفع لاختيار طريقة الشحن قبل إتمام طلبك.",
-        "bundle_requires_components": "لا يمكن إضافة المنتج المجمع '%{name}' إلى عربة التسوق.",
-        "gift_card_with_components_not_supported": "لا يمكن إضافة المنتج المجمع '%{name}' إلى عربة التسوق.",
-        "gift_card_price_must_be_greater_than_zero": "لا يمكن إضافة المنتج المجمع '%{name}' إلى عربة التسوق.",
-        "gift_card_recipient_validation_error": "المستلم المحدد لبطاقة الهدايا غير صالح",
-        "view_lines_limit_reached": "يجب ألا تتجاوز السطور %{limit}",
-        "cart_too_large": "السلة كبيرة جدًا.",
-        "cart_attributes_error": "تحتوي سمات سلة التسوق على بيانات غير صالحة.",
-        "merchandise_line_transformers": {
-          "run_error": "حدث خطأ في سلة مشترياتك."
-        },
-        "merchandise_not_applicable": "لا يمكن شراء هذا المنتج بالتكوين المحدد."
-      },
-      "storefront": {
-        "invalid_password": "كلمة المرور غير صحيحة، يرجى المحاولة مرة أخرى."
-      },
-      "tags": {
-        "add_articles": "تضييق البحث ليشمل المقالات التي تحتوي أيضًا على الوسم %{tag}",
-        "add_products": "تضييق التحديد على المنتجات المطابقة للوسم %{tag}",
-        "remove_articles": "توسيع البحث ليشمل المقالات غير الموسومة بـ %{tag}",
-        "remove_products": "إزالة العلامة %{tag}"
-      }
-    },
-    "email_marketing": {
-      "subscribed": {
-        "confirmation": "نشكرك على الاشتراك في قائمتنا البريدية.",
-        "disclaimer": "يمكنك إلغاء الاشتراك في أي وقت.",
-        "unsubscribe": "إلغاء الاشتراك"
-      },
-      "unsubscribed": {
-        "confirmation": "لقد ألغيت اشتراكك من قائمتنا البريدية.",
-        "disclaimer": "لن تصلك أي تحديثات تسويقية أخرى منّا. يمكنك الاشتراك مرة أخرى في أي وقت.",
-        "preview": "أنت تستعرض ما سيراه العملاء عند إلغاء الاشتراك."
-      },
-      "sms_unsubscribe_confirm": {
-        "message": "هل أنت متأكد أنك تريد إلغاء الاشتراك في التسويق عبر الرسائل النصية القصيرة؟",
-        "button": "إلغاء الاشتراك"
-      },
-      "open_tracking": {
-        "opt_in": {
-          "opted_in_html": "<b>لقد وافقت على تتبع فتح البريد الإلكتروني.</b>",
-          "visibility": "سيتم الإبلاغ عن معدلات فتح البريد الإلكتروني بشكل مجهول. لن نتمكن إلا من معرفة ما إذا كنت قد فتحت رسالة بريد إلكتروني كجزء من معدل فتح البريد الإلكتروني الإجمالي.",
-          "opt_out_html": "يمكنك <a style=\"text-decoration:underline;\" href=\"%{link}\">إلغاء الاشتراك</a> في تتبع فتح الرسائل الإلكترونية إذا كنت لا ترغب في مشاركة هذه المعلومات.",
-          "preview_bar": "أنت تشاهد معاينة لما سيراه العملاء عند الاشتراك في تتبع فتح البريد الإلكتروني."
-        },
-        "opt_out": {
-          "opted_out_html": "<b>لقد ألغيت الاشتراك في تتبع فتح البريد الإلكتروني.</b>",
-          "visibility": "لن نرى ما إذا كنت قد فتحت رسائل البريد الإلكتروني الخاصة بنا.",
-          "opt_in_html": "<a style=\"text-decoration:underline;\" href=\"%{link}\">الاشتراك</a> في تتبّع فتح الرسائل الإلكترونية.",
-          "preview_bar": "أنت تستعرض ما سيراه العملاء عند إلغاء الاشتراك في تتبع فتح البريد الإلكتروني."
-        },
-        "no_longer_track": {
-          "status_html": "<b>لم نعد نتتبع أي فتح للبريد الإلكتروني.</b>",
-          "privacy_policy": "بعد إرسال هذا البريد الإلكتروني، قمنا بتحديث سياسة الخصوصية الخاصة بنا ولم نعد نتتبع عمليات الفتح."
-        },
-        "track": {
-          "status_html": "<b>تم الإبلاغ عن تتبع فتح البريد الإلكتروني.</b>",
-          "visibility": "لن نرى سوى ما إذا كنت قد فتحت رسالة البريد الإلكتروني، كجزء من إجمالي معدل فتح البريد الإلكتروني."
-        },
-        "updated_policy": {
-          "status_html": "<b>تم الإبلاغ عن تتبع فتح البريد الإلكتروني.</b>",
-          "visibility": "لقد قمنا بتحديث سياستنا، ونقوم الآن بتتبع فتح رسائل البريد الإلكتروني. سيتم الإبلاغ عن معدلات فتح البريد الإلكتروني بشكل مجهول. وسنرى ما إذا كنت قد فتحت رسالة بريد إلكتروني كجزء من إجمالي معدل فتح البريد الإلكتروني.",
-          "opt_out_html": "إذا كنت لا ترغب في مشاركة هذه المعلومات، يمكنك <a style=\"text-decoration:underline;\" href=\"%{link}\">إلغاء الاشتراك.</a>"
-        }
-      }
-    },
-    "filters": {
-      "availability": {
-        "value": {
-          "in_stock": "متوفر بالمخزون",
-          "out_of_stock": "نفد المخزون"
-        }
-      },
-      "boolean": {
-        "true_label": "نعم",
-        "false_label": "لا"
-      }
-    },
-    "search": {
-      "error": "حدثت مشكلة في تحميل نتائج البحث. يُرجى تحديث الصفحة أو المحاولة مرة أخرى لاحقًا.",
-      "sorting": {
-        "relevance": "الأهمية",
-        "price_ascending": "السعر، من الأقل للأعلى",
-        "price_descending": "السعر، من الأعلى إلى الأقل"
-      }
-    },
-    "page_titles": {
-      "blog_or_article_with_error": "خطأ - %{title}",
-      "products": "المنتجات",
-      "shopping_cart": "عربة التسوق الخاصة بك",
-      "account": "حساب",
-      "create_account": "إنشاء حساب",
-      "reset_account": "إعادة تعيين الحساب",
-      "addresses": "العناوين",
-      "order": "اطلب %{name}",
-      "search": "بحث",
-      "search_results": {
-        "one": "بحث: تم العثور على %{count} نتيجة لـ \"%{terms}\"",
-        "other": "بحث: تم العثور على %{count} نتيجة لـ \"%{terms}\""
-      },
-      "collections": "المجموعات",
-      "not_found": "404 غير موجود",
-      "challenge": "تحدي",
-      "checkpoint": "نقطة تفتيش"
-    },
-    "cart": {
-      "discounts_with_count": "تم تطبيق %{count} من الخصومات"
-    },
-    "challenge": {
-      "message": "للمتابعة، يرجى تأكيد أنك لست روبوتًا.",
-      "error": "إجابتك لم تكن صحيحة، يرجى المحاولة مرة أخرى.",
-      "submit_button_text": "إرسال"
-    },
-    "checkpoint": {
-      "message": "حل الكابتشا للمتابعة",
-      "error": "فشل التحقق من الكابتشا",
-      "submit_button_text": "إرسال"
-    },
-    "store_availability": {
-      "pick_up_time": {
-        "one_hour": "جاهز عادة في غضون ساعة واحدة",
-        "two_hours": "عادة ما يكون جاهزًا خلال ساعتين.",
-        "four_hours": "عادة ما يكون جاهزًا خلال 4 ساعات",
-        "twenty_four_hours": "عادة ما تكون جاهزة خلال 24 ساعة",
-        "two_to_four_days": "جاهز عادةً في غضون 2-4 أيام",
-        "five_or_more_days": "عادةً ما تكون جاهزة في غضون 5 أيام أو أكثر",
-        "zero_to_two_hours": "عادة ما يكون جاهزًا خلال ساعتين.",
-        "two_to_four_hours": "عادة ما يكون جاهزًا خلال 4 ساعات",
-        "immediately": "جاهز للاستلام الآن",
-        "next_day": "جاهز للاستلام في اليوم التالي"
+        "less_than_minimum": "الحد الأدنى لهذا العنصر هو %{min}."
       }
     }
   },
