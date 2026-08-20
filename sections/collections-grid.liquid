@@ -8,14 +8,26 @@
   <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 pb-6 border-b border-zinc-200">
     <div>
       <span class="text-[11px] uppercase tracking-[0.25em] font-mono-street text-zinc-400">
-        {{ section.settings.subtitle | default: 'Collections' }}
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.subtitle_ar | default: 'المجموعات' }}
+        {%- else -%}
+          {{ section.settings.subtitle | default: 'Collections' }}
+        {%- endif -%}
       </span>
       <h2 class="font-heading font-extrabold text-3xl md:text-4xl uppercase text-[#1a1a1a] mt-1">
-        {{ section.settings.title | default: 'Explore the Archive' }}
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.title_ar | default: 'استكشف التشكيلة' }}
+        {%- else -%}
+          {{ section.settings.title | default: 'Explore the Archive' }}
+        {%- endif -%}
       </h2>
     </div>
     <span class="text-[11px] font-mono-street text-zinc-400 uppercase tracking-widest mt-4 md:mt-0">
-      {{ section.settings.season_label | default: "Season '26" }}
+      {%- if request.locale.iso_code == 'ar' -%}
+        {{ section.settings.season_label_ar | default: "موسم '26" }}
+      {%- else -%}
+        {{ section.settings.season_label | default: "Season '26" }}
+      {%- endif -%}
     </span>
   </div>
 
@@ -31,13 +43,25 @@
       {%- endif -%}
       <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-8">
         <span class="text-[10px] font-mono-street tracking-[0.2em] text-white/60 uppercase">
-          {{ section.settings.collection_1_tag | default: 'Category' }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.collection_1_tag_ar | default: 'تصنيف' }}
+          {%- else -%}
+            {{ section.settings.collection_1_tag | default: 'Category' }}
+          {%- endif -%}
         </span>
         <h3 class="font-heading font-extrabold text-2xl text-white uppercase mt-0.5">
-          {{ section.settings.collection_1_title | default: 'Men' }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.collection_1_title_ar | default: 'رجال' }}
+          {%- else -%}
+            {{ section.settings.collection_1_title | default: 'Men' }}
+          {%- endif -%}
         </h3>
         <span class="text-[11px] font-mono-street tracking-widest text-white/60 mt-2 group-hover:text-white transition-colors">
-          {{ section.settings.collection_1_cta | default: 'Shop Collection →' }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.collection_1_cta_ar | default: 'تسوق المجموعة ←' }}
+          {%- else -%}
+            {{ section.settings.collection_1_cta | default: 'Shop Collection →' }}
+          {%- endif -%}
         </span>
       </div>
     </a>
@@ -51,13 +75,25 @@
       {%- endif -%}
       <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-8">
         <span class="text-[10px] font-mono-street tracking-[0.2em] text-white/60 uppercase">
-          {{ section.settings.collection_2_tag | default: 'Category' }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.collection_2_tag_ar | default: 'تصنيف' }}
+          {%- else -%}
+            {{ section.settings.collection_2_tag | default: 'Category' }}
+          {%- endif -%}
         </span>
         <h3 class="font-heading font-extrabold text-2xl text-white uppercase mt-0.5">
-          {{ section.settings.collection_2_title | default: 'Women' }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.collection_2_title_ar | default: 'نساء' }}
+          {%- else -%}
+            {{ section.settings.collection_2_title | default: 'Women' }}
+          {%- endif -%}
         </h3>
         <span class="text-[11px] font-mono-street tracking-widest text-white/60 mt-2 group-hover:text-white transition-colors">
-          {{ section.settings.collection_2_cta | default: 'Shop Collection →' }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.collection_2_cta_ar | default: 'تسوق المجموعة ←' }}
+          {%- else -%}
+            {{ section.settings.collection_2_cta | default: 'Shop Collection →' }}
+          {%- endif -%}
         </span>
       </div>
     </a>
@@ -71,13 +107,25 @@
       {%- endif -%}
       <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-8">
         <span class="text-[10px] font-mono-street tracking-[0.2em] text-white/60 uppercase">
-          {{ section.settings.collection_3_tag | default: 'Capsule' }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.collection_3_tag_ar | default: 'إصدار حصري' }}
+          {%- else -%}
+            {{ section.settings.collection_3_tag | default: 'Capsule' }}
+          {%- endif -%}
         </span>
         <h3 class="font-heading font-extrabold text-2xl text-white uppercase mt-0.5">
-          {{ section.settings.collection_3_title | default: 'New Drops' }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.collection_3_title_ar | default: 'وصل حديثاً' }}
+          {%- else -%}
+            {{ section.settings.collection_3_title | default: 'New Drops' }}
+          {%- endif -%}
         </h3>
         <span class="text-[11px] font-mono-street tracking-widest text-white/60 mt-2 group-hover:text-white transition-colors">
-          {{ section.settings.collection_3_cta | default: 'Discover Pieces →' }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.collection_3_cta_ar | default: 'اكتشف القطع ←' }}
+          {%- else -%}
+            {{ section.settings.collection_3_cta | default: 'Discover Pieces →' }}
+          {%- endif -%}
         </span>
       </div>
     </a>
@@ -91,13 +139,25 @@
       {%- endif -%}
       <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-8">
         <span class="text-[10px] font-mono-street tracking-[0.2em] text-white/60 uppercase">
-          {{ section.settings.collection_4_tag | default: 'Seasonal' }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.collection_4_tag_ar | default: 'موسمي' }}
+          {%- else -%}
+            {{ section.settings.collection_4_tag | default: 'Seasonal' }}
+          {%- endif -%}
         </span>
         <h3 class="font-heading font-extrabold text-2xl text-white uppercase mt-0.5">
-          {{ section.settings.collection_4_title | default: 'SALE' }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.collection_4_title_ar | default: 'التخفيضات' }}
+          {%- else -%}
+            {{ section.settings.collection_4_title | default: 'SALE' }}
+          {%- endif -%}
         </h3>
         <span class="text-[11px] font-mono-street tracking-widest text-white/60 mt-2 group-hover:text-white transition-colors">
-          {{ section.settings.collection_4_cta | default: 'Shop Sale →' }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.collection_4_cta_ar | default: 'تسوق التخفيضات ←' }}
+          {%- else -%}
+            {{ section.settings.collection_4_cta | default: 'Shop Sale →' }}
+          {%- endif -%}
         </span>
       </div>
     </a>
@@ -110,44 +170,88 @@
   "name": "Collections Grid",
   "settings": [
     {
+      "type": "header",
+      "content": "Section Titles (English)"
+    },
+    {
       "type": "text",
       "id": "subtitle",
-      "label": "Section Subtitle",
+      "label": "Section Subtitle (EN)",
       "default": "Collections"
     },
     {
       "type": "text",
       "id": "title",
-      "label": "Section Heading",
+      "label": "Section Heading (EN)",
       "default": "Explore the Archive"
     },
     {
       "type": "text",
       "id": "season_label",
-      "label": "Season Label",
+      "label": "Season Label (EN)",
       "default": "Season '26"
     },
     {
       "type": "header",
-      "content": "Collection 1"
+      "content": "عناوين السكشن (عربي)"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_ar",
+      "label": "Section Subtitle (AR)",
+      "default": "المجموعات"
+    },
+    {
+      "type": "text",
+      "id": "title_ar",
+      "label": "Section Heading (AR)",
+      "default": "استكشف التشكيلة"
+    },
+    {
+      "type": "text",
+      "id": "season_label_ar",
+      "label": "Season Label (AR)",
+      "default": "موسم '26"
+    },
+    {
+      "type": "header",
+      "content": "Collection 1 (Men)"
     },
     {
       "type": "text",
       "id": "collection_1_title",
-      "label": "Title",
+      "label": "Title (EN)",
       "default": "Men"
     },
     {
       "type": "text",
+      "id": "collection_1_title_ar",
+      "label": "Title (AR)",
+      "default": "رجال"
+    },
+    {
+      "type": "text",
       "id": "collection_1_tag",
-      "label": "Tag",
+      "label": "Tag (EN)",
       "default": "Category"
     },
     {
       "type": "text",
+      "id": "collection_1_tag_ar",
+      "label": "Tag (AR)",
+      "default": "تصنيف"
+    },
+    {
+      "type": "text",
       "id": "collection_1_cta",
-      "label": "CTA Text",
+      "label": "CTA Text (EN)",
       "default": "Shop Collection →"
+    },
+    {
+      "type": "text",
+      "id": "collection_1_cta_ar",
+      "label": "CTA Text (AR)",
+      "default": "تسوق المجموعة ←"
     },
     {
       "type": "url",
@@ -161,25 +265,43 @@
     },
     {
       "type": "header",
-      "content": "Collection 2"
+      "content": "Collection 2 (Women)"
     },
     {
       "type": "text",
       "id": "collection_2_title",
-      "label": "Title",
+      "label": "Title (EN)",
       "default": "Women"
     },
     {
       "type": "text",
+      "id": "collection_2_title_ar",
+      "label": "Title (AR)",
+      "default": "نساء"
+    },
+    {
+      "type": "text",
       "id": "collection_2_tag",
-      "label": "Tag",
+      "label": "Tag (EN)",
       "default": "Category"
     },
     {
       "type": "text",
+      "id": "collection_2_tag_ar",
+      "label": "Tag (AR)",
+      "default": "تصنيف"
+    },
+    {
+      "type": "text",
       "id": "collection_2_cta",
-      "label": "CTA Text",
+      "label": "CTA Text (EN)",
       "default": "Shop Collection →"
+    },
+    {
+      "type": "text",
+      "id": "collection_2_cta_ar",
+      "label": "CTA Text (AR)",
+      "default": "تسوق المجموعة ←"
     },
     {
       "type": "url",
@@ -193,25 +315,43 @@
     },
     {
       "type": "header",
-      "content": "Collection 3"
+      "content": "Collection 3 (New Drops)"
     },
     {
       "type": "text",
       "id": "collection_3_title",
-      "label": "Title",
+      "label": "Title (EN)",
       "default": "New Drops"
     },
     {
       "type": "text",
+      "id": "collection_3_title_ar",
+      "label": "Title (AR)",
+      "default": "وصل حديثاً"
+    },
+    {
+      "type": "text",
       "id": "collection_3_tag",
-      "label": "Tag",
+      "label": "Tag (EN)",
       "default": "Capsule"
     },
     {
       "type": "text",
+      "id": "collection_3_tag_ar",
+      "label": "Tag (AR)",
+      "default": "إصدار حصري"
+    },
+    {
+      "type": "text",
       "id": "collection_3_cta",
-      "label": "CTA Text",
+      "label": "CTA Text (EN)",
       "default": "Discover Pieces →"
+    },
+    {
+      "type": "text",
+      "id": "collection_3_cta_ar",
+      "label": "CTA Text (AR)",
+      "default": "اكتشف القطع ←"
     },
     {
       "type": "url",
@@ -225,25 +365,43 @@
     },
     {
       "type": "header",
-      "content": "Collection 4"
+      "content": "Collection 4 (Sale)"
     },
     {
       "type": "text",
       "id": "collection_4_title",
-      "label": "Title",
+      "label": "Title (EN)",
       "default": "SALE"
     },
     {
       "type": "text",
+      "id": "collection_4_title_ar",
+      "label": "Title (AR)",
+      "default": "التخفيضات"
+    },
+    {
+      "type": "text",
       "id": "collection_4_tag",
-      "label": "Tag",
+      "label": "Tag (EN)",
       "default": "Seasonal"
     },
     {
       "type": "text",
+      "id": "collection_4_tag_ar",
+      "label": "Tag (AR)",
+      "default": "موسمي"
+    },
+    {
+      "type": "text",
       "id": "collection_4_cta",
-      "label": "CTA Text",
+      "label": "CTA Text (EN)",
       "default": "Shop Sale →"
+    },
+    {
+      "type": "text",
+      "id": "collection_4_cta_ar",
+      "label": "CTA Text (AR)",
+      "default": "تسوق التخفيضات ←"
     },
     {
       "type": "url",
