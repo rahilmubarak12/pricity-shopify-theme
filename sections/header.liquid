@@ -131,27 +131,21 @@
         </span>
       </a>
 
-      <!-- RIGHT: Icons & Language Selector -->
+      <!-- RIGHT: Language Switcher, Currency & Icons -->
       <div class="flex items-center gap-3 sm:gap-6 lg:gap-8 justify-end text-sm sm:text-[17px] font-mono-street capitalize tracking-[0.1em] font-medium">
         
-        <!-- Desktop Language Selector -->
-        {%- if localization.available_languages.size > 1 -%}
-          <form action="/localization" method="POST" id="desktop-language-form" class="hidden lg:block">
-            <input type="hidden" name="_method" value="PUT">
-            <input type="hidden" name="return_to" value="{{ request.path }}">
-            <select
-              name="language_code"
-              onchange="document.getElementById('desktop-language-form').submit()"
-              class="bg-transparent text-current text-[11px] tracking-wider border border-current/20 rounded-full px-3 py-1 appearance-none cursor-pointer hover:border-current/50 transition-colors outline-none font-bold"
-            >
-              {%- for language in localization.available_languages -%}
-                <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %} style="background:#000;color:#fff;">
-                  {{ language.endonym_name | upcase }}
-                </option>
-              {%- endfor -%}
-            </select>
-          </form>
-        {%- endif -%}
+        <!-- Desktop Language Switcher (AR / EN) -->
+        <div class="hidden lg:flex items-center gap-1.5 text-[12px] font-mono-street font-bold tracking-wider">
+          {%- if request.locale.iso_code == 'ar' -%}
+            <a href="{{ request.path | remove_first: '/ar' | default: '/' }}" class="text-white/60 hover:text-white transition-colors">EN</a>
+            <span class="text-white/30">|</span>
+            <span class="text-white underline underline-offset-4">AR</span>
+          {%- else -%}
+            <span class="text-white underline underline-offset-4">EN</span>
+            <span class="text-white/30">|</span>
+            <a href="/ar{{ request.path }}" class="text-white/60 hover:text-white transition-colors">AR</a>
+          {%- endif -%}
+        </div>
 
         {%- if localization.available_countries.size > 1 -%}
           <form action="/localization" method="POST" id="desktop-localization-form" class="hidden lg:block">
@@ -170,7 +164,7 @@
             </select>
           </form>
         {%- endif -%}
-        
+
         <button class="search-drawer-trigger transition-colors flex items-center gap-2 p-1 hover:opacity-80 text-current" aria-label="Search">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sm:w-[24px] sm:h-[24px]">
             <circle cx="11" cy="11" r="8"></circle>
@@ -213,7 +207,7 @@
         <button class="search-drawer-trigger p-2 text-white">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </button>
-        <a href="/cart" class="p-2 text-white relative cart-drawer-trigger">
+        <a href="{{ routes.cart_url }}" class="p-2 text-white relative cart-drawer-trigger">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           <span class="cart-count-badge absolute -top-1 -right-1 bg-white text-black text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center leading-none {% if cart.item_count == 0 %}hidden{% endif %}">{{ cart.item_count }}</span>
         </a>
@@ -245,24 +239,17 @@
       {%- endif -%}
 
       <!-- Mobile Language & Currency Selectors -->
-      <div class="pt-4 flex flex-wrap items-center justify-center gap-3">
-        {%- if localization.available_languages.size > 1 -%}
-          <form action="/localization" method="POST" id="mobile-language-form">
-            <input type="hidden" name="_method" value="PUT">
-            <input type="hidden" name="return_to" value="{{ request.path }}">
-            <select
-              name="language_code"
-              onchange="document.getElementById('mobile-language-form').submit()"
-              class="bg-transparent text-zinc-400 text-[11px] tracking-wider border border-zinc-700 rounded-full px-3 py-1.5 appearance-none cursor-pointer hover:border-zinc-400 transition-colors outline-none"
-            >
-              {%- for language in localization.available_languages -%}
-                <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %} style="background:#000;color:#fff;">
-                  {{ language.endonym_name | upcase }}
-                </option>
-              {%- endfor -%}
-            </select>
-          </form>
-        {%- endif -%}
+      <div class="pt-4 flex flex-col items-center justify-center gap-3">
+        <!-- Mobile Language Switcher Buttons -->
+        <div class="flex items-center gap-2 text-xs font-mono-street">
+          {%- if request.locale.iso_code == 'ar' -%}
+            <a href="{{ request.path | remove_first: '/ar' | default: '/' }}" class="px-3 py-1 border border-zinc-700 rounded-full text-zinc-400 hover:text-white transition-colors">English</a>
+            <span class="px-3 py-1 border border-white rounded-full text-white font-bold bg-zinc-800">العربية</span>
+          {%- else -%}
+            <span class="px-3 py-1 border border-white rounded-full text-white font-bold bg-zinc-800">English</span>
+            <a href="/ar{{ request.path }}" class="px-3 py-1 border border-zinc-700 rounded-full text-zinc-400 hover:text-white transition-colors">العربية</a>
+          {%- endif -%}
+        </div>
 
         {%- if localization.available_countries.size > 1 -%}
           <form action="/localization" method="POST" id="mobile-localization-form">
@@ -276,7 +263,7 @@
                 class="bg-transparent text-zinc-400 text-[11px] tracking-wider border border-zinc-700 rounded-full px-3 py-1.5 appearance-none cursor-pointer hover:border-zinc-400 transition-colors outline-none"
               >
                 {%- for country in localization.available_countries -%}
-                  <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %} style="background:#000;color:#fff;">
+                  <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>
                     {{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
                   </option>
                 {%- endfor -%}
@@ -329,7 +316,7 @@
 
     // Scroll state toggler — only applies when mobile menu is NOT open
     const handleScroll = () => {
-      if (mobileMenuOpen) return; // Don't override dark drawer state
+      if (mobileMenuOpen) return;
 
       const isScrolled = window.scrollY > 50;
       if (isScrolled) {
@@ -341,7 +328,7 @@
           el.classList.remove('text-white/70');
           el.classList.add('text-zinc-500');
         });
-        // Icon buttons & language select (Search + Cart + Localization)
+        // Icon buttons & Switchers
         navbar.querySelectorAll('.search-drawer-trigger, .cart-drawer-trigger').forEach(el => {
           el.classList.remove('text-white');
           el.classList.add('text-[#1a1a1a]');
@@ -355,7 +342,7 @@
           el.classList.remove('text-zinc-500');
           el.classList.add('text-white/70');
         });
-        // Icon buttons & language select
+        // Icon buttons & Switchers
         navbar.querySelectorAll('.search-drawer-trigger, .cart-drawer-trigger').forEach(el => {
           el.classList.remove('text-[#1a1a1a]');
           el.classList.add('text-white');
@@ -364,7 +351,7 @@
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial trigger
+    handleScroll();
 
     // Toggle Drawer Open
     if (mobileMenuOpenBtn) {
@@ -372,7 +359,6 @@
         mobileMenuOpen = true;
         mobileDrawer.classList.remove('hidden');
         document.body.classList.add('overflow-hidden');
-        // Lock navbar to dark state while drawer is open
         navbar.classList.remove('bg-gradient-to-b', 'from-black/50', 'to-transparent', 'bg-[#faf9f7]/85', 'backdrop-blur-md', 'border-zinc-200/40', 'shadow-sm', 'text-[#1a1a1a]');
         navbar.classList.add('bg-black/95', 'backdrop-blur-md', 'border-b', 'border-zinc-800', 'text-white');
       });
@@ -384,13 +370,12 @@
         mobileMenuOpen = false;
         mobileDrawer.classList.add('hidden');
         document.body.classList.remove('overflow-hidden');
-        // Re-apply correct scroll state
         navbar.classList.remove('bg-black/95', 'border-zinc-800');
         handleScroll();
       });
     }
 
-    // Also close drawer if we click a link inside it
+    // Close drawer when clicking a link inside it
     mobileDrawer.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mobileMenuOpen = false;
