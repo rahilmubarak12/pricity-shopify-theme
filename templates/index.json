@@ -75,9 +75,14 @@
         "subtitle": "EDITORIAL DROP",
         "title": "WHERE COMFORT MEETS QUALITY",
         "description": "Clean silhouettes crafted for everyday confidence.",
-        "video_url": "",
         "card_left_text": "Editorial Motion",
-        "card_right_text": "Summer Drop 26"
+        "card_right_text": "Summer Drop 26",
+        "subtitle_ar": "اختيارات الموسم",
+        "title_ar": "راحة تلبسها جودة تحس فيها",
+        "description_ar": "قصّات مريحة ونظيفة، تعطيك ثقة من أول لبسة.",
+        "card_left_text_ar": "اختيارنا",
+        "card_right_text_ar": "صيف 2026",
+        "video_url": ""
       }
     },
     "product_catalog": {
