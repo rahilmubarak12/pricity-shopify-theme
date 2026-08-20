@@ -1,21 +1,51 @@
 {% comment %}
   Cart Drawer Section
   Sliding cart drawer displaying items, free shipping progress, quantity adjustments, and Tabby installments.
+  Supports English & Arabic bilingual switching.
 {% endcomment %}
+
+{%- liquid
+  if request.locale.iso_code == 'ar'
+    assign bag_heading = 'حقيبة التسوق'
+    assign empty_bag_msg = section.settings.empty_cart_text_ar | default: 'حقيبة التسوق فارغة.'
+    assign discover_btn_text = section.settings.discover_button_text_ar | default: 'استكشف التشكيلة'
+    assign max_stock_msg = 'تم الوصول للحد الأقصى'
+    assign upsell_heading = section.settings.cart_upsell_title_ar | default: 'قد يعجبك أيضاً'
+    assign view_product_text = 'عرض'
+    assign subtotal_title = 'المجموع الفرعي'
+    assign installments_label = section.settings.installments_text_ar | default: 'أو قسمها على'
+    assign checkout_btn_label = section.settings.checkout_button_text_ar | default: 'إتمام الطلب'
+    assign secure_checkout_label = section.settings.secure_checkout_text_ar | default: 'دفع إلكتروني آمن ومشفّر'
+    assign shipping_notice_label = section.settings.shipping_notice_text_ar | default: '🇸🇦 شحن سريع مجاني داخل السعودية'
+  else
+    assign bag_heading = 'Bag'
+    assign empty_bag_msg = section.settings.empty_cart_text | default: 'Your bag is empty.'
+    assign discover_btn_text = section.settings.discover_button_text | default: 'Discover Pieces'
+    assign max_stock_msg = 'Max stock reached'
+    assign upsell_heading = section.settings.cart_upsell_title | default: 'You May Also Like'
+    assign view_product_text = 'View'
+    assign subtotal_title = 'Subtotal'
+    assign installments_label = section.settings.installments_text | default: '4 payments of'
+    assign checkout_btn_label = section.settings.checkout_button_text | default: 'Guest Checkout'
+    assign secure_checkout_label = section.settings.secure_checkout_text | default: 'Secure Checkout'
+    assign shipping_notice_label = section.settings.shipping_notice_text | default: '🇸🇦 Free KSA Express Shipping'
+  endif
+-%}
 
 <div 
   id="CartDrawerSection" 
   class="cart-drawer-container fixed inset-0 z-[9999] overflow-hidden bg-black/40 opacity-0 pointer-events-none transition-opacity duration-300 flex justify-end"
+  data-lang="{{ request.locale.iso_code }}"
 >
   <div 
-    class="cart-drawer-panel w-full max-w-md bg-white h-full flex flex-col shadow-2xl border-l border-zinc-200 transform translate-x-full transition-transform duration-300"
+    class="cart-drawer-panel w-full max-w-md bg-white h-full flex flex-col shadow-2xl border-l border-zinc-200 transform translate-x-full transition-transform duration-300 {% if request.locale.iso_code == 'ar' %}text-right{% endif %}"
   >
     <!-- Header -->
     <div class="p-8 border-b border-zinc-200 flex items-center justify-between">
       <div>
         <span class="text-[10px] font-mono-street text-zinc-400 uppercase tracking-[0.25em]">Apricity Officials</span>
         <h2 class="font-heading font-extrabold text-xl text-[#1a1a1a] uppercase mt-0.5">
-          Bag (<span class="cart-total-qty">{{ cart.item_count }}</span>)
+          {{ bag_heading }} (<span class="cart-total-qty">{{ cart.item_count }}</span>)
         </h2>
       </div>
       <button type="button" class="cart-drawer-close p-2 text-zinc-400 hover:text-[#1a1a1a]" aria-label="Close">
@@ -28,7 +58,7 @@
 
     <!-- Free Shipping Notice -->
     <div class="bg-[#f3f2f0] border-b border-zinc-200 py-2.5 px-8 flex items-center justify-between text-[11px] font-mono-street text-zinc-500 uppercase tracking-wider">
-      <span>{{ section.settings.shipping_notice_text | default: '🇸🇦 Free KSA Express Shipping' }}</span>
+      <span>{{ shipping_notice_label }}</span>
       <span>{{ section.settings.shipping_notice_threshold | default: 0 | times: 100 | money_without_trailing_zeros }}</span>
     </div>
 
@@ -36,9 +66,9 @@
     <div class="cart-drawer-items flex-1 overflow-y-auto p-8 divide-y divide-zinc-100">
       {%- if cart.item_count == 0 -%}
         <div class="h-full flex flex-col items-center justify-center text-center text-zinc-400 space-y-4 py-12 font-mono-street">
-          <p class="text-xs uppercase tracking-wider">Your bag is empty.</p>
+          <p class="text-xs uppercase tracking-wider">{{ empty_bag_msg }}</p>
           <button type="button" class="cart-drawer-close px-6 py-3 bg-[#1a1a1a] text-white text-[11px] font-bold uppercase tracking-widest hover:bg-zinc-800 transition-colors">
-            Discover Pieces
+            {{ discover_btn_text }}
           </button>
         </div>
       {%- else -%}
@@ -59,7 +89,7 @@
             data-max-stock="{{ max_stock }}"
           >
             {%- if item.image != blank -%}
-              <img src="{{ item.image | image_url: width: 240 }}" alt="{{ item.title | escape }}" class="w-20 h-24 object-cover bg-[#f3f2f0] shrink-0"  width="1000" height="1000" />
+              <img src="{{ item.image | image_url: width: 240 }}" alt="{{ item.title | escape }}" class="w-20 h-24 object-cover bg-[#f3f2f0] shrink-0" width="240" height="288" />
             {%- endif -%}
             
             <div class="flex-1">
@@ -115,14 +145,13 @@
               </div>
               
               {%- if at_max -%}
-                <p class="text-[10px] text-amber-500 font-mono-street mt-1.5 uppercase tracking-wider">Max stock reached</p>
+                <p class="text-[10px] text-amber-500 font-mono-street mt-1.5 uppercase tracking-wider">{{ max_stock_msg }}</p>
               {%- endif -%}
             </div>
           </div>
         {%- endfor -%}
       {%- endif -%}
     </div>
-
 
     <!-- Cart Upsell -->
     {%- if cart.item_count > 0 and section.settings.cart_upsell_enabled != false -%}
@@ -142,15 +171,15 @@
       {%- endfor -%}
       {%- if upsell_product -%}
         <div class="px-8 pt-4 pb-2">
-          <p class="text-[9px] uppercase tracking-[0.2em] text-zinc-400 font-mono-street mb-3">{{ section.settings.cart_upsell_title | default: 'You May Also Like' }}</p>
+          <p class="text-[9px] uppercase tracking-[0.2em] text-zinc-400 font-mono-street mb-3">{{ upsell_heading }}</p>
           <div class="flex items-center gap-4 bg-white border border-zinc-100 rounded-xl p-3">
             <img src="{{ upsell_product.featured_image | image_url: width: 120 }}" alt="{{ upsell_product.title | escape }}" class="w-16 h-20 object-cover rounded-lg bg-zinc-50 shrink-0" width="120" height="150" />
             <div class="flex-1 min-w-0">
               <p class="text-xs font-semibold text-zinc-900 uppercase tracking-wide truncate">{{ upsell_product.title }}</p>
               <p class="text-xs text-zinc-500 font-mono-street mt-0.5">{{ upsell_product.price | money_without_trailing_zeros }}</p>
             </div>
-            <a href="{{ upsell_product.url }}" class="shrink-0 px-3 py-2 text-white text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all" style="background-color:{{ settings.atc_button_color | default: '#006039' }};">
-              View
+            <a href="{{ upsell_product.url }}" class="shrink-0 px-3 py-2 text-white text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all" style="background-color:{{ settings.atc_button_color | default: '#000000' }};">
+              {{ view_product_text }}
             </a>
           </div>
         </div>
@@ -161,7 +190,7 @@
     {%- if cart.item_count > 0 -%}
       <div class="cart-drawer-footer p-8 bg-[#f3f2f0] border-t border-zinc-200 space-y-4">
         <div class="flex items-center justify-between text-zinc-400 font-mono-street text-[11px] uppercase">
-          <span>Subtotal</span>
+          <span>{{ subtotal_title }}</span>
           <span class="cart-subtotal-price text-[#1a1a1a] font-bold text-base">
             {{ cart.total_price | money_without_trailing_zeros }}
           </span>
@@ -173,7 +202,7 @@
           <div class="py-2.5 px-3 bg-white border border-zinc-200 flex items-center justify-between text-[11px] font-mono-street text-zinc-500 uppercase">
             <span class="text-[#1a1a1a] font-bold">{{ section.settings.installments_provider | default: 'Tabby' }} {{ split_parts }}×</span>
             <span>
-              {{ section.settings.installments_text | default: '4 payments of' }} 
+              {{ installments_label }} 
               <span class="tabby-split-price">
                 {{ cart.total_price | divided_by: split_parts | money_without_trailing_zeros }}
               </span>
@@ -183,10 +212,10 @@
 
         <a 
           href="/checkout" 
-          class="w-full py-4 text-white font-mono-street text-[11px] font-extrabold uppercase tracking-[0.2em] bg-[#0B3D2E] hover:bg-[#07402A] hover:shadow-lg hover:shadow-[#0B3D2E]/30 active:scale-[0.99] transition-all duration-300 ease-in-out flex items-center justify-center gap-2 no-underline"
+          class="w-full py-4 text-white font-mono-street text-[11px] font-extrabold uppercase tracking-[0.2em] bg-[#000000] hover:bg-zinc-800 hover:shadow-lg active:scale-[0.99] transition-all duration-300 ease-in-out flex items-center justify-center gap-2 no-underline"
         >
-          <span>{{ section.settings.checkout_button_text | default: 'Guest Checkout' }}</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <span>{{ checkout_btn_label }}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="{% if request.locale.iso_code == 'ar' %}rotate-180{% endif %}">
             <line x1="5" x2="19" y1="12" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
           </svg>
@@ -196,7 +225,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
           </svg> 
-          {{ section.settings.secure_checkout_text | default: 'Secure Checkout' }}
+          {{ secure_checkout_label }}
         </div>
       </div>
     {%- endif -%}
@@ -204,7 +233,6 @@
 </div>
 
 <style>
-  /* Local animations for removal transition */
   .animate-slide-out {
     animation: slideOut 0.25s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     overflow: hidden;
@@ -221,6 +249,56 @@
   "settings": [
     {
       "type": "header",
+      "content": "Free Shipping Progress"
+    },
+    {
+      "type": "text",
+      "id": "shipping_notice_text",
+      "label": "Shipping Label (EN)",
+      "default": "🇸🇦 Free KSA Express Shipping"
+    },
+    {
+      "type": "text",
+      "id": "shipping_notice_text_ar",
+      "label": "نص الشحن المجاني (عربي)",
+      "default": "🇸🇦 شحن سريع مجاني داخل السعودية"
+    },
+    {
+      "type": "number",
+      "id": "shipping_notice_threshold",
+      "label": "Free Shipping Threshold",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Empty State"
+    },
+    {
+      "type": "text",
+      "id": "empty_cart_text",
+      "label": "Empty Cart Text (EN)",
+      "default": "Your bag is empty."
+    },
+    {
+      "type": "text",
+      "id": "empty_cart_text_ar",
+      "label": "نص السلة الفارغة (عربي)",
+      "default": "حقيبة التسوق فارغة."
+    },
+    {
+      "type": "text",
+      "id": "discover_button_text",
+      "label": "Discover Button (EN)",
+      "default": "Discover Pieces"
+    },
+    {
+      "type": "text",
+      "id": "discover_button_text_ar",
+      "label": "زر الاستكشاف (عربي)",
+      "default": "استكشف التشكيلة"
+    },
+    {
+      "type": "header",
       "content": "Upsell"
     },
     {
@@ -232,8 +310,14 @@
     {
       "type": "text",
       "id": "cart_upsell_title",
-      "label": "Upsell Section Title",
+      "label": "Upsell Title (EN)",
       "default": "You May Also Like"
+    },
+    {
+      "type": "text",
+      "id": "cart_upsell_title_ar",
+      "label": "عنوان المقترحات (عربي)",
+      "default": "قد يعجبك أيضاً"
     },
     {
       "type": "collection",
@@ -242,46 +326,36 @@
     },
     {
       "type": "header",
-      "content": "Free Shipping Progress"
-    },
-    {
-      "type": "text",
-      "id": "shipping_notice_text",
-      "label": "Shipping Announcement Label",
-      "default": "🇸🇦 Free KSA Express Shipping"
-    },
-    {
-      "type": "number",
-      "id": "shipping_notice_threshold",
-      "label": "Free Shipping Threshold (Amount in Store Currency)",
-      "default": 0
-    },
-    {
-      "type": "header",
-      "content": "Installments configuration"
+      "content": "Installments Configuration"
     },
     {
       "type": "checkbox",
       "id": "enable_installments",
-      "label": "Enable Installments calculation",
+      "label": "Enable Installments",
       "default": true
     },
     {
       "type": "text",
       "id": "installments_provider",
-      "label": "Installment Provider Name",
+      "label": "Provider Name",
       "default": "Tabby"
     },
     {
       "type": "text",
       "id": "installments_text",
-      "label": "Split installments descriptive label",
+      "label": "Installments Label (EN)",
       "default": "4 payments of"
+    },
+    {
+      "type": "text",
+      "id": "installments_text_ar",
+      "label": "نص التقسيط (عربي)",
+      "default": "أو قسمها على 4 دفعات بقيمة"
     },
     {
       "type": "range",
       "id": "installments_split",
-      "label": "Installment split parts count",
+      "label": "Split Parts Count",
       "min": 2,
       "max": 12,
       "step": 1,
@@ -289,19 +363,31 @@
     },
     {
       "type": "header",
-      "content": "Checkout buttons labels"
+      "content": "Checkout Buttons"
     },
     {
       "type": "text",
       "id": "checkout_button_text",
-      "label": "Checkout Button label",
+      "label": "Checkout Button (EN)",
       "default": "Guest Checkout"
     },
     {
       "type": "text",
+      "id": "checkout_button_text_ar",
+      "label": "زر إتمام الطلب (عربي)",
+      "default": "إتمام الطلب"
+    },
+    {
+      "type": "text",
       "id": "secure_checkout_text",
-      "label": "Secure Checkout subtitle label",
+      "label": "Secure Checkout Text (EN)",
       "default": "Secure Checkout"
+    },
+    {
+      "type": "text",
+      "id": "secure_checkout_text_ar",
+      "label": "نص الدفع الآمن (عربي)",
+      "default": "دفع إلكتروني آمن ومشفّر"
     }
   ]
 }
