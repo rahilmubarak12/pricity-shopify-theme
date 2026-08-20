@@ -1,8 +1,30 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "main-product",
-      "settings": {}
+      "settings": {
+        "atc_button_color": "#006039",
+        "sticky_atc_enabled": true,
+        "trust_badges_enabled": true,
+        "trust_badge_1_text": "Secure Pay",
+        "trust_badge_2_text": "Free Delivery",
+        "trust_badge_3_text": "Easy Returns",
+        "trust_badge_4_text": "Premium",
+        "trust_badge_1_text_ar": "دفع آمن",
+        "trust_badge_2_text_ar": "توصيل مجاني",
+        "trust_badge_3_text_ar": "إرجاع سهل",
+        "trust_badge_4_text_ar": "جودة عاليه",
+        "low_stock_threshold": 3
+      }
     }
   },
   "order": [
