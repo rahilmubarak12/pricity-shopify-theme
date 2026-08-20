@@ -131,8 +131,28 @@
         </span>
       </a>
 
-      <!-- RIGHT: Icons -->
+      <!-- RIGHT: Icons & Language Selector -->
       <div class="flex items-center gap-3 sm:gap-6 lg:gap-8 justify-end text-sm sm:text-[17px] font-mono-street capitalize tracking-[0.1em] font-medium">
+        
+        <!-- Desktop Language Selector -->
+        {%- if localization.available_languages.size > 1 -%}
+          <form action="/localization" method="POST" id="desktop-language-form" class="hidden lg:block">
+            <input type="hidden" name="_method" value="PUT">
+            <input type="hidden" name="return_to" value="{{ request.path }}">
+            <select
+              name="language_code"
+              onchange="document.getElementById('desktop-language-form').submit()"
+              class="bg-transparent text-current text-[11px] tracking-wider border border-current/20 rounded-full px-3 py-1 appearance-none cursor-pointer hover:border-current/50 transition-colors outline-none font-bold"
+            >
+              {%- for language in localization.available_languages -%}
+                <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %} style="background:#000;color:#fff;">
+                  {{ language.endonym_name | upcase }}
+                </option>
+              {%- endfor -%}
+            </select>
+          </form>
+        {%- endif -%}
+
         {%- if localization.available_countries.size > 1 -%}
           <form action="/localization" method="POST" id="desktop-localization-form" class="hidden lg:block">
             <input type="hidden" name="_method" value="PUT">
@@ -150,6 +170,7 @@
             </select>
           </form>
         {%- endif -%}
+        
         <button class="search-drawer-trigger transition-colors flex items-center gap-2 p-1 hover:opacity-80 text-current" aria-label="Search">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sm:w-[24px] sm:h-[24px]">
             <circle cx="11" cy="11" r="8"></circle>
@@ -223,9 +244,27 @@
         {%- endif -%}
       {%- endif -%}
 
-      <!-- Currency/Country Selector -->
-      {%- if localization.available_countries.size > 1 -%}
-        <div class="pt-4 flex justify-center">
+      <!-- Mobile Language & Currency Selectors -->
+      <div class="pt-4 flex flex-wrap items-center justify-center gap-3">
+        {%- if localization.available_languages.size > 1 -%}
+          <form action="/localization" method="POST" id="mobile-language-form">
+            <input type="hidden" name="_method" value="PUT">
+            <input type="hidden" name="return_to" value="{{ request.path }}">
+            <select
+              name="language_code"
+              onchange="document.getElementById('mobile-language-form').submit()"
+              class="bg-transparent text-zinc-400 text-[11px] tracking-wider border border-zinc-700 rounded-full px-3 py-1.5 appearance-none cursor-pointer hover:border-zinc-400 transition-colors outline-none"
+            >
+              {%- for language in localization.available_languages -%}
+                <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %} style="background:#000;color:#fff;">
+                  {{ language.endonym_name | upcase }}
+                </option>
+              {%- endfor -%}
+            </select>
+          </form>
+        {%- endif -%}
+
+        {%- if localization.available_countries.size > 1 -%}
           <form action="/localization" method="POST" id="mobile-localization-form">
             <input type="hidden" name="_method" value="PUT">
             <input type="hidden" name="return_to" value="{{ request.path }}">
@@ -234,19 +273,18 @@
               <select
                 name="country_code"
                 onchange="document.getElementById('mobile-localization-form').submit()"
-                class="bg-transparent text-zinc-400 text-[11px] tracking-wider border border-zinc-700 rounded-full px-3 py-1.5 appearance-none cursor-pointer hover:border-zinc-400 transition-colors outline-none pr-7"
-                style="background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center;"
+                class="bg-transparent text-zinc-400 text-[11px] tracking-wider border border-zinc-700 rounded-full px-3 py-1.5 appearance-none cursor-pointer hover:border-zinc-400 transition-colors outline-none"
               >
                 {%- for country in localization.available_countries -%}
-                  <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>
+                  <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %} style="background:#000;color:#fff;">
                     {{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
                   </option>
                 {%- endfor -%}
               </select>
             </div>
           </form>
-        </div>
-      {%- endif -%}
+        {%- endif -%}
+      </div>
 
       <!-- Mobile Contact Info -->
       {%- if section.settings.show_contact != false -%}
@@ -272,8 +310,8 @@
     <div class="px-6 pb-16 pt-4 flex justify-center">
       <button class="mobile-menu-close flex items-center gap-2 px-8 py-3 border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-400 font-mono-street text-[11px] uppercase tracking-widest transition-colors" aria-label="Close menu">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" x2="6" y1="6" y2="18"></line>
-          <line x1="6" x2="18" y1="6" y2="18"></line>
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg> {{ section.settings.close_label | default: 'Close' }}
       </button>
     </div>
@@ -303,7 +341,7 @@
           el.classList.remove('text-white/70');
           el.classList.add('text-zinc-500');
         });
-        // Icon buttons (Search + Cart)
+        // Icon buttons & language select (Search + Cart + Localization)
         navbar.querySelectorAll('.search-drawer-trigger, .cart-drawer-trigger').forEach(el => {
           el.classList.remove('text-white');
           el.classList.add('text-[#1a1a1a]');
@@ -317,7 +355,7 @@
           el.classList.remove('text-zinc-500');
           el.classList.add('text-white/70');
         });
-        // Icon buttons (Search + Cart)
+        // Icon buttons & language select
         navbar.querySelectorAll('.search-drawer-trigger, .cart-drawer-trigger').forEach(el => {
           el.classList.remove('text-[#1a1a1a]');
           el.classList.add('text-white');
