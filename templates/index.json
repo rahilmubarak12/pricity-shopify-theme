@@ -1,20 +1,72 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero_video": {
       "type": "hero-video",
-      "settings": {}
+      "settings": {
+        "subtitle": "Summer Capsule '26",
+        "title": "APRICITY OFFICIALS",
+        "description": "Elevated essentials with a refined modern fit.",
+        "btn_1_label": "Shop Now",
+        "btn_2_label": "Men",
+        "btn_3_label": "Women",
+        "subtitle_ar": "صيف 2026",
+        "title_ar": "APRICITY OFFICIALS",
+        "description_ar": "أساسيات بستَايل راقٍ وقَصّات عصرية تضبط إطلالتك",
+        "btn_1_label_ar": "تسوق الآن",
+        "btn_2_label_ar": "رجال",
+        "btn_3_label_ar": "نسائي",
+        "btn_1_url": "",
+        "btn_2_url": "",
+        "btn_3_url": "",
+        "video_url": ""
+      }
     },
     "collections_grid": {
       "type": "collections-grid",
-      "settings": {}
+      "settings": {
+        "subtitle": "Collections",
+        "title": "Explore the Archive",
+        "season_label": "Season '26",
+        "collection_1_title": "Men",
+        "collection_1_tag": "Category",
+        "collection_1_cta": "Shop Collection →",
+        "collection_1_url": "",
+        "collection_2_title": "Women",
+        "collection_2_tag": "Category",
+        "collection_2_cta": "Shop Collection →",
+        "collection_2_url": "",
+        "collection_3_title": "New Drops",
+        "collection_3_tag": "Capsule",
+        "collection_3_cta": "Discover Pieces →",
+        "collection_3_url": "",
+        "collection_4_title": "SALE",
+        "collection_4_tag": "Seasonal",
+        "collection_4_cta": "Shop Sale →",
+        "collection_4_url": ""
+      }
     },
     "fabric_detail": {
       "type": "fabric-detail",
-      "settings": {}
+      "settings": {
+        "subtitle": "EDITORIAL DROP",
+        "title": "WHERE COMFORT MEETS QUALITY",
+        "description": "Clean silhouettes crafted for everyday confidence.",
+        "video_url": "",
+        "card_left_text": "Editorial Motion",
+        "card_right_text": "Summer Drop 26"
+      }
     },
     "product_catalog": {
       "type": "product-catalog",
-      "settings": {},
       "blocks": {
         "sub_summer": {
           "type": "subcategory_filter",
@@ -58,7 +110,13 @@
         "sub_shirt",
         "sub_sweatshirt",
         "sub_tshirt"
-      ]
+      ],
+      "settings": {
+        "subtitle": "Catalog",
+        "title": "The Collection",
+        "collection": "",
+        "products_to_show": 24
+      }
     }
   },
   "order": [
