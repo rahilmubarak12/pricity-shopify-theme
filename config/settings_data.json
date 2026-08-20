@@ -65,7 +65,7 @@
           "enable_installments": true,
           "installments_provider": "Tabby",
           "installments_text": "4 payments of",
-          "installments_text_ar": "4 دفعات كل دفعه",
+          "installments_text_ar": "4  دفعات كل دفعه",
           "installments_split": 4,
           "checkout_button_text": "Guest Checkout",
           "checkout_button_text_ar": "إتمام الطلب",
