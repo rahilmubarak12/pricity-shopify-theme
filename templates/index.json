@@ -92,6 +92,7 @@
           "type": "subcategory_filter",
           "settings": {
             "label": "Summer Collection",
+            "label_ar": "تشكيلة الصيف",
             "key": "summer"
           }
         },
@@ -99,6 +100,7 @@
           "type": "subcategory_filter",
           "settings": {
             "label": "Hoodies",
+            "label_ar": "تشكيلة الصيف",
             "key": "hoodie"
           }
         },
@@ -106,6 +108,7 @@
           "type": "subcategory_filter",
           "settings": {
             "label": "Sets",
+            "label_ar": "تشكيلة الصيف",
             "key": "shirt"
           }
         },
@@ -113,6 +116,7 @@
           "type": "subcategory_filter",
           "settings": {
             "label": "Sweatshirts",
+            "label_ar": "تشكيلة الصيف",
             "key": "sweatshirt"
           }
         },
@@ -120,6 +124,7 @@
           "type": "subcategory_filter",
           "settings": {
             "label": "T-Shirts & Tops",
+            "label_ar": "تشكيلة الصيف",
             "key": "t-shirt"
           }
         }
@@ -134,6 +139,18 @@
       "settings": {
         "subtitle": "Catalog",
         "title": "The Collection",
+        "cat_all_label": "All",
+        "cat_new_label": "New Drops",
+        "cat_men_label": "Men",
+        "cat_women_label": "Women",
+        "cat_sale_label": "Sale",
+        "subtitle_ar": "الكتالوج",
+        "title_ar": "التشكيلة",
+        "cat_all_label_ar": "الكل",
+        "cat_new_label_ar": "الجديد",
+        "cat_men_label_ar": "رجال",
+        "cat_women_label_ar": "نساء",
+        "cat_sale_label_ar": "التخفيضات",
         "collection": "",
         "products_to_show": 24
       }
