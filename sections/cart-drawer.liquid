@@ -6,7 +6,7 @@
 
 {%- liquid
   if request.locale.iso_code == 'ar'
-    assign bag_heading = 'حقيبة التسوق'
+    assign bag_heading = ' السلة'
     assign empty_bag_msg = section.settings.empty_cart_text_ar | default: 'حقيبة التسوق فارغة.'
     assign discover_btn_text = section.settings.discover_button_text_ar | default: 'استكشف التشكيلة'
     assign max_stock_msg = 'تم الوصول للحد الأقصى'
