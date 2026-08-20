@@ -3,6 +3,20 @@
   Dedicated PDP section rendering the shared product-detail snippet.
 {% endcomment %}
 
+{%- liquid
+  if request.locale.iso_code == 'ar'
+    assign badge_1 = section.settings.trust_badge_1_text_ar | default: 'دفع آمن'
+    assign badge_2 = section.settings.trust_badge_2_text_ar | default: 'توصيل مجاني'
+    assign badge_3 = section.settings.trust_badge_3_text_ar | default: 'إرجاع سهل'
+    assign badge_4 = section.settings.trust_badge_4_text_ar | default: 'جودة فاخرة'
+  else
+    assign badge_1 = section.settings.trust_badge_1_text | default: 'Secure Pay'
+    assign badge_2 = section.settings.trust_badge_2_text | default: 'Free Delivery'
+    assign badge_3 = section.settings.trust_badge_3_text | default: 'Easy Returns'
+    assign badge_4 = section.settings.trust_badge_4_text | default: 'Premium'
+  endif
+-%}
+
 <div class="main-product-section-wrapper pt-24 pb-12 md:pt-28 md:pb-16 bg-[#faf9f7]">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     {% render 'product-detail',
@@ -11,10 +25,10 @@
       atc_color: section.settings.atc_button_color,
       sticky_atc_enabled: section.settings.sticky_atc_enabled,
       trust_badges_enabled: section.settings.trust_badges_enabled,
-      trust_badge_1: section.settings.trust_badge_1_text,
-      trust_badge_2: section.settings.trust_badge_2_text,
-      trust_badge_3: section.settings.trust_badge_3_text,
-      trust_badge_4: section.settings.trust_badge_4_text,
+      trust_badge_1: badge_1,
+      trust_badge_2: badge_2,
+      trust_badge_3: badge_3,
+      trust_badge_4: badge_4,
       low_stock_threshold: section.settings.low_stock_threshold
     %}
   </div>
@@ -64,7 +78,7 @@
     },
     {
       "type": "header",
-      "content": "Trust Badges"
+      "content": "Trust Badges (English)"
     },
     {
       "type": "checkbox",
@@ -75,26 +89,54 @@
     {
       "type": "text",
       "id": "trust_badge_1_text",
-      "label": "Badge 1 Text",
+      "label": "Badge 1 Text (EN)",
       "default": "Secure Pay"
     },
     {
       "type": "text",
       "id": "trust_badge_2_text",
-      "label": "Badge 2 Text",
+      "label": "Badge 2 Text (EN)",
       "default": "Free Delivery"
     },
     {
       "type": "text",
       "id": "trust_badge_3_text",
-      "label": "Badge 3 Text",
+      "label": "Badge 3 Text (EN)",
       "default": "Easy Returns"
     },
     {
       "type": "text",
       "id": "trust_badge_4_text",
-      "label": "Badge 4 Text",
+      "label": "Badge 4 Text (EN)",
       "default": "Premium"
+    },
+    {
+      "type": "header",
+      "content": "شارات الثقة (عربي)"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_1_text_ar",
+      "label": "شارة 1 (AR)",
+      "default": "دفع آمن"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_2_text_ar",
+      "label": "شارة 2 (AR)",
+      "default": "توصيل مجاني"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_3_text_ar",
+      "label": "شارة 3 (AR)",
+      "default": "إرجاع سهل"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_4_text_ar",
+      "label": "شارة 4 (AR)",
+      "default": "جودة فاخرة"
     },
     {
       "type": "header",
