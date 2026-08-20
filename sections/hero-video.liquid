@@ -40,34 +40,54 @@
   <!-- Content -->
   <div class="relative z-20 max-w-5xl mx-auto px-6 w-full text-center -mt-10">
     <span class="text-[11px] font-mono-street tracking-[0.3em] uppercase text-white/60 mb-5 block">
-      {{ section.settings.subtitle | default: "Summer Capsule '26" }}
+      {%- if request.locale.iso_code == 'ar' -%}
+        {{ section.settings.subtitle_ar | default: "تشكيلة صيف '26" }}
+      {%- else -%}
+        {{ section.settings.subtitle | default: "Summer Capsule '26" }}
+      {%- endif -%}
     </span>
 
     <h1 class="font-heading font-bold text-4xl sm:text-6xl md:text-7xl text-white uppercase leading-none mb-6 min-h-[1.1em] typewriter-target"
-        data-text="{{ section.settings.title | default: 'APRICITY OFFICIALS' }}"
+        data-text="{% if request.locale.iso_code == 'ar' %}{{ section.settings.title_ar | default: 'APRICITY OFFICIALS' }}{% else %}{{ section.settings.title | default: 'APRICITY OFFICIALS' }}{% endif %}"
         data-speed="75"
         data-delay="300">
       <!-- Typed text will be written here by Javascript -->
     </h1>
 
     <p class="text-white/70 font-light text-base md:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
-      {{ section.settings.description | default: 'Elevated essentials with a refined modern fit.' }}
+      {%- if request.locale.iso_code == 'ar' -%}
+        {{ section.settings.description_ar | default: 'قطع أساسية راقية بتصميم عصري متقن.' }}
+      {%- else -%}
+        {{ section.settings.description | default: 'Elevated essentials with a refined modern fit.' }}
+      {%- endif -%}
     </p>
 
     <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto font-mono-street text-xs uppercase tracking-[0.2em]">
-      {%- if section.settings.btn_1_label != blank -%}
-        <a href="{{ section.settings.btn_1_url | default: '#' }}" class="w-full sm:w-auto px-10 py-4 bg-white text-black font-extrabold hover:bg-zinc-100 transition-colors no-underline">
-          {{ section.settings.btn_1_label }}
+      {%- if section.settings.btn_1_label != blank or section.settings.btn_1_label_ar != blank -%}
+        <a href="{{ section.settings.btn_1_url | default: routes.all_products_collection_url }}" class="w-full sm:w-auto px-10 py-4 bg-white text-black font-extrabold hover:bg-zinc-100 transition-colors no-underline">
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.btn_1_label_ar | default: 'تسوق الآن' }}
+          {%- else -%}
+            {{ section.settings.btn_1_label | default: 'Shop Now' }}
+          {%- endif -%}
         </a>
       {%- endif -%}
-      {%- if section.settings.btn_2_label != blank -%}
+      {%- if section.settings.btn_2_label != blank or section.settings.btn_2_label_ar != blank -%}
         <a href="{{ section.settings.btn_2_url | default: '#' }}" class="w-full sm:w-auto px-8 py-4 bg-transparent text-white border border-white/40 hover:border-white hover:bg-white/10 transition-colors no-underline">
-          {{ section.settings.btn_2_label }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.btn_2_label_ar | default: 'رجال' }}
+          {%- else -%}
+            {{ section.settings.btn_2_label | default: 'Men' }}
+          {%- endif -%}
         </a>
       {%- endif -%}
-      {%- if section.settings.btn_3_label != blank -%}
+      {%- if section.settings.btn_3_label != blank or section.settings.btn_3_label_ar != blank -%}
         <a href="{{ section.settings.btn_3_url | default: '#' }}" class="w-full sm:w-auto px-8 py-4 bg-transparent text-white border border-white/40 hover:border-white hover:bg-white/10 transition-colors no-underline">
-          {{ section.settings.btn_3_label }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.btn_3_label_ar | default: 'نساء' }}
+          {%- else -%}
+            {{ section.settings.btn_3_label | default: 'Women' }}
+          {%- endif -%}
         </a>
       {%- endif -%}
     </div>
@@ -128,22 +148,103 @@
   "name": "Hero Video",
   "settings": [
     {
+      "type": "header",
+      "content": "English Content"
+    },
+    {
       "type": "text",
       "id": "subtitle",
-      "label": "Subtitle",
+      "label": "Subtitle (EN)",
       "default": "Summer Capsule '26"
     },
     {
       "type": "text",
       "id": "title",
-      "label": "Heading Title",
+      "label": "Heading Title (EN)",
       "default": "APRICITY OFFICIALS"
     },
     {
       "type": "textarea",
       "id": "description",
-      "label": "Description",
+      "label": "Description (EN)",
       "default": "Elevated essentials with a refined modern fit."
+    },
+    {
+      "type": "text",
+      "id": "btn_1_label",
+      "label": "Button 1 Label (EN)",
+      "default": "Shop Now"
+    },
+    {
+      "type": "text",
+      "id": "btn_2_label",
+      "label": "Button 2 Label (EN)",
+      "default": "Men"
+    },
+    {
+      "type": "text",
+      "id": "btn_3_label",
+      "label": "Button 3 Label (EN)",
+      "default": "Women"
+    },
+    {
+      "type": "header",
+      "content": "Arabic Content (المحتوى العربي)"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_ar",
+      "label": "Subtitle (AR)",
+      "default": "تشكيلة صيف '26"
+    },
+    {
+      "type": "text",
+      "id": "title_ar",
+      "label": "Heading Title (AR)",
+      "default": "APRICITY OFFICIALS"
+    },
+    {
+      "type": "textarea",
+      "id": "description_ar",
+      "label": "Description (AR)",
+      "default": "قطع أساسية راقية بتصميم عصري متقن."
+    },
+    {
+      "type": "text",
+      "id": "btn_1_label_ar",
+      "label": "Button 1 Label (AR)",
+      "default": "تسوق الآن"
+    },
+    {
+      "type": "text",
+      "id": "btn_2_label_ar",
+      "label": "Button 2 Label (AR)",
+      "default": "رجال"
+    },
+    {
+      "type": "text",
+      "id": "btn_3_label_ar",
+      "label": "Button 3 Label (AR)",
+      "default": "نساء"
+    },
+    {
+      "type": "header",
+      "content": "Button Links"
+    },
+    {
+      "type": "url",
+      "id": "btn_1_url",
+      "label": "Button 1 URL"
+    },
+    {
+      "type": "url",
+      "id": "btn_2_url",
+      "label": "Button 2 URL"
+    },
+    {
+      "type": "url",
+      "id": "btn_3_url",
+      "label": "Button 3 URL"
     },
     {
       "type": "header",
@@ -168,43 +269,6 @@
       "type": "image_picker",
       "id": "image_mobile",
       "label": "Mobile Background Image"
-    },
-    {
-      "type": "header",
-      "content": "CTA Buttons"
-    },
-    {
-      "type": "text",
-      "id": "btn_1_label",
-      "label": "Button 1 Label",
-      "default": "Shop Now"
-    },
-    {
-      "type": "url",
-      "id": "btn_1_url",
-      "label": "Button 1 URL"
-    },
-    {
-      "type": "text",
-      "id": "btn_2_label",
-      "label": "Button 2 Label",
-      "default": "Men"
-    },
-    {
-      "type": "url",
-      "id": "btn_2_url",
-      "label": "Button 2 URL"
-    },
-    {
-      "type": "text",
-      "id": "btn_3_label",
-      "label": "Button 3 Label",
-      "default": "Women"
-    },
-    {
-      "type": "url",
-      "id": "btn_3_url",
-      "label": "Button 3 URL"
     }
   ],
   "presets": [
