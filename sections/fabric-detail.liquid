@@ -8,15 +8,27 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
       
       <!-- Left Column: Content -->
-      <div class="lg:col-span-6 space-y-8">
+      <div class="lg:col-span-6 space-y-8 {% if request.locale.iso_code == 'ar' %}text-right{% endif %}">
         <span class="text-[11px] font-mono-street text-zinc-400 uppercase tracking-[0.25em] block">
-          {{ section.settings.subtitle | default: 'EDITORIAL DROP' }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.subtitle_ar | default: 'إصدار حصري' }}
+          {%- else -%}
+            {{ section.settings.subtitle | default: 'EDITORIAL DROP' }}
+          {%- endif -%}
         </span>
-        <h2 class="font-heading font-extrabold text-3xl md:text-5xl uppercase leading-[1.05] text-[#1a1a1a]">
-          {{ section.settings.title | default: 'WHERE COMFORT MEETS QUALITY' }}
+        <h2 class="font-heading font-extrabold text-3xl md:text-5xl uppercase leading-[1.15] text-[#1a1a1a]">
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.title_ar | default: 'حيث تلتقي الراحة بالجودة الفائقة' }}
+          {%- else -%}
+            {{ section.settings.title | default: 'WHERE COMFORT MEETS QUALITY' }}
+          {%- endif -%}
         </h2>
         <p class="text-zinc-500 font-light text-base md:text-lg leading-relaxed">
-          {{ section.settings.description | default: 'Clean silhouettes crafted for everyday confidence.' }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ section.settings.description_ar | default: 'أساسيات بستَايل راقٍ وقَصّات عصرية تضبط إطلالتك.' }}
+          {%- else -%}
+            {{ section.settings.description | default: 'Clean silhouettes crafted for everyday confidence.' }}
+          {%- endif -%}
         </p>
       </div>
       
@@ -31,13 +43,13 @@
                 src="{{ section.settings.image | image_url: width: 1000 }}" 
                 alt="Editorial Cover" 
                 class="fabric-image w-full h-full object-cover object-center transition-opacity duration-500 group-hover:opacity-0" 
-               width="1000" height="1000" />
+                width="1000" height="1000" />
             {%- else -%}
               <img 
                 src="{{ 'editorial-cover.jpg' | asset_url }}" 
                 alt="Editorial Cover" 
                 class="fabric-image w-full h-full object-cover object-center transition-opacity duration-500 group-hover:opacity-0" 
-               width="1000" height="1000" />
+                width="1000" height="1000" />
             {%- endif -%}
             
             <!-- Video - Hidden until hover -->
@@ -58,10 +70,18 @@
           
           <div class="p-6 flex items-center justify-between text-[11px] font-mono-street border-t border-zinc-200 mt-2 uppercase tracking-widest">
             <span class="text-zinc-400">
-              {{ section.settings.card_left_text | default: 'Editorial Motion' }}
+              {%- if request.locale.iso_code == 'ar' -%}
+                {{ section.settings.card_left_text_ar | default: 'موشن الإصدار' }}
+              {%- else -%}
+                {{ section.settings.card_left_text | default: 'Editorial Motion' }}
+              {%- endif -%}
             </span>
             <span class="text-[#1a1a1a] font-bold">
-              {{ section.settings.card_right_text | default: 'Summer Drop 26' }}
+              {%- if request.locale.iso_code == 'ar' -%}
+                {{ section.settings.card_right_text_ar | default: 'إصدار صيف 26' }}
+              {%- else -%}
+                {{ section.settings.card_right_text | default: 'Summer Drop 26' }}
+              {%- endif -%}
             </span>
           </div>
         </div>
@@ -99,26 +119,76 @@
   "name": "Fabric Detail Editorial",
   "settings": [
     {
+      "type": "header",
+      "content": "English Content"
+    },
+    {
       "type": "text",
       "id": "subtitle",
-      "label": "Subtitle",
+      "label": "Subtitle (EN)",
       "default": "EDITORIAL DROP"
     },
     {
       "type": "text",
       "id": "title",
-      "label": "Heading Title",
+      "label": "Heading Title (EN)",
       "default": "WHERE COMFORT MEETS QUALITY"
     },
     {
       "type": "textarea",
       "id": "description",
-      "label": "Description",
+      "label": "Description (EN)",
       "default": "Clean silhouettes crafted for everyday confidence."
     },
     {
+      "type": "text",
+      "id": "card_left_text",
+      "label": "Card Label Left (EN)",
+      "default": "Editorial Motion"
+    },
+    {
+      "type": "text",
+      "id": "card_right_text",
+      "label": "Card Label Right (EN)",
+      "default": "Summer Drop 26"
+    },
+    {
       "type": "header",
-      "content": "Interactive Card"
+      "content": "المحتوى العربي (Arabic Content)"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_ar",
+      "label": "العنوان الفرعي (AR)",
+      "default": "إصدار حصري"
+    },
+    {
+      "type": "text",
+      "id": "title_ar",
+      "label": "العنوان الرئيسي (AR)",
+      "default": "حيث تلتقي الراحة بالجودة الفائقة"
+    },
+    {
+      "type": "textarea",
+      "id": "description_ar",
+      "label": "الوصف (AR)",
+      "default": "أساسيات بستَايل راقٍ وقَصّات عصرية تضبط إطلالتك."
+    },
+    {
+      "type": "text",
+      "id": "card_left_text_ar",
+      "label": "نص البطاقة يسار (AR)",
+      "default": "موشن الإصدار"
+    },
+    {
+      "type": "text",
+      "id": "card_right_text_ar",
+      "label": "نص البطاقة يمين (AR)",
+      "default": "إصدار صيف 26"
+    },
+    {
+      "type": "header",
+      "content": "Media Settings"
     },
     {
       "type": "image_picker",
@@ -130,18 +200,6 @@
       "id": "video_url",
       "label": "Editorial Video URL",
       "info": "URL of the mp4 video file. If left blank, it will load the default editorial.mp4 asset."
-    },
-    {
-      "type": "text",
-      "id": "card_left_text",
-      "label": "Card Label (Left)",
-      "default": "Editorial Motion"
-    },
-    {
-      "type": "text",
-      "id": "card_right_text",
-      "label": "Card Label (Right)",
-      "default": "Summer Drop 26"
     }
   ],
   "presets": [
