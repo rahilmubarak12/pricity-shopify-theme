@@ -657,7 +657,7 @@
       <div class="flex gap-2.5">
         <button
           type="button"
-          class="product-add-to-cart flex-1 py-4 rounded-xl text-sm font-semibold tracking-[0.1em] uppercase flex items-center justify-center gap-2.5 transition-all duration-300 text-white shadow-lg shadow-zinc-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:text-white" style="background-color:{{ atc_color | default: '#006039' }};"
+          class="product-add-to-cart flex-1 py-4 rounded-xl text-sm font-semibold tracking-[0.1em] uppercase flex items-center justify-center gap-2.5 transition-all duration-300 text-white shadow-lg shadow-zinc-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:text-white" style="background-color: #000000 !important;"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
@@ -730,7 +730,7 @@
       type="button"
       id="StickyATCBtn"
       class="shrink-0 px-6 py-3 text-white text-xs font-bold uppercase tracking-widest rounded-xl transition-all disabled:opacity-50"
-      style="background-color:{{ atc_color | default: '#006039' }};"
+      style="background-color: #000000 !important;"
     >
       {% if request.locale.iso_code == 'ar' %}أضف إلى السلة{% else %}Add to Cart{% endif %}
     </button>
@@ -767,11 +767,7 @@
     stickyBtn.disabled = mainAtc.disabled;
     const btnText = mainAtc.querySelector('.btn-text');
     if (btnText) stickyBtn.textContent = btnText.textContent;
-    if (mainAtc.style.backgroundColor) {
-      stickyBtn.style.backgroundColor = mainAtc.style.backgroundColor;
-    } else {
-      stickyBtn.style.backgroundColor = '#006039';
-    }
+    stickyBtn.style.backgroundColor = '#000000';
   };
 
   new MutationObserver(mirrorState).observe(mainAtc, { attributes: true, subtree: true, childList: true });
@@ -851,3 +847,60 @@
     }
   </script>
 </div>
+
+<script>
+  (function initProductInteractions() {
+    const attachEvents = () => {
+      // 1. Accordion Toggle
+      const accordionHeaders = document.querySelectorAll('.accordion-header');
+      accordionHeaders.forEach(header => {
+        if (header.getAttribute('data-accordion-init') === 'true') return;
+        header.setAttribute('data-accordion-init', 'true');
+
+        header.addEventListener('click', function(e) {
+          e.preventDefault();
+          const item = this.closest('.accordion-item');
+          const body = item ? item.querySelector('.accordion-body') : null;
+          const plus = this.querySelector('.accordion-plus');
+
+          if (!body) return;
+
+          const isHidden = body.classList.contains('hidden');
+          if (isHidden) {
+            body.classList.remove('hidden');
+            if (plus) plus.textContent = '−';
+          } else {
+            body.classList.add('hidden');
+            if (plus) plus.textContent = '+';
+          }
+        });
+      });
+
+      // 2. Size Guide Modal
+      const openBtn = document.querySelector('.size-guide-trigger-btn');
+      const modal = document.querySelector('.product-size-chart-modal');
+      const closeBtn = document.querySelector('.size-chart-modal-close');
+
+      if (openBtn && modal) {
+        openBtn.onclick = (e) => {
+          e.preventDefault();
+          modal.classList.remove('hidden');
+        };
+
+        if (closeBtn) {
+          closeBtn.onclick = () => modal.classList.add('hidden');
+        }
+
+        modal.onclick = (e) => {
+          if (e.target === modal) modal.classList.add('hidden');
+        };
+      }
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', attachEvents);
+    } else {
+      attachEvents();
+    }
+  })();
+</script>
