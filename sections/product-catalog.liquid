@@ -63,19 +63,39 @@
     <!-- CATEGORY TOGGLE -->
     <div class="category-filters flex items-center gap-6 font-mono-street text-[11px] uppercase tracking-widest">
       <button type="button" class="category-filter-btn pb-0.5 transition text-[#1a1a1a] font-bold border-b border-[#1a1a1a]" data-category="all">
-        {% if request.locale.iso_code == 'ar' %}الكل{% else %}All{% endif %}
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.cat_all_label_ar | default: 'الكل' }}
+        {%- else -%}
+          {{ section.settings.cat_all_label | default: 'All' }}
+        {%- endif -%}
       </button>
       <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="new-drops">
-        {% if request.locale.iso_code == 'ar' %}وصل حديثاً{% else %}New Drops{% endif %}
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.cat_new_label_ar | default: 'وصل حديثاً' }}
+        {%- else -%}
+          {{ section.settings.cat_new_label | default: 'New Drops' }}
+        {%- endif -%}
       </button>
       <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="men">
-        {% if request.locale.iso_code == 'ar' %}رجال{% else %}Men{% endif %}
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.cat_men_label_ar | default: 'رجال' }}
+        {%- else -%}
+          {{ section.settings.cat_men_label | default: 'Men' }}
+        {%- endif -%}
       </button>
       <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="women">
-        {% if request.locale.iso_code == 'ar' %}نساء{% else %}Women{% endif %}
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.cat_women_label_ar | default: 'نساء' }}
+        {%- else -%}
+          {{ section.settings.cat_women_label | default: 'Women' }}
+        {%- endif -%}
       </button>
       <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="sale">
-        {% if request.locale.iso_code == 'ar' %}التخفيضات{% else %}Sale{% endif %}
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.cat_sale_label_ar | default: 'التخفيضات' }}
+        {%- else -%}
+          {{ section.settings.cat_sale_label | default: 'Sale' }}
+        {%- endif -%}
       </button>
     </div>
   </div>
@@ -83,7 +103,11 @@
   <!-- SUBCATEGORY PILLS -->
   <div class="subcategory-filters flex items-center gap-3 overflow-x-auto pb-6 scrollbar-none mb-12 select-none">
     <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-[#1a1a1a] text-white border-[#1a1a1a]" data-subcategory="all">
-      {% if request.locale.iso_code == 'ar' %}الكل{% else %}All{% endif %}
+      {%- if request.locale.iso_code == 'ar' -%}
+        {{ section.settings.cat_all_label_ar | default: 'الكل' }}
+      {%- else -%}
+        {{ section.settings.cat_all_label | default: 'All' }}
+      {%- endif -%}
     </button>
     {%- assign subcat_blocks = section.blocks | where: 'type', 'subcategory_filter' -%}
     {%- if subcat_blocks.size > 0 -%}
@@ -133,7 +157,6 @@
     {%- liquid
       assign rendered_count = 0
       
-      # First pass: Summer products (Not hoodies, Not sweatshirts)
       for product in collection_obj.products
         if rendered_count >= products_limit
           break
@@ -159,7 +182,6 @@
         endif
       endfor
 
-      # Second pass: Winter products (Hoodies and Sweatshirts)
       for product in collection_obj.products
         if rendered_count >= products_limit
           break
@@ -227,7 +249,6 @@
       });
     };
 
-    // Update Filter Visibility
     const filterGrid = () => {
       let visibleCount = 0;
       
@@ -273,14 +294,12 @@
         }
       });
 
-      // Update Showing Text
       if (isArabic) {
         countText.innerHTML = `عرض <span class="count-num">${visibleCount}</span> قطعة مميزة`;
       } else {
         countText.innerHTML = `Showing <span class="count-num">${visibleCount}</span> premium pieces`;
       }
 
-      // Update Heading Title
       if (activeCategory === 'men') {
         titleText.textContent = isArabic ? "تشكيلة الرجال" : "Men's Archive";
       } else if (activeCategory === 'women') {
@@ -293,7 +312,6 @@
         titleText.textContent = titleBase;
       }
 
-      // Empty State Toggle
       if (visibleCount === 0 && cards.length > 0) {
         emptyState.classList.remove('hidden');
       } else {
@@ -301,7 +319,6 @@
       }
     };
 
-    // Category click handler
     categoryBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         categoryBtns.forEach(b => {
@@ -318,7 +335,6 @@
       });
     });
 
-    // Subcategory click handler
     const setupSubcategoryHandlers = () => {
       const subcategoryBtns = getSubcategoryBtns();
       subcategoryBtns.forEach(btn => {
@@ -331,7 +347,6 @@
     };
     setupSubcategoryHandlers();
 
-    // Reset Filter Button
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
         const defaultCategoryBtn = catalog.querySelector('.category-filter-btn[data-category="all"]');
@@ -341,7 +356,6 @@
       });
     }
 
-    // Auto-filter from URL param
     const urlParams = new URLSearchParams(window.location.search);
     const filterParam = urlParams.get('filter');
     if (filterParam) {
@@ -352,7 +366,6 @@
       }
     }
 
-    // Intercept clicks on local filter links
     const handleFilterLinkClick = (e) => {
       const link = e.target.closest('a');
       if (!link) return;
@@ -416,7 +429,6 @@
 
     document.addEventListener('click', handleFilterLinkClick);
 
-    // Toggle Mobile Size Picker
     cards.forEach(card => {
       const mobileTrigger = card.querySelector('.mobile-quick-add-trigger');
       const mobilePopup = card.querySelector('.mobile-size-popup');
@@ -434,13 +446,11 @@
       }
     });
 
-    // Dismiss size picker
     document.addEventListener('click', (e) => {
       if (e.target.closest('.mobile-size-popup') || e.target.closest('.mobile-quick-add-trigger') || e.target.closest('.quick-add-size-btn')) return;
       catalog.querySelectorAll('.mobile-size-popup').forEach(pop => pop.classList.add('hidden'));
     });
 
-    // AJAX Add to Cart
     document.addEventListener('click', (e) => {
       const sizeBtn = e.target.closest('.quick-add-size-btn');
       if (!sizeBtn || sizeBtn.disabled) return;
@@ -520,6 +530,40 @@
     },
     {
       "type": "header",
+      "content": "Main Category Filter Labels (EN)"
+    },
+    {
+      "type": "text",
+      "id": "cat_all_label",
+      "label": "All (EN)",
+      "default": "All"
+    },
+    {
+      "type": "text",
+      "id": "cat_new_label",
+      "label": "New Drops (EN)",
+      "default": "New Drops"
+    },
+    {
+      "type": "text",
+      "id": "cat_men_label",
+      "label": "Men (EN)",
+      "default": "Men"
+    },
+    {
+      "type": "text",
+      "id": "cat_women_label",
+      "label": "Women (EN)",
+      "default": "Women"
+    },
+    {
+      "type": "text",
+      "id": "cat_sale_label",
+      "label": "Sale (EN)",
+      "default": "Sale"
+    },
+    {
+      "type": "header",
       "content": "العناوين العربية (Arabic)"
     },
     {
@@ -533,6 +577,40 @@
       "id": "title_ar",
       "label": "العنوان الرئيسي (AR)",
       "default": "التشكيلة"
+    },
+    {
+      "type": "header",
+      "content": "أسماء الفئات الرئيسية (عربي)"
+    },
+    {
+      "type": "text",
+      "id": "cat_all_label_ar",
+      "label": "فلتر الكل (AR)",
+      "default": "الكل"
+    },
+    {
+      "type": "text",
+      "id": "cat_new_label_ar",
+      "label": "فلتر وصل حديثاً (AR)",
+      "default": "وصل حديثاً"
+    },
+    {
+      "type": "text",
+      "id": "cat_men_label_ar",
+      "label": "فلتر رجال (AR)",
+      "default": "رجال"
+    },
+    {
+      "type": "text",
+      "id": "cat_women_label_ar",
+      "label": "فلتر نساء (AR)",
+      "default": "نساء"
+    },
+    {
+      "type": "text",
+      "id": "cat_sale_label_ar",
+      "label": "فلتر التخفيضات (AR)",
+      "default": "التخفيضات"
     },
     {
       "type": "header",
