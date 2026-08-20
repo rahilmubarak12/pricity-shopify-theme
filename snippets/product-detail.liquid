@@ -29,44 +29,93 @@
   assign product_type_lower = product.type | downcase
   assign product_tags_string = product.tags | join: ' ' | downcase
   assign combined_text = product_title_lower | append: ' ' | append: product_type_lower | append: ' ' | append: product_tags_string | append: ' ' | append: product.handle
-  assign size_chart_title = 'Size Chart'
+  
+  if request.locale.iso_code == 'ar'
+    assign size_chart_title = 'جدول المقاسات'
+  else
+    assign size_chart_title = 'Size Chart'
+  endif
   assign size_chart_key = 'default'
 
   if combined_text contains 'yellow' or combined_text contains 'pink top'
     assign size_chart_key = 'none'
   elsif combined_text contains 'a new era' and combined_text contains 'crop'
     assign size_chart_key = 'a-new-era-cropped'
-    assign size_chart_title = 'A New Era Cropped Sweatshirt Size Chart'
+    if request.locale.iso_code == 'ar'
+      assign size_chart_title = 'جدول مقاسات سويت شيرت كروب A New Era'
+    else
+      assign size_chart_title = 'A New Era Cropped Sweatshirt Size Chart'
+    endif
   elsif combined_text contains 'turtleneck'
     assign size_chart_key = 'turtleneck'
-    assign size_chart_title = 'Oversized Sweatshirt Turtleneck Size Chart'
+    if request.locale.iso_code == 'ar'
+      assign size_chart_title = 'جدول مقاسات سويت شيرت هاي كول أوفر سايز'
+    else
+      assign size_chart_title = 'Oversized Sweatshirt Turtleneck Size Chart'
+    endif
   elsif combined_text contains 'double collar' and combined_text contains 'crop'
     assign size_chart_key = 'women-cropped'
-    assign size_chart_title = 'Double Collar Cropped Sweatshirt Size Chart'
+    if request.locale.iso_code == 'ar'
+      assign size_chart_title = 'جدول مقاسات سويت شيرت دبل كولار نسائي'
+    else
+      assign size_chart_title = 'Double Collar Cropped Sweatshirt Size Chart'
+    endif
   elsif combined_text contains 'hoodie'
     assign size_chart_key = 'hoodie'
-    assign size_chart_title = 'Unisex Hoodies Size Chart'
+    if request.locale.iso_code == 'ar'
+      assign size_chart_title = 'جدول مقاسات الهوديز للجنسين'
+    else
+      assign size_chart_title = 'Unisex Hoodies Size Chart'
+    endif
   elsif combined_text contains 'staple' or combined_text contains 'sand'
     assign size_chart_key = 'staple'
-    assign size_chart_title = 'Staple Sand Unisex Size Chart'
+    if request.locale.iso_code == 'ar'
+      assign size_chart_title = 'جدول مقاسات Staple Sand للجنسين'
+    else
+      assign size_chart_title = 'Staple Sand Unisex Size Chart'
+    endif
   elsif combined_text contains 'linen'
     assign size_chart_key = 'linen'
-    assign size_chart_title = 'Linen Shirt & Shorts Size Chart'
+    if request.locale.iso_code == 'ar'
+      assign size_chart_title = 'جدول مقاسات طقم الكتان'
+    else
+      assign size_chart_title = 'Linen Shirt & Shorts Size Chart'
+    endif
   elsif combined_text contains 't-shirt' or combined_text contains 'tshirt' or combined_text contains 't shirt' or combined_text contains 'tee' or combined_text contains 'top'
     assign size_chart_key = 'tshirt'
-    assign size_chart_title = 'Unisex T-Shirt Size Chart'
+    if request.locale.iso_code == 'ar'
+      assign size_chart_title = 'جدول مقاسات التيشيرتات للجنسين'
+    else
+      assign size_chart_title = 'Unisex T-Shirt Size Chart'
+    endif
   elsif combined_text contains 'set'
     assign size_chart_key = 'linen'
-    assign size_chart_title = 'Linen Shirt & Shorts Size Chart'
+    if request.locale.iso_code == 'ar'
+      assign size_chart_title = 'جدول مقاسات طقم الكتان'
+    else
+      assign size_chart_title = 'Linen Shirt & Shorts Size Chart'
+    endif
   elsif combined_text contains 'crop'
     assign size_chart_key = 'women-cropped'
-    assign size_chart_title = 'Double Collar Cropped Sweatshirt Size Chart'
+    if request.locale.iso_code == 'ar'
+      assign size_chart_title = 'جدول مقاسات سويت شيرت دبل كولار نسائي'
+    else
+      assign size_chart_title = 'Double Collar Cropped Sweatshirt Size Chart'
+    endif
   elsif combined_text contains 'sweatshirt' or combined_text contains 'sweater'
     assign size_chart_key = 'sweatshirt'
-    assign size_chart_title = 'Unisex Sweatshirts Size Chart'
+    if request.locale.iso_code == 'ar'
+      assign size_chart_title = 'جدول مقاسات السويت شيرت للجنسين'
+    else
+      assign size_chart_title = 'Unisex Sweatshirts Size Chart'
+    endif
   else
     assign size_chart_key = 'sweatshirt'
-    assign size_chart_title = 'Unisex Sweatshirts Size Chart'
+    if request.locale.iso_code == 'ar'
+      assign size_chart_title = 'جدول مقاسات السويت شيرت للجنسين'
+    else
+      assign size_chart_title = 'Unisex Sweatshirts Size Chart'
+    endif
   endif
 
   if product.handle == 'apricity-blush' or product.handle == 'apy-butter-set' or combined_text contains 'yellow' or combined_text contains 'pink' or combined_text contains 'blush' or product.handle contains 'yellow' or product.handle contains 'pink' or product.handle contains 'blush'
@@ -77,47 +126,35 @@
 {% capture size_chart_html %}
   {% case size_chart_key %}
     {% when 'turtleneck' %}
-      <table width="100%"><tbody><tr><td></td><td style="text-align:center">Length</td><td style="text-align:center">Sleeve</td><td style="text-align:center">1/2 Chest</td><td style="text-align:center">1/2 Bottom</td><td style="text-align:center">Shoulder</td></tr><tr style="text-align:center"><td>S/M</td><td>69</td><td>58</td><td>66</td><td>46</td><td>67</td></tr><tr style="text-align:center"><td>M/L</td><td>71</td><td>59</td><td>68</td><td>49</td><td>69</td></tr><tr style="text-align:center"><td>L/XL</td><td>73</td><td>60</td><td>71</td><td>51</td><td>71</td></tr></tbody></table>
+      <table width="100%"><tbody><tr><td></td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الطول{% else %}Length{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكم{% else %}Sleeve{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}1/2 الصدر{% else %}1/2 Chest{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}1/2 الحاشية{% else %}1/2 Bottom{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكتف{% else %}Shoulder{% endif %}</td></tr><tr style="text-align:center"><td>S/M</td><td>69</td><td>58</td><td>66</td><td>46</td><td>67</td></tr><tr style="text-align:center"><td>M/L</td><td>71</td><td>59</td><td>68</td><td>49</td><td>69</td></tr><tr style="text-align:center"><td>L/XL</td><td>73</td><td>60</td><td>71</td><td>51</td><td>71</td></tr></tbody></table>
     {% when 'women-cropped' %}
-      <table width="100%"><tbody><tr><td></td><td style="text-align:center">Length</td><td style="text-align:center">Sleeve</td><td style="text-align:center">1/2 Chest</td><td style="text-align:center">1/2 Bottom</td><td style="text-align:center">Shoulder</td></tr><tr style="text-align:center"><td>XS/S</td><td>43</td><td>52</td><td>46</td><td>37</td><td>55</td></tr><tr style="text-align:center"><td>S/M</td><td>45</td><td>53</td><td>48.5</td><td>39.5</td><td>57</td></tr><tr style="text-align:center"><td>M/L</td><td>47</td><td>54</td><td>51</td><td>42</td><td>59</td></tr></tbody></table>
+      <table width="100%"><tbody><tr><td></td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الطول{% else %}Length{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكم{% else %}Sleeve{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}1/2 الصدر{% else %}1/2 Chest{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}1/2 الحاشية{% else %}1/2 Bottom{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكتف{% else %}Shoulder{% endif %}</td></tr><tr style="text-align:center"><td>XS/S</td><td>43</td><td>52</td><td>46</td><td>37</td><td>55</td></tr><tr style="text-align:center"><td>S/M</td><td>45</td><td>53</td><td>48.5</td><td>39.5</td><td>57</td></tr><tr style="text-align:center"><td>M/L</td><td>47</td><td>54</td><td>51</td><td>42</td><td>59</td></tr></tbody></table>
     {% when 'a-new-era-cropped' %}
-      <table width="100%"><tbody><tr><td></td><td style="text-align:center">Length</td><td style="text-align:center">Sleeve</td><td style="text-align:center">1/2 Chest</td><td style="text-align:center">1/2 Bottom</td><td style="text-align:center">Shoulder</td></tr><tr style="text-align:center"><td>XS/S</td><td>44</td><td>59</td><td>52</td><td>43</td><td>59</td></tr><tr style="text-align:center"><td>S/M</td><td>46</td><td>60</td><td>53</td><td>44</td><td>60</td></tr><tr style="text-align:center"><td>M/L</td><td>48</td><td>61</td><td>54</td><td>45</td><td>62</td></tr></tbody></table>
+      <table width="100%"><tbody><tr><td></td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الطول{% else %}Length{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكم{% else %}Sleeve{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}1/2 الصدر{% else %}1/2 Chest{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}1/2 الحاشية{% else %}1/2 Bottom{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكتف{% else %}Shoulder{% endif %}</td></tr><tr style="text-align:center"><td>XS/S</td><td>44</td><td>59</td><td>52</td><td>43</td><td>59</td></tr><tr style="text-align:center"><td>S/M</td><td>46</td><td>60</td><td>53</td><td>44</td><td>60</td></tr><tr style="text-align:center"><td>M/L</td><td>48</td><td>61</td><td>54</td><td>45</td><td>62</td></tr></tbody></table>
     {% when 'hoodie' %}
-      <table width="100%"><tbody><tr><td></td><td style="text-align:center">Length</td><td style="text-align:center">Sleeve</td><td style="text-align:center">1/2 Chest</td><td style="text-align:center">1/2 Bottom</td><td style="text-align:center">Shoulder</td></tr><tr style="text-align:center"><td>S/M</td><td>69</td><td>54-56</td><td>62-63</td><td>54-58</td><td>65-67</td></tr><tr style="text-align:center"><td>M/L</td><td>71</td><td>57-58</td><td>64-66</td><td>56-60</td><td>68-69</td></tr><tr style="text-align:center"><td>L/XL</td><td>73</td><td>59</td><td>67-69</td><td>59-64</td><td>70-74</td></tr></tbody></table>
+      <table width="100%"><tbody><tr><td></td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الطول{% else %}Length{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكم{% else %}Sleeve{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}1/2 الصدر{% else %}1/2 Chest{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}1/2 الحاشية{% else %}1/2 Bottom{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكتف{% else %}Shoulder{% endif %}</td></tr><tr style="text-align:center"><td>S/M</td><td>69</td><td>54-56</td><td>62-63</td><td>54-58</td><td>65-67</td></tr><tr style="text-align:center"><td>M/L</td><td>71</td><td>57-58</td><td>64-66</td><td>56-60</td><td>68-69</td></tr><tr style="text-align:center"><td>L/XL</td><td>73</td><td>59</td><td>67-69</td><td>59-64</td><td>70-74</td></tr></tbody></table>
     {% when 'tshirt' %}
-      <table width="100%"><tbody><tr><td></td><td style="text-align:center">Length</td><td style="text-align:center">Sleeve</td><td style="text-align:center">Chest</td><td style="text-align:center">Shoulder</td></tr><tr style="text-align:center"><td>S/M</td><td>70</td><td>23</td><td>55</td><td>48</td></tr><tr style="text-align:center"><td>M/L</td><td>75</td><td>25.5</td><td>60</td><td>50</td></tr><tr style="text-align:center"><td>L/XL</td><td>78</td><td>26.5</td><td>62</td><td>53</td></tr></tbody></table>
+      <table width="100%"><tbody><tr><td></td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الطول{% else %}Length{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكم{% else %}Sleeve{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الصدر{% else %}Chest{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكتف{% else %}Shoulder{% endif %}</td></tr><tr style="text-align:center"><td>S/M</td><td>70</td><td>23</td><td>55</td><td>48</td></tr><tr style="text-align:center"><td>M/L</td><td>75</td><td>25.5</td><td>60</td><td>50</td></tr><tr style="text-align:center"><td>L/XL</td><td>78</td><td>26.5</td><td>62</td><td>53</td></tr></tbody></table>
     {% when 'linen' %}
-      <table width="100%"><tbody><tr><td></td><td style="text-align:center">Waist (elastic)</td><td style="text-align:center">Shorts Length</td><td style="text-align:center">Shirt Length</td><td style="text-align:center">Chest</td><td style="text-align:center">Shoulder</td><td style="text-align:center">Sleeve Length</td></tr><tr style="text-align:center"><td>S/M</td><td>33</td><td>43</td><td>64</td><td>51</td><td>46</td><td>23</td></tr><tr style="text-align:center"><td>M/L</td><td>37</td><td>48</td><td>67</td><td>54</td><td>48</td><td>27</td></tr><tr style="text-align:center"><td>L/XL</td><td>43</td><td>50</td><td>70</td><td>57</td><td>50</td><td>30</td></tr></tbody></table>
+      <table width="100%"><tbody><tr><td></td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الخصر (مطاط){% else %}Waist (elastic){% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}طول الشورت{% else %}Shorts Length{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}طول القميص{% else %}Shirt Length{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الصدر{% else %}Chest{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكتف{% else %}Shoulder{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}طول الكم{% else %}Sleeve Length{% endif %}</td></tr><tr style="text-align:center"><td>S/M</td><td>33</td><td>43</td><td>64</td><td>51</td><td>46</td><td>23</td></tr><tr style="text-align:center"><td>M/L</td><td>37</td><td>48</td><td>67</td><td>54</td><td>48</td><td>27</td></tr><tr style="text-align:center"><td>L/XL</td><td>43</td><td>50</td><td>70</td><td>57</td><td>50</td><td>30</td></tr></tbody></table>
     {% when 'staple' %}
-      <table width="100%"><tbody><tr><td></td><td style="text-align:center">Length</td><td style="text-align:center">Sleeve</td><td style="text-align:center">Chest</td><td style="text-align:center">Sholder</td></tr><tr style="text-align:center"><td>S/M</td><td>68</td><td>26.5</td><td>57</td><td>57</td></tr><tr style="text-align:center"><td>M/L</td><td>74</td><td>28</td><td>62</td><td>59</td></tr><tr style="text-align:center"><td>L/XL</td><td>76</td><td>29</td><td>66.5</td><td>62</td></tr></tbody></table>
+      <table width="100%"><tbody><tr><td></td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الطول{% else %}Length{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكم{% else %}Sleeve{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الصدر{% else %}Chest{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكتف{% else %}Sholder{% endif %}</td></tr><tr style="text-align:center"><td>S/M</td><td>68</td><td>26.5</td><td>57</td><td>57</td></tr><tr style="text-align:center"><td>M/L</td><td>74</td><td>28</td><td>62</td><td>59</td></tr><tr style="text-align:center"><td>L/XL</td><td>76</td><td>29</td><td>66.5</td><td>62</td></tr></tbody></table>
     {% when 'none' %}
-      {%- comment -%} Explicitly return empty chart {%- endcomment -%}
     {% else %}
-      <table width="100%"><tbody><tr><td></td><td style="text-align:center">Length</td><td style="text-align:center">Sleeve</td><td style="text-align:center">1/2 Chest</td><td style="text-align:center">1/2 Bottom</td><td style="text-align:center">Shoulder</td></tr><tr style="text-align:center"><td>S/M</td><td>69-70</td><td>54</td><td>66-67</td><td>58-59</td><td>68</td></tr><tr style="text-align:center"><td>M/L</td><td>71-72</td><td>55-56</td><td>68-69</td><td>60-61</td><td>69-70</td></tr><tr style="text-align:center"><td>L/XL</td><td>73</td><td>57</td><td>70</td><td>62</td><td>71</td></tr></tbody></table>
+      <table width="100%"><tbody><tr><td></td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الطول{% else %}Length{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكم{% else %}Sleeve{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}1/2 الصدر{% else %}1/2 Chest{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}1/2 الحاشية{% else %}1/2 Bottom{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكتف{% else %}Shoulder{% endif %}</td></tr><tr style="text-align:center"><td>S/M</td><td>69-70</td><td>54</td><td>66-67</td><td>58-59</td><td>68</td></tr><tr style="text-align:center"><td>M/L</td><td>71-72</td><td>55-56</td><td>68-69</td><td>60-61</td><td>69-70</td></tr><tr style="text-align:center"><td>L/XL</td><td>73</td><td>57</td><td>70</td><td>62</td><td>71</td></tr></tbody></table>
   {% endcase %}
 {% endcapture %}
 {%- assign size_chart_html = size_chart_html | strip -%}
 
-{%- comment -%} If key is 'none', clear the chart {%- endcomment -%}
 {%- if size_chart_key == 'none' -%}
   {%- assign size_chart_html = '' -%}
 {%- endif -%}
 
-{%- comment -%}
-  Preferred path: structured "Size Chart" metaobject, editable in Admin with no HTML.
-  Set on a product via metafield: custom.size_chart_ref (type: metaobject reference).
-  Metaobject fields expected: title (single line text), column_headers (list of
-  single line text), rows (list of single line text, each formatted "Label,val,val,val").
-{%- endcomment -%}
 {%- assign size_chart_object = product.metafields.custom.size_chart_ref.value -%}
-<!-- 
-  DEBUG SIZE CHART:
-  object: {{ size_chart_object | json }}
-  columns_raw: {{ size_chart_object.column_headers.value | default: size_chart_object.column_headers | json }}
-  rows_raw: {{ size_chart_object.rows.value | default: size_chart_object.rows | json }}
--->
 {%- if size_chart_object -%}
-  {%- assign size_chart_title = size_chart_object.title.value | default: size_chart_object.title | default: 'Size Chart' -%}
+  {%- assign default_sc_title = 'Size Chart' -%}
+  {%- if request.locale.iso_code == 'ar' -%}{%- assign default_sc_title = 'جدول المقاسات' -%}{%- endif -%}
+  {%- assign size_chart_title = size_chart_object.title.value | default: size_chart_object.title | default: default_sc_title -%}
 
   {%- assign sc_columns_raw = size_chart_object.column_headers.value | default: size_chart_object.column_headers -%}
   {%- if sc_columns_raw.first -%}
@@ -172,14 +209,17 @@
     {%- assign size_chart_html = size_chart_html | strip -%}
   {%- endif -%}
 {%- elsif product.metafields.custom.size_chart != blank -%}
-  {%- comment -%} Legacy raw-HTML override metafield, kept working for continuity {%- endcomment -%}
   {%- assign size_chart_html = product.metafields.custom.size_chart.value -%}
   {%- if size_chart_title == blank or size_chart_title == 'Size Chart' -%}
-    {%- assign size_chart_title = 'Size Chart' -%}
+    {%- if request.locale.iso_code == 'ar' -%}
+      {%- assign size_chart_title = 'جدول المقاسات' -%}
+    {%- else -%}
+      {%- assign size_chart_title = 'Size Chart' -%}
+    {%- endif -%}
   {%- endif -%}
 {%- endif -%}
 
-<div class="product-detail-wrapper flex flex-col lg:flex-row w-full h-full" data-product-handle="{{ product.handle }}">
+<div class="product-detail-wrapper flex flex-col lg:flex-row w-full h-full" data-product-handle="{{ product.handle }}" data-lang="{{ request.locale.iso_code }}">
   
   <!-- LEFT COLUMN: Image Gallery -->
   <div class="product-detail-gallery w-full lg:w-1/2 bg-zinc-50 p-6 flex flex-col gap-3 lg:h-full lg:overflow-y-auto" style="-webkit-overflow-scrolling: touch;">
@@ -188,7 +228,7 @@
         src="{{ featured_image | image_url: width: 1000 }}" 
         alt="{{ product.title | escape }}" 
         class="product-main-image w-full h-auto object-contain transition-transform duration-700 ease-out hover:scale-110 cursor-zoom-in"
-       width="1000" height="1000" />
+        width="1000" height="1000" />
     </div>
     {%- if images.size > 1 -%}
       <div class="flex gap-2 overflow-x-auto pb-1 product-thumbnails">
@@ -198,7 +238,7 @@
             class="thumbnail-btn flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition {% if featured_image == img %}border-black{% else %}border-transparent{% endif %}"
             data-image-url="{{ img | image_url: width: 1000 }}"
           >
-            <img src="{{ img | image_url: width: 150 }}" alt="" class="w-full h-full object-cover"  width="1000" height="1000" />
+            <img src="{{ img | image_url: width: 150 }}" alt="" class="w-full h-full object-cover" width="150" height="150" />
           </button>
         {%- endfor -%}
       </div>
@@ -236,12 +276,11 @@
               <!-- Color Selector -->
               <div class="option-color-container" data-option-index="{{ color_option_index }}">
                 <p class="text-[10px] uppercase tracking-[0.2em] text-zinc-400 mb-3 font-medium">
-                  Colour — <span class="active-color-label text-zinc-600 normal-case tracking-normal">{{ option.selected_value }}</span>
+                  {% if request.locale.iso_code == 'ar' %}اللون —{% else %}Colour —{% endif %} <span class="active-color-label text-zinc-600 normal-case tracking-normal">{{ option.selected_value }}</span>
                 </p>
                 <div class="flex flex-wrap gap-2">
                   {%- for value in option.values -%}
                     {%- liquid
-                      # Simple color verification to see if at least one variant of this color is in stock
                       assign color_in_stock = false
                       for variant in product.variants
                         if variant.options[color_option_index] == value and variant.available
@@ -266,20 +305,18 @@
               <div class="option-size-container rounded-2xl border border-zinc-100 bg-zinc-50/80 p-5" data-option-index="{{ size_option_index }}">
                 <div class="flex items-center justify-between mb-4">
                   <span class="text-[10px] uppercase tracking-[0.2em] text-zinc-400 font-medium">
-                    Select Size
+                    {% if request.locale.iso_code == 'ar' %}اختر المقاس{% else %}Select Size{% endif %}
                   </span>
                   
-                  <!-- Live Stock Message (amber dots/critical alerts) -->
+                  <!-- Live Stock Message -->
                   <span class="stock-status-indicator text-[10px] font-semibold tracking-wide uppercase flex items-center gap-1.5 text-emerald-600">
-                    <!-- Updated by JS -->
-                    In Stock
+                    {% if request.locale.iso_code == 'ar' %}متوفر بالمخزون{% else %}In Stock{% endif %}
                   </span>
                 </div>
 
                 <div class="grid grid-cols-4 gap-2">
                   {%- for value in option.values -%}
                     {%- liquid
-                      # Check if this size is available
                       assign size_variant = nil
                       for variant in product.variants
                         if variant.options[size_option_index] == value
@@ -320,7 +357,7 @@
                 <div class="mt-3.5 flex items-center justify-between">
                   <p class="low-stock-legend text-[10px] text-zinc-400 flex items-center gap-1.5 hidden">
                     <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0"></span>
-                    Low stock
+                    {% if request.locale.iso_code == 'ar' %}كمية محدودة{% else %}Low stock{% endif %}
                   </p>
                 </div>
               </div>
@@ -329,7 +366,7 @@
         </div>
       {%- endunless -%}
 
-      <!-- Size Guide Button (always shown if chart exists) -->
+      <!-- Size Guide Button -->
       {%- if size_chart_html != blank -%}
         <div class="mt-2 flex justify-end">
           <button
@@ -342,7 +379,7 @@
               <line x1="8" x2="16" y1="16" y2="16"></line>
               <line x1="8" x2="16" y1="8" y2="8"></line>
             </svg>
-            <span>Size Guide</span>
+            <span>{% if request.locale.iso_code == 'ar' %}دليل المقاسات{% else %}Size Guide{% endif %}</span>
           </button>
         </div>
       {%- endif -%}
@@ -354,8 +391,8 @@
         <div class="border-b border-zinc-100 accordion-item">
           <button type="button" class="accordion-header w-full flex items-center justify-between py-4 text-left group">
             <div class="flex items-center gap-3">
-              <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40"  width="1000" height="1000" />
-              <span class="text-sm text-zinc-700 font-medium tracking-wide">Attention style seekers</span>
+              <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40" width="16" height="16" />
+              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}لمحبي التميز واللفَت{% else %}Attention style seekers{% endif %}</span>
             </div>
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
@@ -407,7 +444,7 @@
                 {% when 'apy-butter-set' %}
                   <p>Soft like butter. Sharp like attitude</p>
                 {% else %}
-                  Designed for those who move between worlds — from quiet confidence to bold statements. Apricity Officials speaks to the individual who appreciates quality without compromise. This piece is made for you.
+                  {{ product.description }}
               {% endcase %}
             {%- endif -%}
           </div>
@@ -417,8 +454,8 @@
         <div class="border-b border-zinc-100 accordion-item">
           <button type="button" class="accordion-header w-full flex items-center justify-between py-4 text-left group">
             <div class="flex items-center gap-3">
-              <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40"  width="1000" height="1000" />
-              <span class="text-sm text-zinc-700 font-medium tracking-wide">Description & Features</span>
+              <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40" width="16" height="16" />
+              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}الوصف والمميزات{% else %}Description & Features{% endif %}</span>
             </div>
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
@@ -428,52 +465,7 @@
             {%- elsif product.description != blank -%}
               {{ product.description }}
             {%- else -%}
-              {% case product.handle %}
-                {% when 'oversized-dual-tone-sweatshirt' %}
-                  <p>Brighten up your wardrobe with this eye-catching sweatshirt. The rich blue base is complemented by vibrant orange accents on the neckline and cuffs, giving it a sporty, dynamic feel. A fun and energetic addition to your style!</p><ul><li>Color : Cobalt Blue </li><li>Material: Soft Scuba & Cotton Blend – smooth, breathable</li><li>Bold 3D embossed text – Apricity is like a warm affection that wraps around your soul – bringing an inspiring message to life in striking texture.</li><li>Back 3D embossed 'APRICITY'</li><li>Double Collar Neck & Cuffs</li></ul>
-                {% when 'oversized-sweatshirt-turtleneck' %}
-                  <p>This cozy and stylish, uniquely gray sweatshirt is a must-have for you! Made from soft, high-quality fabric, it offers warmth and comfort. Featuring unique neck details and thumb holes for added flair, its combination of style and coziness is unmatched</p><ul><li>Color: Charcoal Gray </li><li>Material: A premium blend of fleece, cotton, and polyester, offering ultimate warmth softness</li><li>Embroidery logo on the turtleneck for a stylish touch</li><li>Back embroidery of 'APRICITY' </li><li>Two-tone grey cuffs, featuring a lighter grey accent at the thumb hole</li></ul>
-                {% when 'overlap-neck-sweatshirt' %}
-                  <p>This soft black sweatshirt boasts stylish elbow line details and bold blue overlapping neck accents for a modern edge. Its clean black base and unique design make it a must-have for those who value fashion-forward yet comfortable pieces.</p><ul><li>Color : Black</li><li>Material : Soft Scuba & Cotton Blend – smooth, breathable</li><li>Two-tone overlapping neck for a modern, stylish look</li><li>Front leather patch logo</li><li>Back 3D embossed logo </li><li>Around elbow line details</li></ul>
-                {% when 'crewneck-oversized-sweatshirt' %}
-                  <p>Step up your style game with the Apricity Chili Red Sweatshirt. This statement piece features a bold black logo on the back that's sure to turn heads. Perfect for those who aren't afraid to be noticed, this sweatshirt combines comfort, quality, and a daring style that says "look at me"</p><ul><li>Color : Chili Red</li><li>Material : Soft Scuba & Cotton Blend – smooth, breathable</li><li>Debossed 'APRICITY'on the turtleneck for a stylish touch</li><li>Back embroidery 'APRICITY'</li><li>Front embroidery Text – shine so brightly that others can't escape the warmth of your presence –</li></ul>
-                {% when 'hoodie-with-burgundy-piping' %}
-                  <p>This brown hoodie redefines casual wear with a refined design. It features a textured look, a leather patch on the front, and double-line details in brown and burgundy, complemented by a burgundy inner pocket. Unique line details around the hood add a sharp, dynamic touch</p><ul><li>Color : Coffee Brown</li><li>Material : Soft Scuba & Cotton Blend – smooth, breathable</li><li>Front leather patch 'APRICITY'</li><li>Double-line details in brown and burgundy on the shoulders and hood create a modern, refined look</li><li>Burgundy inner pocket</li></ul>
-                {% when 'hoodie-with-leather-piped-detailing' %}
-                  <p>Black hoodie from Apricity brings together luxury and edge. The embossed leather logo patch on the front exudes sophistication, while the metal leather patch and sleek leather piping add a modern, industrial twist. Crafted for ultimate comfort, this hoodie is designed for those who demand style with substance</p><ul><li>Color : Black</li><li>Material : Soft Scuba & Cotton Blend – smooth, breathable</li><li>Bold, large leather patch with 'APRICITY' on the front for a standout look</li><li>Leather line details on the shoulders, hood and back </li><li>Back leather metal patch 'APRICITY'</li></ul>
-                {% when 'all-in-well-hoodie' %}
-                  <p>This ivory cream hoodie blends elegance and trendiness with subtle blue details for a twist. The soft cream fabric provides a cozy base, while the blue accents offer a stylish contrast, making it a standout and versatile piece for any casual outfit</p><ul><li>Color: Ivory Cream</li><li>Material: A premium blend of fleece, cotton, and polyester, offering ultimate warmth softness</li><li>Vibrant blue inner neck layer, adding a bold, refreshing contrast</li><li>Embroidery 'All in well' </li><li>Cuff patch text – Apricity (n.) The warmth of the sun in the winter –</li><li>Under the hood Embroidery 'APRICITY' </li></ul>
-                {% when 'apricity-leather-patch-hoodie' %}
-                  <p>The Brown Hoodie That Speaks Volumes—crafted in rich brown, featuring a leather patch and the Apricity logo on the back. Soft, comfortable, and full of unique details, it's the perfect blend of luxury and style.</p><ul><li>Color: Coffee Brown</li><li>Material: A premium blend of fleece, cotton, and polyester, offering ultimate warmth softness</li><li>Bold, large leather patch with text – Apricity (n.) The warmth of the sun in the winter – </li><li>Back embroidery 'APRICITY' </li></ul>
-                {% when 'double-collar-cropped-sweatshirt' %}
-                  <p>Get ready to make a statement! This Ivory Cream Cropped Sweatshirt with a bold Green Double collar is designed for the trendsetter in you. With its fresh, eye-catching color combination, this piece brings comfort and style together effortlessly</p><ul><li>Color: Ivory Cream</li><li>Material: A premium blend of fleece, cotton, and polyester, offering ultimate warmth softness</li><li>Front embroidery 'APRICITY' </li><li>shoulder double pocket—one with a sleek zipper, and one open for easy access. Perfect for storing your lipstick while hanging out!</li><li>Double collar featuring green accents</li></ul>
-                {% when 'a-new-era-cropped-sweatshirt' %}
-                  <p>Bring a fresh vibe to your look with this cropped sweatshirt. The soft sky blue tone pairs with bold embroidery details, making it the perfect mix of comfort and statement style. A new era, your way.</p><ul><li>Color: Sky Blue</li><li>Material: Material: Blend of french terry and cotton, for ultimate comfort </li><li>Front embroidery 'APRICITY' </li><li>Back embroidery text – A New Era of Me –</li></ul>
-                {% when 'indulge-in-self-love-hoodie' %}
-                  <p>Stay cozy and stylish in our Blissful Blue hoodie, designed for comfort and a contemporary aesthetic. Combining urban edge with premium craftsmanship, it offers an elevated look that's impossible to miss! Thumbhole cuffs add a touch of flair, while the leather patch on the pocket and hood adds a refined, high-end feel</p><ul><li>Color: Blissful Blue</li><li>Material: A premium blend of fleece, cotton, and polyester, offering ultimate warmth softness</li><li>Front embroidery logo</li><li>Front pocket leather patch 'APRICITY' </li><li>two-tone cuffs with a cream accent at the thumb hole for added style</li><li>leather and embroidered logos on the hood add standout style</li><li>Back embroidery text – Indulge in Selflove –</li></ul>
-                {% when '3d-apricity-hoodie' %}
-                  <p>Discover effortless style with our Midnight Navy Hoodie. Crafted in rich navy, it combines comfort and sophistication, with subtle embossed branding and a dark purple hood lining for a unique pop of color an essential wardrobe addition</p><ul><li>Color : Midnight Navy</li><li>Material : Soft Scuba & Cotton Blend – smooth, breathable</li><li>Front embossed 'APRICITY'</li><li>Two-tone cuffs with a dark purple accent at the thumb hole for added style</li><li>Bold, large text embossed with 'APRICITY' on the back for a standout look</li><li>Vibrant purple inner hood</li></ul>
-                {% when 'bayview-linen-set' %}
-                  <p>A breezy buttercream linen set featuring a relaxed-fit shirt with an embroidered sketch of a surfer holding a board, paired with matching comfy shorts. Perfect for sunny days, beach strolls, or chilled weekends</p><ul><li>Color: Buttercream</li><li>Material: Premium Poly Linen Orbit, lightweight, breathable</li><li>Front Print: embroidery of a minimalist surfer figure holding a board, adding a playful, artistic</li><li>Back Print: Printed text on the back: "the summer nights when everything comes alive – by APY" Evoking the magic and energy of summer evenings</li><li>Bottoms Design: Coordinated shorts with an elastic waistband for ease and comfort. Finished with the distinctive APRICITY logo, adding a touch of signature style</li></ul>
-                {% when 'club-1932-t-shirt' %}
-                  <p>This meaningful and stylish cream-colored T-shirt is a must-have for anyone proud of their Saudi identity. Featuring a clean front design with the refined "CLUB 1932" print, a tribute to the founding year of Saudi Arabia, and a bold message on the back, this piece blends heritage with modern style. A statement of pride, unity, and timeless identity</p><ul><li>Color: Cream</li><li>Material: Premium Lycra – breathable, stretchy, and soft to the touch</li><li>Front Print: "CLUB 1932" with a minimalist sword graphic, symbolizing pride and legacy</li><li>Back Print: "I'M SAUDI ENOUGH – to be the strength behind the flag" in deep maroon</li></ul>
-                {% when 'onyx-black' %}
-                  <p>Unleash your inner power with this black T-shirt, designed for those who carry strength silently and style boldly</p><ul><li>Color: Black</li><li>Material: Premium Lycra – breathable, stretchy, and soft to the touch</li><li>Front Print: A clean and minimal APRICITY logo that adds a sleek, modern touch to the design</li><li>Back Print: Features "APRICITY" boldly written across the back in a handwritten</li></ul><p>Patch: A distinctive woven patch with the phrases: "FEAR NONE – ONYX – POWER RUNS DEEP, SO DO YOU"</p>
-                {% when 'onyx-gray' %}
-                  <p>Unleash your inner power with this black T-shirt, designed for those who carry strength silently and style boldly.</p><ul><li>Color: Gray</li><li>Material: Premium Lycra – breathable, stretchy, and soft to the touch</li><li>Front Print: A clean and minimal APRICITY logo that adds a sleek, modern touch to the design</li><li>Back Print: Features "APRICITY" boldly written across the back in a handwritten</li><li>Patch: A distinctive woven patch with the phrases: "FEAR NONE – ONYX – POWER RUNS DEEP, SO DO YOU"</li></ul>
-                {% when 'echoes-of-silence-green' %}
-                  <p>Showcase your style with this classic green T-shirt, crafted for those who appreciate simplicity and strength.</p><ul><li>Color: Green</li><li>Material: Single heavy jersey, 100% cotton – offering a durable, soft, and comfortable fit. </li><li>Front Print: Simple and sleek with the "APRICITY" logo, reflecting a modern, stylish design.</li><li>Back Print: A unique design that features vertically reversed text, drawing attention. The quote at the bottom adds depth: "I no longer fear the silence. It speaks now in echoes, in buried truths, in the language of quiet survival."</li></ul>
-                {% when 'echoes-of-silence-white' %}
-                  <p>Showcase your style with this classic white T-shirt, crafted for those who appreciate simplicity and strength.</p><ul><li>Color: White</li><li>Material: Single heavy jersey, 100% cotton – offering a durable, soft, and comfortable fit. </li><li>Front Print: Simple and sleek with the "APRICITY" logo, reflecting a modern, stylish design.</li><li>Back Print: A unique design that features vertically reversed text, drawing attention. The quote at the bottom adds depth: "I no longer fear the silence. It speaks now in echoes, in buried truths, in the language of quiet survival."</li></ul>
-                {% when 'staple-sand' %}
-                  <p>A clean staple piece redefined with subtle statement details. Crafted from soft French Terry fabric, this sand-beige T-shirt delivers structure with comfort. Designed with a relaxed silhouette and refined crew neck, it's elevated by subtle line detailing across the back and sleeves that adds depth and quiet character. Understated, yet intentional.</p><ul><li>Color: Sand Beige</li><li>Material: French Terry – soft, breathable, structured, and comfortable</li><li>Front Detail: Minimal patch with brown "apricity" embroidery</li></ul>
-                {% when 'apricity-blush' %}
-                  <p>Feminine essential designed to elevate everyday styling. This soft blush-pink top is crafted to contour the body with a clean, flattering silhouette while maintaining a minimal aesthetic. Delicate logo metal detailing at the shoulder adds a refined statement touch. </p><p>Features a soft blush pink tone with subtle variations between front and back, creating added depth, and may appear slightly different due to lighting and photography.</p><ul><li>Color: Blush Pink</li><li>Material: Jersey fabric (95% cotton, 5% lycra) – soft, breathable, and comfortable</li><li>Shoulder Detail: Gold-tone logo metal accent</li><li>Back Detail: White "APRICITY" embroidery</li></ul>
-                {% when 'apy-butter-set' %}
-                  <p>A butter-cream set that plays on contrast — clean lines, defined shape, and unapologetic presence. Soft in tone yet striking in attitude, it's designed to sculpt, define, and quietly command attention with every movement.</p><p>Note: The pants feature a soft tonal shift between front and back, creating a subtle contrast that adds depth and dimension for a naturally dynamic summer look. Colors may appear slightly different due to lighting and photography.</p><ul><li>Color: Butter Cream</li><li>Top Material: Jersey fabric (95% cotton, 5% lycra)</li><li>Pants Material: French Terry (100% cotton)</li><li>Front Embroidery: "APY"</li><li>Back Closure: Gold-tone logo metal accent</li><li>Back Pockets: Two pockets with embroidered logo</li></ul>
-                {% else %}
-                  {{ product.description }}
-              {% endcase %}
+              {{ product.description }}
             {%- endif -%}
           </div>
         </div>
@@ -482,8 +474,8 @@
         <div class="border-b border-zinc-100 accordion-item">
           <button type="button" class="accordion-header w-full flex items-center justify-between py-4 text-left group">
             <div class="flex items-center gap-3">
-              <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40"  width="1000" height="1000" />
-              <span class="text-sm text-zinc-700 font-medium tracking-wide">Size & Fit</span>
+              <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40" width="16" height="16" />
+              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}المقاس والملاءمة{% else %}Size & Fit{% endif %}</span>
             </div>
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
@@ -535,8 +527,7 @@
                 {% when 'apy-butter-set' %}
                   <p>Designed exclusively for women, offering a flattering close-to-body fit</p><p>Model is 5'4" (163 cm) and wears size S/M</p>
                 {% else %}
-                  Designed for a versatile unisex fit, it looks great on everyone.
-                  <p class="text-xs text-zinc-400 mt-2">Recommended: Go for your normal size for a relaxed standard fit, or size up for an oversized streetwear look.</p>
+                  {{ product.description }}
               {% endcase %}
             {%- endif -%}
           </div>
@@ -546,8 +537,8 @@
         <div class="border-b border-zinc-100 accordion-item">
           <button type="button" class="accordion-header w-full flex items-center justify-between py-4 text-left group">
             <div class="flex items-center gap-3">
-              <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40"  width="1000" height="1000" />
-              <span class="text-sm text-zinc-700 font-medium tracking-wide">Take care of me</span>
+              <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40" width="16" height="16" />
+              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}تعليمات العناية{% else %}Take care of me{% endif %}</span>
             </div>
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
@@ -618,12 +609,12 @@
     <!-- STICKY CTA BUTTONS FOOTER -->
     <div class="product-detail-cta-footer flex-shrink-0 border-t border-zinc-100 bg-white px-6 py-4 flex flex-col gap-3">
       <div class="flex items-center justify-center text-[10px] text-zinc-400 tracking-wide uppercase">
-        <span>Secure checkout</span>
+        <span>{% if request.locale.iso_code == 'ar' %}دفع إلكتروني آمن{% else %}Secure checkout{% endif %}</span>
       </div>
 
       <!-- Quantity Selector -->
       <div class="product-qty-row flex items-center justify-between border border-zinc-200 bg-white rounded-xl h-12 w-full px-4">
-        <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Quantity</span>
+        <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">{% if request.locale.iso_code == 'ar' %}الكمية{% else %}Quantity{% endif %}</span>
         <div class="flex items-center gap-4">
           <button
             type="button"
@@ -655,21 +646,32 @@
       <div class="flex gap-2.5">
         <button
           type="button"
-          class="product-add-to-cart flex-1 py-4 rounded-xl text-sm font-semibold tracking-[0.1em] uppercase flex items-center justify-center gap-2.5 transition-all duration-300 text-white shadow-lg shadow-zinc-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:text-white" style="background-color:{{ atc_color | default: '#006039' }};"
+          class="product-add-to-cart flex-1 py-4 rounded-xl text-sm font-semibold tracking-[0.1em] uppercase flex items-center justify-center gap-2.5 transition-all duration-300 text-white shadow-lg shadow-zinc-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:text-white" style="background-color: #000000 !important;"
+          data-variant-id="{{ current_variant.id }}"
+          {% unless current_variant.available %}disabled{% endunless %}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
           </svg>
-          <span class="btn-text">Add to Cart</span>
+          <span class="btn-text">
+            {%- if is_out_of_stock -%}
+              {% if request.locale.iso_code == 'ar' %}نفدت الكمية{% else %}Sold Out{% endif %}
+            {%- else -%}
+              {% if request.locale.iso_code == 'ar' %}أضف إلى السلة{% else %}Add to Cart{% endif %}
+            {%- endif -%}
+          </span>
         </button>
 
         <button
           type="button"
           class="product-quick-buy flex-1 py-4 rounded-xl text-sm font-semibold tracking-[0.1em] uppercase flex items-center justify-center gap-2.5 transition-all duration-300 bg-white text-zinc-900 border border-zinc-300 hover:border-zinc-900 hover:bg-zinc-50 shadow-sm"
+          data-variant-id="{{ current_variant.id }}"
+          {% unless current_variant.available %}disabled{% endunless %}
         >
-          Quick Buy
+          {% if request.locale.iso_code == 'ar' %}شراء سريع{% else %}Quick Buy{% endif %}
         </button>
       </div>
+
       {%- if trust_badges_enabled != false -%}
       <!-- Trust Badges -->
       <div class="flex items-center justify-center gap-4 pt-1 pb-1">
@@ -692,15 +694,16 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           <span class="text-[9px] uppercase tracking-wider font-medium">{{ trust_badge_4 | default: "Premium" }}</span>
         </div>
+      </div>
       {%- endif -%}
     </div>
 
   </div>
-
+</div>
 
 {%- unless is_modal -%}
 {%- if sticky_atc_enabled != false -%}
-<!-- Sticky Add to Cart Bar (main product page only) -->
+<!-- Sticky Add to Cart Bar -->
 <style>
   body.sticky-atc-active .chat-toggle,
   body.sticky-atc-active #shopify-chat,
@@ -720,57 +723,12 @@
       type="button"
       id="StickyATCBtn"
       class="shrink-0 px-6 py-3 text-white text-xs font-bold uppercase tracking-widest rounded-xl transition-all disabled:opacity-50"
-      style="background-color:{{ atc_color | default: '#006039' }};"
+      style="background-color: #000000 !important;"
     >
-      Add to Cart
+      {% if request.locale.iso_code == 'ar' %}أضف إلى السلة{% else %}Add to Cart{% endif %}
     </button>
   </div>
 </div>
-
-<script>
-(function() {
-  const stickyBar = document.getElementById('StickyATC');
-  const stickyBtn = document.getElementById('StickyATCBtn');
-  const mainAtc = document.querySelector('.product-add-to-cart');
-
-  if (!stickyBar || !stickyBtn || !mainAtc) return;
-
-  // Show/hide based on scroll position of main ATC button
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        stickyBar.classList.add('translate-y-full');
-        document.body.classList.remove('sticky-atc-active');
-      } else {
-        stickyBar.classList.remove('translate-y-full');
-        document.body.classList.add('sticky-atc-active');
-      }
-    });
-  }, { threshold: 0.1 });
-
-  observer.observe(mainAtc);
-
-  // Proxy click to the main ATC button
-  stickyBtn.addEventListener('click', () => {
-    mainAtc.click();
-  });
-
-  // Mirror disabled state from main ATC
-  const mirrorState = () => {
-    stickyBtn.disabled = mainAtc.disabled;
-    const btnText = mainAtc.querySelector('.btn-text');
-    if (btnText) stickyBtn.textContent = btnText.textContent;
-    if (mainAtc.style.backgroundColor) {
-      stickyBtn.style.backgroundColor = mainAtc.style.backgroundColor;
-    } else {
-      stickyBtn.style.backgroundColor = '#006039';
-    }
-  };
-
-  new MutationObserver(mirrorState).observe(mainAtc, { attributes: true, subtree: true, childList: true });
-  mirrorState();
-})();
-</script>
 {%- endif -%}
 {%- endunless -%}
 
@@ -801,7 +759,7 @@
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" x2="6" y1="6" y2="18"></line>
-              <line x1="6" x2="18" y1="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
           </button>
         </div>
@@ -815,7 +773,7 @@
 
         <!-- Footer -->
         <div class="mt-6 pt-4 border-t border-zinc-100 text-[10px] text-zinc-400 flex items-center justify-center">
-          <span>All measurements are in centimeters (cm) unless specified otherwise.</span>
+          <span>{% if request.locale.iso_code == 'ar' %}جميع القياسات بالسنتيمتر (سم) ما لم يُذكر خلاف ذلك.{% else %}All measurements are in centimeters (cm) unless specified otherwise.{% endif %}</span>
         </div>
       </div>
     </div>
@@ -842,5 +800,274 @@
       ],
       "options": {{ product.options | json }}
     }
+  </script>
+
+  <script>
+  (function() {
+    function setupProductDetail() {
+      const container = document.querySelector('.product-detail-wrapper');
+      if (!container) return;
+
+      const isAr = container.getAttribute('data-lang') === 'ar';
+      const rawJsonEl = container.querySelector('.product-raw-json');
+      let productData = null;
+      try {
+        if (rawJsonEl) productData = JSON.parse(rawJsonEl.textContent);
+      } catch (e) {
+        console.error('Failed to parse product JSON', e);
+      }
+
+      let selectedOptions = [];
+      if (productData && productData.options) {
+        productData.options.forEach((opt, idx) => {
+          const activeColor = container.querySelector('.option-color-container[data-option-index="' + idx + '"] .color-option-btn.bg-zinc-900');
+          const activeSize = container.querySelector('.option-size-container[data-option-index="' + idx + '"] .size-option-btn.bg-zinc-900');
+          if (activeColor) selectedOptions[idx] = activeColor.getAttribute('data-value');
+          else if (activeSize) selectedOptions[idx] = activeSize.getAttribute('data-value');
+          else selectedOptions[idx] = opt.values ? opt.values[0] : '';
+        });
+      }
+
+      const mainImg = container.querySelector('.product-main-image');
+      const thumbBtns = container.querySelectorAll('.thumbnail-btn');
+      const priceDisplay = container.querySelector('.product-price-display');
+      const compareDisplay = container.querySelector('.product-compare-display');
+      const atcBtn = container.querySelector('.product-add-to-cart');
+      const atcText = atcBtn ? atcBtn.querySelector('.btn-text') : null;
+      const quickBuyBtn = container.querySelector('.product-quick-buy');
+      const stockIndicator = container.querySelector('.stock-status-indicator');
+      const qtyMinus = container.querySelector('.product-qty-btn-minus');
+      const qtyPlus = container.querySelector('.product-qty-btn-plus');
+      const qtyVal = container.querySelector('.product-qty-display-value');
+
+      let currentQty = 1;
+      let currentVariant = productData && productData.variants ? productData.variants[0] : null;
+
+      // 1. Thumbnails
+      thumbBtns.forEach(btn => {
+        btn.onclick = function(e) {
+          e.preventDefault();
+          const targetSrc = btn.getAttribute('data-image-url');
+          if (mainImg && targetSrc) mainImg.src = targetSrc;
+          thumbBtns.forEach(b => {
+            b.classList.remove('border-black');
+            b.classList.add('border-transparent');
+          });
+          btn.classList.add('border-black');
+          btn.classList.remove('border-transparent');
+        };
+      });
+
+      // 2. Quantity
+      if (qtyMinus && qtyPlus && qtyVal) {
+        qtyMinus.onclick = function(e) {
+          e.preventDefault();
+          if (currentQty > 1) {
+            currentQty--;
+            qtyVal.textContent = currentQty;
+            if (currentQty === 1) qtyMinus.disabled = true;
+          }
+        };
+        qtyPlus.onclick = function(e) {
+          e.preventDefault();
+          currentQty++;
+          qtyVal.textContent = currentQty;
+          qtyMinus.disabled = false;
+        };
+      }
+
+      // 3. Variant Matcher
+      function updateVariant() {
+        if (!productData || !productData.variants) return;
+
+        currentVariant = productData.variants.find(v => {
+          return v.options.every((val, idx) => selectedOptions[idx] === val);
+        }) || productData.variants[0];
+
+        if (!currentVariant) return;
+
+        if (atcBtn) atcBtn.setAttribute('data-variant-id', currentVariant.id);
+        if (quickBuyBtn) quickBuyBtn.setAttribute('data-variant-id', currentVariant.id);
+
+        if (priceDisplay) priceDisplay.textContent = currentVariant.price;
+        if (compareDisplay) {
+          if (currentVariant.compare_at_price && currentVariant.compare_at_price !== '' && currentVariant.compare_at_price !== currentVariant.price) {
+            compareDisplay.textContent = currentVariant.compare_at_price;
+            compareDisplay.classList.remove('hidden');
+          } else {
+            compareDisplay.classList.add('hidden');
+          }
+        }
+
+        if (mainImg && currentVariant.featured_image) {
+          mainImg.src = currentVariant.featured_image;
+        }
+
+        if (atcBtn && atcText) {
+          if (currentVariant.available) {
+            atcBtn.disabled = false;
+            if (quickBuyBtn) quickBuyBtn.disabled = false;
+            atcText.textContent = isAr ? 'أضف إلى السلة' : 'Add to Cart';
+            if (stockIndicator) {
+              stockIndicator.className = 'stock-status-indicator text-[10px] font-semibold tracking-wide uppercase flex items-center gap-1.5 text-emerald-600';
+              stockIndicator.textContent = isAr ? 'متوفر بالمخزون' : 'In Stock';
+            }
+          } else {
+            atcBtn.disabled = true;
+            if (quickBuyBtn) quickBuyBtn.disabled = true;
+            atcText.textContent = isAr ? 'نفدت الكمية' : 'Sold Out';
+            if (stockIndicator) {
+              stockIndicator.className = 'stock-status-indicator text-[10px] font-semibold tracking-wide uppercase flex items-center gap-1.5 text-zinc-400';
+              stockIndicator.textContent = isAr ? 'نفدت الكمية' : 'Sold Out';
+            }
+          }
+        }
+      }
+
+      // 4. Color Clicks
+      container.querySelectorAll('.option-color-container').forEach(colorWrap => {
+        const optIndex = parseInt(colorWrap.getAttribute('data-option-index'), 10);
+        const label = colorWrap.querySelector('.active-color-label');
+        colorWrap.querySelectorAll('.color-option-btn').forEach(btn => {
+          btn.onclick = function(e) {
+            e.preventDefault();
+            const val = btn.getAttribute('data-value');
+            selectedOptions[optIndex] = val;
+            if (label) label.textContent = val;
+
+            colorWrap.querySelectorAll('.color-option-btn').forEach(b => {
+              b.classList.remove('bg-zinc-900', 'text-white', 'border-zinc-900', 'shadow-md');
+              b.classList.add('bg-white', 'text-zinc-700', 'border-zinc-200');
+            });
+            btn.classList.remove('bg-white', 'text-zinc-700', 'border-zinc-200');
+            btn.classList.add('bg-zinc-900', 'text-white', 'border-zinc-900', 'shadow-md');
+
+            updateVariant();
+          };
+        });
+      });
+
+      // 5. Size Clicks
+      container.querySelectorAll('.option-size-container').forEach(sizeWrap => {
+        const optIndex = parseInt(sizeWrap.getAttribute('data-option-index'), 10);
+        sizeWrap.querySelectorAll('.size-option-btn').forEach(btn => {
+          btn.onclick = function(e) {
+            e.preventDefault();
+            if (btn.disabled) return;
+            const val = btn.getAttribute('data-value');
+            selectedOptions[optIndex] = val;
+
+            sizeWrap.querySelectorAll('.size-option-btn').forEach(b => {
+              if (!b.disabled) {
+                b.classList.remove('bg-zinc-900', 'text-white', 'border-zinc-900', 'shadow-lg', 'scale-[1.03]');
+                b.classList.add('bg-white', 'text-zinc-800', 'border-zinc-200');
+              }
+            });
+            btn.classList.remove('bg-white', 'text-zinc-800', 'border-zinc-200');
+            btn.classList.add('bg-zinc-900', 'text-white', 'border-zinc-900', 'shadow-lg', 'scale-[1.03]');
+
+            updateVariant();
+          };
+        });
+      });
+
+      // 6. Accordions
+      container.querySelectorAll('.accordion-header').forEach(header => {
+        header.onclick = function(e) {
+          e.preventDefault();
+          const item = header.closest('.accordion-item');
+          const body = item ? item.querySelector('.accordion-body') : null;
+          const plus = header.querySelector('.accordion-plus');
+          if (!body) return;
+          const isHidden = body.classList.contains('hidden');
+          if (isHidden) {
+            body.classList.remove('hidden');
+            if (plus) plus.textContent = '−';
+          } else {
+            body.classList.add('hidden');
+            if (plus) plus.textContent = '+';
+          }
+        };
+      });
+
+      // 7. Size Guide
+      const guideBtn = container.querySelector('.size-guide-trigger-btn');
+      const sizeModal = container.querySelector('.product-size-chart-modal');
+      const modalClose = container.querySelector('.size-chart-modal-close');
+      if (guideBtn && sizeModal) {
+        guideBtn.onclick = function(e) { e.preventDefault(); sizeModal.classList.remove('hidden'); };
+        if (modalClose) modalClose.onclick = function() { sizeModal.classList.add('hidden'); };
+        sizeModal.onclick = function(e) { if (e.target === sizeModal) sizeModal.classList.add('hidden'); };
+      }
+
+      // 8. Add to Cart & Quick Buy Requests
+      function performAddToCart(isCheckout) {
+        const targetVariantId = atcBtn ? atcBtn.getAttribute('data-variant-id') : null;
+        if (!targetVariantId) return;
+
+        const originalText = atcText ? atcText.textContent : '';
+        if (atcBtn) atcBtn.disabled = true;
+        if (atcText) atcText.textContent = '...';
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ id: parseInt(targetVariantId, 10), quantity: currentQty })
+        })
+        .then(res => {
+          if (!res.ok) throw new Error('Add to cart failed');
+          return res.json();
+        })
+        .then(item => {
+          if (isCheckout) {
+            window.location.href = '/checkout';
+            return;
+          }
+          if (atcText) atcText.textContent = '✓';
+          document.dispatchEvent(new CustomEvent('cart:updated', { detail: { item: item, openDrawer: true } }));
+          setTimeout(() => {
+            if (atcBtn) atcBtn.disabled = false;
+            if (atcText) atcText.textContent = originalText;
+          }, 1200);
+        })
+        .catch(err => {
+          console.error(err);
+          if (atcBtn) atcBtn.disabled = false;
+          if (atcText) atcText.textContent = isAr ? 'خطأ' : 'Error';
+          setTimeout(() => { if (atcText) atcText.textContent = originalText; }, 1500);
+        });
+      }
+
+      if (atcBtn) atcBtn.onclick = function(e) { e.preventDefault(); performAddToCart(false); };
+      if (quickBuyBtn) quickBuyBtn.onclick = function(e) { e.preventDefault(); performAddToCart(true); };
+
+      // 9. Sticky ATC Bar
+      const stickyBar = document.getElementById('StickyATC');
+      const stickyBtn = document.getElementById('StickyATCBtn');
+      if (stickyBar && atcBtn) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              stickyBar.classList.add('translate-y-full');
+              document.body.classList.remove('sticky-atc-active');
+            } else {
+              stickyBar.classList.remove('translate-y-full');
+              document.body.classList.add('sticky-atc-active');
+            }
+          });
+        }, { threshold: 0.1 });
+        observer.observe(atcBtn);
+        if (stickyBtn) stickyBtn.onclick = function() { atcBtn.click(); };
+      }
+
+      updateVariant();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupProductDetail);
+    } else {
+      setupProductDetail();
+    }
+  })();
   </script>
 </div>
