@@ -31,7 +31,7 @@
   assign combined_text = product_title_lower | append: ' ' | append: product_type_lower | append: ' ' | append: product_tags_string | append: ' ' | append: product.handle
   
   if request.locale.iso_code == 'ar'
-    assign size_chart_title = 'جدول المقاسات'
+    assign size_chart_title = 'دليل المقاسات'
   else
     assign size_chart_title = 'Size Chart'
   endif
@@ -138,7 +138,7 @@
     {% when 'linen' %}
       <table width="100%"><tbody><tr><td></td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الخصر (مطاط){% else %}Waist (elastic){% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}طول الشورت{% else %}Shorts Length{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}طول القميص{% else %}Shirt Length{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الصدر{% else %}Chest{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكتف{% else %}Shoulder{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}طول الكم{% else %}Sleeve Length{% endif %}</td></tr><tr style="text-align:center"><td>S/M</td><td>33</td><td>43</td><td>64</td><td>51</td><td>46</td><td>23</td></tr><tr style="text-align:center"><td>M/L</td><td>37</td><td>48</td><td>67</td><td>54</td><td>48</td><td>27</td></tr><tr style="text-align:center"><td>L/XL</td><td>43</td><td>50</td><td>70</td><td>57</td><td>50</td><td>30</td></tr></tbody></table>
     {% when 'staple' %}
-      <table width="100%"><tbody><tr><td></td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الطول{% else %}Length{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكم{% else %}Sleeve{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الصدر{% else %}Chest{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكتف{% else %}Sholder{% endif %}</td></tr><tr style="text-align:center"><td>S/M</td><td>68</td><td>26.5</td><td>57</td><td>57</td></tr><tr style="text-align:center"><td>M/L</td><td>74</td><td>28</td><td>62</td><td>59</td></tr><tr style="text-align:center"><td>L/XL</td><td>76</td><td>29</td><td>66.5</td><td>62</td></tr></tbody></table>
+      <table width="100%"><tbody><tr><td></td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الطول{% else %}Length{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكم{% else %}Sleeve{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الصدر{% else %}Chest{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكتف{% else %}Shoulder{% endif %}</td></tr><tr style="text-align:center"><td>S/M</td><td>68</td><td>26.5</td><td>57</td><td>57</td></tr><tr style="text-align:center"><td>M/L</td><td>74</td><td>28</td><td>62</td><td>59</td></tr><tr style="text-align:center"><td>L/XL</td><td>76</td><td>29</td><td>66.5</td><td>62</td></tr></tbody></table>
     {% when 'none' %}
     {% else %}
       <table width="100%"><tbody><tr><td></td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الطول{% else %}Length{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكم{% else %}Sleeve{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}1/2 الصدر{% else %}1/2 Chest{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}1/2 الحاشية{% else %}1/2 Bottom{% endif %}</td><td style="text-align:center">{% if request.locale.iso_code == 'ar' %}الكتف{% else %}Shoulder{% endif %}</td></tr><tr style="text-align:center"><td>S/M</td><td>69-70</td><td>54</td><td>66-67</td><td>58-59</td><td>68</td></tr><tr style="text-align:center"><td>M/L</td><td>71-72</td><td>55-56</td><td>68-69</td><td>60-61</td><td>69-70</td></tr><tr style="text-align:center"><td>L/XL</td><td>73</td><td>57</td><td>70</td><td>62</td><td>71</td></tr></tbody></table>
@@ -153,7 +153,7 @@
 {%- assign size_chart_object = product.metafields.custom.size_chart_ref.value -%}
 {%- if size_chart_object -%}
   {%- assign default_sc_title = 'Size Chart' -%}
-  {%- if request.locale.iso_code == 'ar' -%}{%- assign default_sc_title = 'جدول المقاسات' -%}{%- endif -%}
+  {%- if request.locale.iso_code == 'ar' -%}{%- assign default_sc_title = 'دليل المقاسات' -%}{%- endif -%}
   {%- assign size_chart_title = size_chart_object.title.value | default: size_chart_object.title | default: default_sc_title -%}
 
   {%- assign sc_columns_raw = size_chart_object.column_headers.value | default: size_chart_object.column_headers -%}
@@ -212,7 +212,7 @@
   {%- assign size_chart_html = product.metafields.custom.size_chart.value -%}
   {%- if size_chart_title == blank or size_chart_title == 'Size Chart' -%}
     {%- if request.locale.iso_code == 'ar' -%}
-      {%- assign size_chart_title = 'جدول المقاسات' -%}
+      {%- assign size_chart_title = 'دليل المقاسات' -%}
     {%- else -%}
       {%- assign size_chart_title = 'Size Chart' -%}
     {%- endif -%}
@@ -392,7 +392,7 @@
           <button type="button" class="accordion-header w-full flex items-center justify-between py-4 text-left group">
             <div class="flex items-center gap-3">
               <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40" width="16" height="16" />
-              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}لمحبي التميز واللفَت{% else %}Attention style seekers{% endif %}</span>
+              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}اللي يحبون التفاصيل{% else %}Attention style seekers{% endif %}</span>
             </div>
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
@@ -455,7 +455,7 @@
           <button type="button" class="accordion-header w-full flex items-center justify-between py-4 text-left group">
             <div class="flex items-center gap-3">
               <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40" width="16" height="16" />
-              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}الوصف والمميزات{% else %}Description & Features{% endif %}</span>
+              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}التفاصيل{% else %}Description & Features{% endif %}</span>
             </div>
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
@@ -475,7 +475,7 @@
           <button type="button" class="accordion-header w-full flex items-center justify-between py-4 text-left group">
             <div class="flex items-center gap-3">
               <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40" width="16" height="16" />
-              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}المقاس والملاءمة{% else %}Size & Fit{% endif %}</span>
+              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}المقاس والقصّة{% else %}Size & Fit{% endif %}</span>
             </div>
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
@@ -538,7 +538,7 @@
           <button type="button" class="accordion-header w-full flex items-center justify-between py-4 text-left group">
             <div class="flex items-center gap-3">
               <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40" width="16" height="16" />
-              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}تعليمات العناية{% else %}Take care of me{% endif %}</span>
+              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}العناية بالقطعة{% else %}Take care of me{% endif %}</span>
             </div>
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
@@ -759,7 +759,7 @@
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" x2="6" y1="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
+              <line x1="6" x2="18" y1="6" y2="18"></line>
             </svg>
           </button>
         </div>
