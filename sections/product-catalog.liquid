@@ -9,24 +9,40 @@
   assign products_limit = section.settings.products_to_show | default: 48
 -%}
 
-<section class="py-24 px-6 md:px-16 max-w-7xl mx-auto" id="shop-catalog" data-section-id="{{ section.id }}">
+<section class="py-24 px-6 md:px-16 max-w-7xl mx-auto" id="shop-catalog" data-section-id="{{ section.id }}" data-lang="{{ request.locale.iso_code }}">
 
   <!-- HEADER -->
   <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 pb-6 border-b border-zinc-200 gap-6">
     <div>
       <span class="text-[11px] font-mono-street tracking-[0.25em] text-zinc-400 uppercase">
-        {{ section.settings.subtitle | default: 'Catalog' }}
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.subtitle_ar | default: 'الكتالوج' }}
+        {%- else -%}
+          {{ section.settings.subtitle | default: 'Catalog' }}
+        {%- endif -%}
       </span>
 
       {%- liquid
-        assign base_title = section.settings.title | default: 'The Collection'
-        assign suffix = ''
-        if collection_obj.handle == 'new-drops'
-          assign suffix = ' · New Drops'
-        elsif collection_obj.handle == 'sale' or collection_obj.handle == 'archival-sale'
-          assign suffix = ' · Archival Sale'
-        elsif collection_obj.handle == 'summer-capsule' or collection_obj.handle == 'summer-drop'
-          assign suffix = ' · Summer Capsule'
+        if request.locale.iso_code == 'ar'
+          assign base_title = section.settings.title_ar | default: 'التشكيلة'
+          assign suffix = ''
+          if collection_obj.handle == 'new-drops'
+            assign suffix = ' · وصل حديثاً'
+          elsif collection_obj.handle == 'sale' or collection_obj.handle == 'archival-sale'
+            assign suffix = ' · التخفيضات'
+          elsif collection_obj.handle == 'summer-capsule' or collection_obj.handle == 'summer-drop'
+            assign suffix = ' · تشكيلة الصيف'
+          endif
+        else
+          assign base_title = section.settings.title | default: 'The Collection'
+          assign suffix = ''
+          if collection_obj.handle == 'new-drops'
+            assign suffix = ' · New Drops'
+          elsif collection_obj.handle == 'sale' or collection_obj.handle == 'archival-sale'
+            assign suffix = ' · Archival Sale'
+          elsif collection_obj.handle == 'summer-capsule' or collection_obj.handle == 'summer-drop'
+            assign suffix = ' · Summer Capsule'
+          endif
         endif
         assign final_title = base_title | append: suffix
       -%}
@@ -36,26 +52,30 @@
       </h2>
 
       <p class="catalog-count text-[11px] text-zinc-400 font-mono-street tracking-wider mt-2 uppercase">
-        Showing {{ collection_obj.products_count }} premium pieces
+        {%- if request.locale.iso_code == 'ar' -%}
+          عرض <span class="count-num">{{ collection_obj.products_count }}</span> قطعة مميزة
+        {%- else -%}
+          Showing <span class="count-num">{{ collection_obj.products_count }}</span> premium pieces
+        {%- endif -%}
       </p>
     </div>
 
     <!-- CATEGORY TOGGLE -->
     <div class="category-filters flex items-center gap-6 font-mono-street text-[11px] uppercase tracking-widest">
       <button type="button" class="category-filter-btn pb-0.5 transition text-[#1a1a1a] font-bold border-b border-[#1a1a1a]" data-category="all">
-        All
+        {% if request.locale.iso_code == 'ar' %}الكل{% else %}All{% endif %}
       </button>
       <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="new-drops">
-        New Drops
+        {% if request.locale.iso_code == 'ar' %}وصل حديثاً{% else %}New Drops{% endif %}
       </button>
       <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="men">
-        Men
+        {% if request.locale.iso_code == 'ar' %}رجال{% else %}Men{% endif %}
       </button>
       <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="women">
-        Women
+        {% if request.locale.iso_code == 'ar' %}نساء{% else %}Women{% endif %}
       </button>
       <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="sale">
-        Sale
+        {% if request.locale.iso_code == 'ar' %}التخفيضات{% else %}Sale{% endif %}
       </button>
     </div>
   </div>
@@ -63,30 +83,34 @@
   <!-- SUBCATEGORY PILLS -->
   <div class="subcategory-filters flex items-center gap-3 overflow-x-auto pb-6 scrollbar-none mb-12 select-none">
     <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-[#1a1a1a] text-white border-[#1a1a1a]" data-subcategory="all">
-      All
+      {% if request.locale.iso_code == 'ar' %}الكل{% else %}All{% endif %}
     </button>
     {%- assign subcat_blocks = section.blocks | where: 'type', 'subcategory_filter' -%}
     {%- if subcat_blocks.size > 0 -%}
       {%- for block in subcat_blocks -%}
         <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="{{ block.settings.key | escape }}" {{ block.shopify_attributes }}>
-          {{ block.settings.label | escape }}
+          {%- if request.locale.iso_code == 'ar' -%}
+            {{ block.settings.label_ar | default: block.settings.label | escape }}
+          {%- else -%}
+            {{ block.settings.label | escape }}
+          {%- endif -%}
         </button>
       {%- endfor -%}
     {%- else -%}
       <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="summer">
-        Summer Collection
+        {% if request.locale.iso_code == 'ar' %}تشكيلة الصيف{% else %}Summer Collection{% endif %}
       </button>
       <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="hoodie">
-        Hoodies
+        {% if request.locale.iso_code == 'ar' %}هوديز{% else %}Hoodies{% endif %}
       </button>
       <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="shirt">
-        Sets
+        {% if request.locale.iso_code == 'ar' %}أطقم{% else %}Sets{% endif %}
       </button>
       <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="sweatshirt">
-        Sweatshirts
+        {% if request.locale.iso_code == 'ar' %}سويت شيرت{% else %}Sweatshirts{% endif %}
       </button>
       <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="t-shirt">
-        T-Shirts & Tops
+        {% if request.locale.iso_code == 'ar' %}تيشيرتات{% else %}T-Shirts & Tops{% endif %}
       </button>
     {%- endif -%}
   </div>
@@ -94,11 +118,13 @@
   <!-- EMPTY STATE -->
   <div class="catalog-empty-state hidden flex flex-col items-center justify-center py-32 text-center gap-4">
     <p class="font-mono-street text-xs uppercase tracking-[0.25em] text-zinc-400">
-      No products found
+      {% if request.locale.iso_code == 'ar' %}لم يتم العثور على منتجات{% else %}No products found{% endif %}
     </p>
-    <p class="text-zinc-300 text-sm font-light">Try adjusting your filters</p>
+    <p class="text-zinc-300 text-sm font-light">
+      {% if request.locale.iso_code == 'ar' %}جرب تعديل خيارات التصفية{% else %}Try adjusting your filters{% endif %}
+    </p>
     <button type="button" class="catalog-reset-btn mt-2 px-8 py-3 bg-[#1a1a1a] text-white font-mono-street text-[11px] uppercase tracking-widest hover:bg-zinc-800 transition-colors">
-      Reset Filters
+      {% if request.locale.iso_code == 'ar' %}إعادة ضبط الفلاتر{% else %}Reset Filters{% endif %}
     </button>
   </div>
 
@@ -160,7 +186,9 @@
       endfor
     -%}
     {%- if rendered_count == 0 -%}
-      <p class="text-center col-span-full py-12 text-zinc-400 font-mono-street text-xs uppercase">No products in this collection.</p>
+      <p class="text-center col-span-full py-12 text-zinc-400 font-mono-street text-xs uppercase">
+        {% if request.locale.iso_code == 'ar' %}لا توجد منتجات في هذه المجموعة حالياً.{% else %}No products in this collection.{% endif %}
+      </p>
     {%- endif -%}
   </div>
 
@@ -171,6 +199,7 @@
     const catalog = document.getElementById('shop-catalog');
     if (!catalog) return;
 
+    const isArabic = catalog.getAttribute('data-lang') === 'ar';
     const cards = catalog.querySelectorAll('.product-card');
     const categoryBtns = catalog.querySelectorAll('.category-filter-btn');
     const emptyState = catalog.querySelector('.catalog-empty-state');
@@ -231,7 +260,6 @@
         if (activeSubcategory === 'all') {
           matchesSubcategory = true;
         } else if (activeSubcategory === 'summer') {
-          // Summer = anything that's not a hoodie or sweatshirt
           matchesSubcategory = (sub !== 'hoodie' && sub !== 'sweatshirt');
         } else {
           matchesSubcategory = (sub === activeSubcategory);
@@ -246,17 +274,21 @@
       });
 
       // Update Showing Text
-      countText.textContent = `Showing ${visibleCount} premium pieces`;
+      if (isArabic) {
+        countText.innerHTML = `عرض <span class="count-num">${visibleCount}</span> قطعة مميزة`;
+      } else {
+        countText.innerHTML = `Showing <span class="count-num">${visibleCount}</span> premium pieces`;
+      }
 
       // Update Heading Title
       if (activeCategory === 'men') {
-        titleText.textContent = "Men's Archive";
+        titleText.textContent = isArabic ? "تشكيلة الرجال" : "Men's Archive";
       } else if (activeCategory === 'women') {
-        titleText.textContent = "Women's Archive";
+        titleText.textContent = isArabic ? "تشكيلة النساء" : "Women's Archive";
       } else if (activeCategory === 'sale') {
-        titleText.textContent = "Archival Sale";
+        titleText.textContent = isArabic ? "التخفيضات" : "Archival Sale";
       } else if (activeCategory === 'new-drops') {
-        titleText.textContent = "New Drops";
+        titleText.textContent = isArabic ? "وصل حديثاً" : "New Drops";
       } else {
         titleText.textContent = titleBase;
       }
@@ -280,11 +312,8 @@
         btn.classList.remove('text-zinc-400');
 
         activeCategory = btn.getAttribute('data-category');
-        
-        // Reset subcategory selection to "All" when switching main categories
         activeSubcategory = 'all';
         updateSubcategoryPillsUI('all');
-
         filterGrid();
       });
     });
@@ -312,7 +341,7 @@
       });
     }
 
-    // Auto-filter from URL param e.g. /?filter=men or /?filter=women or /?filter=sale
+    // Auto-filter from URL param
     const urlParams = new URLSearchParams(window.location.search);
     const filterParam = urlParams.get('filter');
     if (filterParam) {
@@ -323,7 +352,7 @@
       }
     }
 
-    // Intercept clicks on links pointing to Men, Women, Sale collections or #shop-catalog to filter locally
+    // Intercept clicks on local filter links
     const handleFilterLinkClick = (e) => {
       const link = e.target.closest('a');
       if (!link) return;
@@ -331,8 +360,7 @@
       const href = link.getAttribute('href');
       if (!href) return;
 
-      // Only intercept on homepage to keep single page feel
-      const isHomepage = window.location.pathname === '/' || window.location.pathname === '';
+      const isHomepage = window.location.pathname === '/' || window.location.pathname === '' || window.location.pathname === '/ar' || window.location.pathname === '/ar/';
       if (!isHomepage) return;
 
       let category = null;
@@ -349,27 +377,23 @@
       } else if (href.includes('/collections/all') || href.includes('filter=all') || href === '#all') {
         category = 'all';
       } else if (href.includes('#shop-catalog') || href === '#') {
-        // Fallback: check link text if configured directly to #shop-catalog or left as '#'
-        if (text.includes('women')) {
+        if (text.includes('women') || text.includes('نساء')) {
           category = 'women';
-        } else if (text.includes('men')) {
+        } else if (text.includes('men') || text.includes('رجال')) {
           category = 'men';
-        } else if (text.includes('new drops') || text.includes('newdrops')) {
+        } else if (text.includes('new drops') || text.includes('وصل حديثاً')) {
           category = 'new-drops';
-        } else if (text.includes('sale')) {
+        } else if (text.includes('sale') || text.includes('تخفيضات')) {
           category = 'sale';
-        } else if (text.includes('shop now') || text.includes('all') || text.includes('shop')) {
+        } else if (text.includes('shop now') || text.includes('all') || text.includes('الكل') || text.includes('تسوق')) {
           category = 'all';
         }
       }
 
       if (category) {
         e.preventDefault();
-        
-        // Find the category button
         const btn = catalog.querySelector(`.category-filter-btn[data-category="${category}"]`);
         if (btn) {
-          // Close mobile menu if it is open
           const mobileDrawer = document.getElementById('MobileNavDrawer');
           if (mobileDrawer && !mobileDrawer.classList.contains('hidden')) {
             const closeBtn = mobileDrawer.querySelector('.mobile-menu-close');
@@ -401,11 +425,7 @@
         mobileTrigger.addEventListener('click', (e) => {
           e.stopPropagation();
           const isClosed = mobilePopup.classList.contains('hidden');
-          
-          // Close all other popups
-          catalog.querySelectorAll('.mobile-size-popup').forEach(pop => {
-            pop.classList.add('hidden');
-          });
+          catalog.querySelectorAll('.mobile-size-popup').forEach(pop => pop.classList.add('hidden'));
 
           if (isClosed) {
             mobilePopup.classList.remove('hidden');
@@ -414,15 +434,13 @@
       }
     });
 
-    // Dismiss size picker clicking outside
+    // Dismiss size picker
     document.addEventListener('click', (e) => {
       if (e.target.closest('.mobile-size-popup') || e.target.closest('.mobile-quick-add-trigger') || e.target.closest('.quick-add-size-btn')) return;
-      catalog.querySelectorAll('.mobile-size-popup').forEach(pop => {
-        pop.classList.add('hidden');
-      });
+      catalog.querySelectorAll('.mobile-size-popup').forEach(pop => pop.classList.add('hidden'));
     });
 
-    // Handle AJAX Add to Cart
+    // AJAX Add to Cart
     document.addEventListener('click', (e) => {
       const sizeBtn = e.target.closest('.quick-add-size-btn');
       if (!sizeBtn || sizeBtn.disabled) return;
@@ -431,7 +449,6 @@
 
       let variantId = sizeBtn.getAttribute('data-variant-id');
       if (!variantId) return;
-      // Extract numeric ID if it's a Shopify GID
       if (variantId.includes('/')) variantId = variantId.split('/').pop();
       variantId = parseInt(variantId, 10);
       if (isNaN(variantId)) return;
@@ -440,7 +457,6 @@
       sizeBtn.disabled = true;
       sizeBtn.textContent = '...';
 
-      // POST to Shopify AJAX API
       fetch('/cart/add.js', {
         method: 'POST',
         headers: {
@@ -457,10 +473,7 @@
         return res.json();
       })
       .then(item => {
-        // Success
         sizeBtn.textContent = '\u2713';
-
-        // Dispatch custom cart update event
         document.dispatchEvent(new CustomEvent('cart:updated', {
           detail: { item: item, openDrawer: true }
         }));
@@ -468,14 +481,13 @@
         setTimeout(() => {
           sizeBtn.disabled = false;
           sizeBtn.textContent = originalText;
-          // Close the mobile size popup after adding to cart
           const popup = sizeBtn.closest('.mobile-size-popup');
           if (popup) popup.classList.add('hidden');
         }, 1500);
       })
       .catch(err => {
         console.error('AJAX quick add failed:', err);
-        sizeBtn.textContent = 'Error';
+        sizeBtn.textContent = isArabic ? 'خطأ' : 'Error';
         setTimeout(() => {
           sizeBtn.disabled = false;
           sizeBtn.textContent = originalText;
@@ -491,16 +503,40 @@
   "name": "Product Catalog Grid",
   "settings": [
     {
+      "type": "header",
+      "content": "English Titles"
+    },
+    {
       "type": "text",
       "id": "subtitle",
-      "label": "Section Subtitle",
+      "label": "Section Subtitle (EN)",
       "default": "Catalog"
     },
     {
       "type": "text",
       "id": "title",
-      "label": "Section Heading",
+      "label": "Section Heading (EN)",
       "default": "The Collection"
+    },
+    {
+      "type": "header",
+      "content": "العناوين العربية (Arabic)"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_ar",
+      "label": "العنوان الفرعي (AR)",
+      "default": "الكتالوج"
+    },
+    {
+      "type": "text",
+      "id": "title_ar",
+      "label": "العنوان الرئيسي (AR)",
+      "default": "التشكيلة"
+    },
+    {
+      "type": "header",
+      "content": "Collection Settings"
     },
     {
       "type": "collection",
@@ -526,15 +562,21 @@
         {
           "type": "text",
           "id": "label",
-          "label": "Filter Label",
+          "label": "Filter Label (EN)",
           "default": "Summer Collection"
+        },
+        {
+          "type": "text",
+          "id": "label_ar",
+          "label": "اسم الفلتر (AR)",
+          "default": "تشكيلة الصيف"
         },
         {
           "type": "text",
           "id": "key",
           "label": "Filter Key (Matching subcategory tag)",
           "default": "summer",
-          "info": "Values like: all, summer, hoodie, shirt, sweatshirt, t-shirt. The 'summer' key is treated as anything that is not a hoodie or sweatshirt."
+          "info": "Values like: all, summer, hoodie, shirt, sweatshirt, t-shirt."
         }
       ]
     }
@@ -547,6 +589,7 @@
           "type": "subcategory_filter",
           "settings": {
             "label": "Summer Collection",
+            "label_ar": "تشكيلة الصيف",
             "key": "summer"
           }
         },
@@ -554,6 +597,7 @@
           "type": "subcategory_filter",
           "settings": {
             "label": "Hoodies",
+            "label_ar": "هوديز",
             "key": "hoodie"
           }
         },
@@ -561,6 +605,7 @@
           "type": "subcategory_filter",
           "settings": {
             "label": "Sets",
+            "label_ar": "أطقم",
             "key": "shirt"
           }
         },
@@ -568,6 +613,7 @@
           "type": "subcategory_filter",
           "settings": {
             "label": "Sweatshirts",
+            "label_ar": "سويت شيرت",
             "key": "sweatshirt"
           }
         },
@@ -575,6 +621,7 @@
           "type": "subcategory_filter",
           "settings": {
             "label": "T-Shirts & Tops",
+            "label_ar": "تيشيرتات",
             "key": "t-shirt"
           }
         }
