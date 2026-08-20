@@ -135,15 +135,15 @@
       <div class="flex items-center gap-3 sm:gap-6 lg:gap-8 justify-end text-sm sm:text-[17px] font-mono-street capitalize tracking-[0.1em] font-medium">
         
         <!-- Desktop Language Switcher (AR / EN) -->
-        <div class="hidden lg:flex items-center gap-1.5 text-[12px] font-mono-street font-bold tracking-wider">
+        <div class="lang-switcher hidden lg:flex items-center gap-1.5 text-[12px] font-mono-street font-bold tracking-wider text-white transition-colors duration-300">
           {%- if request.locale.iso_code == 'ar' -%}
-            <a href="{{ request.path | remove_first: '/ar' | default: '/' }}" class="text-white/60 hover:text-white transition-colors">EN</a>
-            <span class="text-white/30">|</span>
-            <span class="text-white underline underline-offset-4">AR</span>
+            <a href="{{ request.path | remove_first: '/ar' | default: '/' }}" class="opacity-60 hover:opacity-100 transition-opacity">EN</a>
+            <span class="opacity-30">|</span>
+            <span class="underline underline-offset-4">AR</span>
           {%- else -%}
-            <span class="text-white underline underline-offset-4">EN</span>
-            <span class="text-white/30">|</span>
-            <a href="/ar{{ request.path }}" class="text-white/60 hover:text-white transition-colors">AR</a>
+            <span class="underline underline-offset-4">EN</span>
+            <span class="opacity-30">|</span>
+            <a href="/ar{{ request.path }}" class="opacity-60 hover:opacity-100 transition-opacity">AR</a>
           {%- endif -%}
         </div>
 
@@ -168,7 +168,7 @@
         <button class="search-drawer-trigger transition-colors flex items-center gap-2 p-1 hover:opacity-80 text-current" aria-label="Search">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sm:w-[24px] sm:h-[24px]">
             <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
           <span class="hidden md:inline">{{ section.settings.search_label | default: 'Search' }}</span>
         </button>
@@ -314,11 +314,13 @@
 
     let mobileMenuOpen = false;
 
-    // Scroll state toggler — only applies when mobile menu is NOT open
+    // Scroll state toggler
     const handleScroll = () => {
       if (mobileMenuOpen) return;
 
       const isScrolled = window.scrollY > 50;
+      const langSwitcher = navbar.querySelector('.lang-switcher');
+
       if (isScrolled) {
         navbar.classList.remove('bg-gradient-to-b', 'from-black/50', 'to-transparent', 'text-white');
         navbar.classList.add('bg-[#faf9f7]/85', 'backdrop-blur-md', 'border-b', 'border-zinc-200/40', 'shadow-sm', 'text-[#1a1a1a]');
@@ -328,11 +330,16 @@
           el.classList.remove('text-white/70');
           el.classList.add('text-zinc-500');
         });
-        // Icon buttons & Switchers
+        // Icon buttons
         navbar.querySelectorAll('.search-drawer-trigger, .cart-drawer-trigger').forEach(el => {
           el.classList.remove('text-white');
           el.classList.add('text-[#1a1a1a]');
         });
+        // Language Switcher color transition
+        if (langSwitcher) {
+          langSwitcher.classList.remove('text-white');
+          langSwitcher.classList.add('text-[#1a1a1a]');
+        }
       } else {
         navbar.classList.add('bg-gradient-to-b', 'from-black/50', 'to-transparent', 'text-white');
         navbar.classList.remove('bg-[#faf9f7]/85', 'backdrop-blur-md', 'border-b', 'border-zinc-200/40', 'shadow-sm', 'text-[#1a1a1a]');
@@ -342,11 +349,16 @@
           el.classList.remove('text-zinc-500');
           el.classList.add('text-white/70');
         });
-        // Icon buttons & Switchers
+        // Icon buttons
         navbar.querySelectorAll('.search-drawer-trigger, .cart-drawer-trigger').forEach(el => {
           el.classList.remove('text-[#1a1a1a]');
           el.classList.add('text-white');
         });
+        // Language Switcher restore white
+        if (langSwitcher) {
+          langSwitcher.classList.remove('text-[#1a1a1a]');
+          langSwitcher.classList.add('text-white');
+        }
       }
     };
 
