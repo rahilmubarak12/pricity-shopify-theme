@@ -1,6 +1,9 @@
 {% comment %}
   Product Detail Snippet
-  Shared code for PDP and Quickview with Customizer variables support.
+  Shared code for both main-product.liquid section and templates/product.quickview.liquid.
+  Accepts:
+  - product: {Product} Shopify product object
+  - is_modal: {Boolean} true if rendered inside the quickview modal
 {% endcomment %}
 
 {%- liquid
@@ -13,6 +16,7 @@
     assign is_out_of_stock = false
   endif
 
+  # Calculate discounts
   assign is_on_sale = false
   assign compare_at_price = current_variant.compare_at_price
   assign price = current_variant.price
@@ -20,6 +24,7 @@
     assign is_on_sale = true
   endif
 
+  # Select size chart based on product title + type keywords
   assign product_title_lower = product.title | downcase
   assign product_type_lower = product.type | downcase
   assign product_tags_string = product.tags | join: ' ' | downcase
@@ -141,6 +146,79 @@
 {% endcapture %}
 {%- assign size_chart_html = size_chart_html | strip -%}
 
+{%- if size_chart_key == 'none' -%}
+  {%- assign size_chart_html = '' -%}
+{%- endif -%}
+
+{%- assign size_chart_object = product.metafields.custom.size_chart_ref.value -%}
+{%- if size_chart_object -%}
+  {%- assign default_sc_title = 'Size Chart' -%}
+  {%- if request.locale.iso_code == 'ar' -%}{%- assign default_sc_title = 'جدول المقاسات' -%}{%- endif -%}
+  {%- assign size_chart_title = size_chart_object.title.value | default: size_chart_object.title | default: default_sc_title -%}
+
+  {%- assign sc_columns_raw = size_chart_object.column_headers.value | default: size_chart_object.column_headers -%}
+  {%- if sc_columns_raw.first -%}
+    {%- assign sc_columns_str = sc_columns_raw | join: '|||' -%}
+  {%- else -%}
+    {%- assign sc_columns_str = sc_columns_raw -%}
+  {%- endif -%}
+  {%- if sc_columns_str != blank -%}
+    {%- assign sc_columns_clean = sc_columns_str | newline_to_br | strip_newlines | replace: '<br />', '|||' | replace: '<br>', '|||' -%}
+    {%- assign sc_columns = sc_columns_clean | split: '|||' -%}
+  {%- else -%}
+    {%- assign sc_columns = '' | split: ',' -%}
+  {%- endif -%}
+
+  {%- assign sc_rows_raw = size_chart_object.rows.value | default: size_chart_object.rows -%}
+  {%- if sc_rows_raw.first -%}
+    {%- assign sc_rows_str = sc_rows_raw | join: '|||' -%}
+  {%- else -%}
+    {%- assign sc_rows_str = sc_rows_raw -%}
+  {%- endif -%}
+  {%- if sc_rows_str != blank -%}
+    {%- assign sc_rows_clean = sc_rows_str | newline_to_br | strip_newlines | replace: '<br />', '|||' | replace: '<br>', '|||' -%}
+    {%- assign sc_rows = sc_rows_clean | split: '|||' -%}
+  {%- else -%}
+    {%- assign sc_rows = '' | split: ',' -%}
+  {%- endif -%}
+
+  {%- if sc_columns.size > 0 or sc_rows.size > 0 -%}
+    {%- capture size_chart_html -%}
+      <table width="100%" style="width:100%;border-collapse:collapse;font-size:0.8125rem;line-height:1.4;table-layout:auto;"><tbody>
+        <tr style="background-color:#f5f4f2;"><td style="border:1px solid #e4e4e7;padding:8px 10px;text-align:center;font-weight:600;color:#3f3f46;"></td>
+          {%- for col in sc_columns -%}
+            {%- assign col_stripped = col | strip -%}
+            {%- if col_stripped != blank -%}
+              <td style="border:1px solid #e4e4e7;padding:8px 10px;text-align:center;font-weight:600;color:#3f3f46;">{{ col_stripped }}</td>
+            {%- endif -%}
+          {%- endfor -%}
+        </tr>
+        {%- for row in sc_rows -%}
+          {%- assign row_stripped = row | strip -%}
+          {%- if row_stripped != blank -%}
+            {%- assign row_parts = row_stripped | split: ',' -%}
+            <tr>
+              {%- for part in row_parts -%}
+                <td style="border:1px solid #e4e4e7;padding:8px 10px;text-align:center;{% if forloop.first %}font-weight:600;color:#3f3f46;{% endif %}">{{ part | strip }}</td>
+              {%- endfor -%}
+            </tr>
+          {%- endif -%}
+        {%- endfor -%}
+      </tbody></table>
+    {%- endcapture -%}
+    {%- assign size_chart_html = size_chart_html | strip -%}
+  {%- endif -%}
+{%- elsif product.metafields.custom.size_chart != blank -%}
+  {%- assign size_chart_html = product.metafields.custom.size_chart.value -%}
+  {%- if size_chart_title == blank or size_chart_title == 'Size Chart' -%}
+    {%- if request.locale.iso_code == 'ar' -%}
+      {%- assign size_chart_title = 'جدول المقاسات' -%}
+    {%- else -%}
+      {%- assign size_chart_title = 'Size Chart' -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
+
 <div class="product-detail-wrapper flex flex-col lg:flex-row w-full h-full" data-product-handle="{{ product.handle }}" data-lang="{{ request.locale.iso_code }}">
   
   <!-- LEFT COLUMN: Image Gallery -->
@@ -202,9 +280,17 @@
                 </p>
                 <div class="flex flex-wrap gap-2">
                   {%- for value in option.values -%}
+                    {%- liquid
+                      assign color_in_stock = false
+                      for variant in product.variants
+                        if variant.options[color_option_index] == value and variant.available
+                          assign color_in_stock = true
+                        endif
+                      endfor
+                    -%}
                     <button
                       type="button"
-                      class="color-option-btn px-4 py-2 text-xs rounded-full border transition-all duration-200 tracking-wide {% if option.selected_value == value %}bg-zinc-900 text-white border-zinc-900 shadow-md{% else %}bg-white text-zinc-700 border-zinc-200 hover:border-zinc-500{% endif %}"
+                      class="color-option-btn px-4 py-2 text-xs rounded-full border transition-all duration-200 tracking-wide {% if option.selected_value == value %}bg-zinc-900 text-white border-zinc-900 shadow-md{% else %}bg-white text-zinc-700 border-zinc-200 hover:border-zinc-500{% endif %} {% unless color_in_stock %}opacity-35 line-through{% endunless %}"
                       data-value="{{ value }}"
                     >
                       {{ value }}
@@ -222,6 +308,7 @@
                     {% if request.locale.iso_code == 'ar' %}اختر المقاس{% else %}Select Size{% endif %}
                   </span>
                   
+                  <!-- Live Stock Message -->
                   <span class="stock-status-indicator text-[10px] font-semibold tracking-wide uppercase flex items-center gap-1.5 text-emerald-600">
                     {% if request.locale.iso_code == 'ar' %}متوفر بالمخزون{% else %}In Stock{% endif %}
                   </span>
@@ -241,6 +328,10 @@
                         assign size_in_stock = true
                       endif
                       assign qty = size_variant.inventory_quantity
+                      assign is_low_stock = false
+                      if qty > 0 and qty <= 10
+                        assign is_low_stock = true
+                      endif
                     -%}
                     <button
                       type="button"
@@ -250,8 +341,24 @@
                       data-qty="{{ qty }}"
                     >
                       {{ value }}
+                      {%- if size_in_stock and is_low_stock and option.selected_value != value -%}
+                        <span class="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                      {%- endif -%}
+                      {%- unless size_in_stock -%}
+                        <span class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                          <span class="block w-[60%] h-px bg-zinc-200 rotate-45"></span>
+                        </span>
+                      {%- endunless -%}
                     </button>
                   {%- endfor -%}
+                </div>
+
+                <!-- Size guide triggers -->
+                <div class="mt-3.5 flex items-center justify-between">
+                  <p class="low-stock-legend text-[10px] text-zinc-400 flex items-center gap-1.5 hidden">
+                    <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0"></span>
+                    {% if request.locale.iso_code == 'ar' %}كمية محدودة{% else %}Low stock{% endif %}
+                  </p>
                 </div>
               </div>
             {%- endif -%}
@@ -277,66 +384,221 @@
         </div>
       {%- endif -%}
 
-      <!-- ACCORDION SECTIONS (CONTROLLED BY CUSTOMIZER) -->
+      <!-- ACCORDION SECTIONS -->
       <div class="product-accordions-group mt-4 border-t border-zinc-100">
         
-        <!-- Accordion 1 -->
+        <!-- Accordion 1: Attention Seekers -->
         <div class="border-b border-zinc-100 accordion-item">
           <button type="button" class="accordion-header w-full flex items-center justify-between py-4 text-left group">
             <div class="flex items-center gap-3">
               <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40" width="16" height="16" />
-              <span class="text-sm text-zinc-700 font-medium tracking-wide">{{ acc_1_title }}</span>
+              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}لمحبي التميز واللفَت{% else %}Attention style seekers{% endif %}</span>
             </div>
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
-          <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed whitespace-pre-line">
-            {{ acc_1_text }}
+          <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed prose prose-sm max-w-none prose-zinc whitespace-pre-line">
+            {%- if product.metafields.custom.attention_seekers != blank -%}
+              {{ product.metafields.custom.attention_seekers }}
+            {%- else -%}
+              {% case product.handle %}
+                {% when 'oversized-dual-tone-sweatshirt' %}
+                  <p>Blue and orange, bold and bright, get ready to stand out!</p>
+                {% when 'oversized-sweatshirt-turtleneck' %}
+                  <p>Slip me on, and let comfort lead the way!</p>
+                {% when 'overlap-neck-sweatshirt' %}
+                  <p>You want your wardrobe to level up, try this soft scuba sweatshirt</p>
+                {% when 'crewneck-oversized-sweatshirt' %}
+                  <p>Grab this piece, and let your style do the talking </p>
+                {% when 'hoodie-with-burgundy-piping' %}
+                  <p>For comfort and boldness in one, this hoodie has you covered</p>
+                {% when 'hoodie-with-leather-piped-detailing' %}
+                  <p>This hoodie doesn't follow trend, it sets them </p>
+                {% when 'all-in-well-hoodie' %}
+                  <p>Take the lead, wear the vibe</p>
+                {% when 'apricity-leather-patch-hoodie' %}
+                  <p>Own the Look in Brown</p>
+                {% when 'double-collar-cropped-sweatshirt' %}
+                  <p>Own the spotlight with a sweatshirt as bold as you are</p>
+                {% when 'a-new-era-cropped-sweatshirt' %}
+                  <p>Be the change. Be the era. Wear it like you mean it</p>
+                {% when 'indulge-in-self-love-hoodie' %}
+                  <p>Dare to be different. Own the look. Own the moment</p>
+                {% when '3d-apricity-hoodie' %}
+                  <p>Own your look, own your day, Midnight Navy never fails</p>
+                {% when 'bayview-linen-set' %}
+                  <p>Light linen, heavy presence. Walk freely and let Bay View BLVD. make the world notice you</p>
+                {% when 'club-1932-t-shirt' %}
+                  <p>Carrying the emblem of our homeland in our hearts, we walk boldly, proudly, and endlessly Saudi</p>
+                {% when 'onyx-black' %}
+                  <p>Strong and silent, they never chase attention, ONYX is the power they wear</p>
+                {% when 'onyx-gray' %}
+                  <p>Strong and silent, they never chase attention, ONYX is the power they wear</p>
+                {% when 'echoes-of-silence-green' %}
+                  <p>A perfect blend of power, style, and confidence for anyone who isn't afraid to be noticed</p>
+                {% when 'echoes-of-silence-white' %}
+                  <p>A perfect blend of power, style, and confidence for anyone who isn't afraid to be noticed</p>
+                {% when 'staple-sand' %}
+                  <p>Where minimal meets meaning</p>
+                {% when 'apricity-blush' %}
+                  <p>Soft enough to blush. Bold enough to own it</p>
+                {% when 'apy-butter-set' %}
+                  <p>Soft like butter. Sharp like attitude</p>
+                {% else %}
+                  {{ product.description }}
+              {% endcase %}
+            {%- endif -%}
           </div>
         </div>
 
-        <!-- Accordion 2 -->
+        <!-- Accordion 2: Description & Features -->
         <div class="border-b border-zinc-100 accordion-item">
           <button type="button" class="accordion-header w-full flex items-center justify-between py-4 text-left group">
             <div class="flex items-center gap-3">
               <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40" width="16" height="16" />
-              <span class="text-sm text-zinc-700 font-medium tracking-wide">{{ acc_2_title }}</span>
+              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}الوصف والمميزات{% else %}Description & Features{% endif %}</span>
             </div>
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
-          <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed">
-            {%- if acc_2_text != blank -%}
-              <div class="whitespace-pre-line">{{ acc_2_text }}</div>
+          <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed prose prose-sm max-w-none prose-zinc">
+            {%- if product.metafields.custom.description != blank -%}
+              {{ product.metafields.custom.description }}
+            {%- elsif product.description != blank -%}
+              {{ product.description }}
             {%- else -%}
               {{ product.description }}
             {%- endif -%}
           </div>
         </div>
 
-        <!-- Accordion 3 -->
+        <!-- Accordion 3: Size & Fit -->
         <div class="border-b border-zinc-100 accordion-item">
           <button type="button" class="accordion-header w-full flex items-center justify-between py-4 text-left group">
             <div class="flex items-center gap-3">
               <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40" width="16" height="16" />
-              <span class="text-sm text-zinc-700 font-medium tracking-wide">{{ acc_3_title }}</span>
+              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}المقاس والملاءمة{% else %}Size & Fit{% endif %}</span>
             </div>
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
-          <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed whitespace-pre-line">
-            {{ acc_3_text }}
+          <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed prose prose-sm max-w-none prose-zinc">
+            {%- if product.metafields.custom.size_fit != blank -%}
+              {{ product.metafields.custom.size_fit }}
+            {%- else -%}
+              {% case product.handle %}
+                {% when 'oversized-dual-tone-sweatshirt' %}
+                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                {% when 'oversized-sweatshirt-turtleneck' %}
+                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL </p>
+                {% when 'overlap-neck-sweatshirt' %}
+                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                {% when 'crewneck-oversized-sweatshirt' %}
+                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                {% when 'hoodie-with-burgundy-piping' %}
+                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                {% when 'hoodie-with-leather-piped-detailing' %}
+                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                {% when 'all-in-well-hoodie' %}
+                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                {% when 'apricity-leather-patch-hoodie' %}
+                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                {% when 'double-collar-cropped-sweatshirt' %}
+                  <p>Designed for a flattering and comfortable fit</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p>
+                {% when 'a-new-era-cropped-sweatshirt' %}
+                  <p>Designed for a flattering and comfortable fit</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p>
+                {% when 'indulge-in-self-love-hoodie' %}
+                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                {% when '3d-apricity-hoodie' %}
+                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                {% when 'bayview-linen-set' %}
+                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                {% when 'club-1932-t-shirt' %}
+                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                {% when 'onyx-black' %}
+                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                {% when 'onyx-gray' %}
+                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                {% when 'echoes-of-silence-green' %}
+                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                {% when 'echoes-of-silence-white' %}
+                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                {% when 'staple-sand' %}
+                  <p>Designed for a relaxed oversized look that suits everyone</p><p>Female model is 5'4" (163 cm) and wears size S/M</p><p>Male model is 6'1" (185 cm) and wears size M/L</p>
+                {% when 'apricity-blush' %}
+                  <p>Designed exclusively for women, offering a flattering close-to-body fit</p><p>Model is 5'4" (163 cm) and wears size S/M</p>
+                {% when 'apy-butter-set' %}
+                  <p>Designed exclusively for women, offering a flattering close-to-body fit</p><p>Model is 5'4" (163 cm) and wears size S/M</p>
+                {% else %}
+                  {{ product.description }}
+              {% endcase %}
+            {%- endif -%}
           </div>
         </div>
 
-        <!-- Accordion 4 -->
+        <!-- Accordion 4: Take Care of Me -->
         <div class="border-b border-zinc-100 accordion-item">
           <button type="button" class="accordion-header w-full flex items-center justify-between py-4 text-left group">
             <div class="flex items-center gap-3">
               <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40" width="16" height="16" />
-              <span class="text-sm text-zinc-700 font-medium tracking-wide">{{ acc_4_title }}</span>
+              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}تعليمات العناية{% else %}Take care of me{% endif %}</span>
             </div>
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
-          <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed whitespace-pre-line">
-            {{ acc_4_text }}
+          <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed prose prose-sm max-w-none prose-zinc">
+            {%- if product.metafields.custom.care_instructions != blank -%}
+              {{ product.metafields.custom.care_instructions }}
+            {%- else -%}
+              {% case product.handle %}
+                {% when 'oversized-dual-tone-sweatshirt' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+                {% when 'oversized-sweatshirt-turtleneck' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+                {% when 'overlap-neck-sweatshirt' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+                {% when 'crewneck-oversized-sweatshirt' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
+                {% when 'hoodie-with-burgundy-piping' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not saline soak, bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
+                {% when 'hoodie-with-leather-piped-detailing' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not saline soak, bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
+                {% when 'all-in-well-hoodie' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not saline soak, bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
+                {% when 'apricity-leather-patch-hoodie' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not saline soak, bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
+                {% when 'double-collar-cropped-sweatshirt' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+                {% when 'a-new-era-cropped-sweatshirt' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
+                {% when 'indulge-in-self-love-hoodie' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+                {% when '3d-apricity-hoodie' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
+                {% when 'bayview-linen-set' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+                {% when 'club-1932-t-shirt' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+                {% when 'onyx-black' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+                {% when 'onyx-gray' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+                {% when 'echoes-of-silence-green' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+                {% when 'echoes-of-silence-white' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+                {% when 'staple-sand' %}
+                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+                {% when 'apricity-blush' %}
+                  <p>Machine wash at 86°F / 30°C</p><p>Do not use chlorine bleach</p><p>Do not tumble dry</p><p>Maximum iron at 230°F / 110°C</p><p>Do not dry clean </p><p>Wash inside out. Dry separately </p>
+                {% when 'apy-butter-set' %}
+                  <p>Machine wash at 86°F / 30°C</p><p>Do not use chlorine bleach</p><p>Do not tumble dry</p><p>Maximum iron at 230°F / 110°C</p><p>Do not dry clean </p><p>Wash inside out. Dry separately </p>
+                {% else %}
+                  <ul class="space-y-1.5">
+                    <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Machine wash cold at 30°C, inside out</li>
+                    <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Do not tumble dry — hang to dry</li>
+                    <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Iron on low heat, inside out only</li>
+                    <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Do not bleach</li>
+                    <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Store folded to preserve shape</li>
+                  </ul>
+              {% endcase %}
+            {%- endif -%}
           </div>
         </div>
 
@@ -478,6 +740,7 @@
       <div
         class="bg-white w-full max-w-2xl rounded-2xl p-6 md:p-8 shadow-2xl flex flex-col relative max-h-[85vh] overflow-hidden"
       >
+        <!-- Header -->
         <div class="flex items-center justify-between pb-4 border-b border-zinc-100 mb-6">
           <div class="flex items-center gap-2.5 text-zinc-900 font-semibold tracking-wide uppercase">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -496,17 +759,19 @@
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" x2="6" y1="6" y2="18"></line>
-              <line x1="6" x2="18" y1="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
           </button>
         </div>
 
+        <!-- Chart content -->
         <div class="overflow-x-auto overflow-y-auto pr-2 flex-grow">
           <div class="size-chart-table text-sm text-zinc-600">
             {{ size_chart_html }}
           </div>
         </div>
 
+        <!-- Footer -->
         <div class="mt-6 pt-4 border-t border-zinc-100 text-[10px] text-zinc-400 flex items-center justify-center">
           <span>{% if request.locale.iso_code == 'ar' %}جميع القياسات بالسنتيمتر (سم) ما لم يُذكر خلاف ذلك.{% else %}All measurements are in centimeters (cm) unless specified otherwise.{% endif %}</span>
         </div>
@@ -578,6 +843,7 @@
       let currentQty = 1;
       let currentVariant = productData && productData.variants ? productData.variants[0] : null;
 
+      // 1. Thumbnails
       thumbBtns.forEach(btn => {
         btn.onclick = function(e) {
           e.preventDefault();
@@ -592,6 +858,7 @@
         };
       });
 
+      // 2. Quantity
       if (qtyMinus && qtyPlus && qtyVal) {
         qtyMinus.onclick = function(e) {
           e.preventDefault();
@@ -609,6 +876,7 @@
         };
       }
 
+      // 3. Variant Matcher
       function updateVariant() {
         if (!productData || !productData.variants) return;
 
@@ -656,6 +924,7 @@
         }
       }
 
+      // 4. Color Clicks
       container.querySelectorAll('.option-color-container').forEach(colorWrap => {
         const optIndex = parseInt(colorWrap.getAttribute('data-option-index'), 10);
         const label = colorWrap.querySelector('.active-color-label');
@@ -678,6 +947,7 @@
         });
       });
 
+      // 5. Size Clicks
       container.querySelectorAll('.option-size-container').forEach(sizeWrap => {
         const optIndex = parseInt(sizeWrap.getAttribute('data-option-index'), 10);
         sizeWrap.querySelectorAll('.size-option-btn').forEach(btn => {
@@ -701,6 +971,7 @@
         });
       });
 
+      // 6. Accordions
       container.querySelectorAll('.accordion-header').forEach(header => {
         header.onclick = function(e) {
           e.preventDefault();
@@ -719,6 +990,7 @@
         };
       });
 
+      // 7. Size Guide
       const guideBtn = container.querySelector('.size-guide-trigger-btn');
       const sizeModal = container.querySelector('.product-size-chart-modal');
       const modalClose = container.querySelector('.size-chart-modal-close');
@@ -728,6 +1000,7 @@
         sizeModal.onclick = function(e) { if (e.target === sizeModal) sizeModal.classList.add('hidden'); };
       }
 
+      // 8. Add to Cart & Quick Buy Requests
       function performAddToCart(isCheckout) {
         const targetVariantId = atcBtn ? atcBtn.getAttribute('data-variant-id') : null;
         if (!targetVariantId) return;
@@ -768,6 +1041,7 @@
       if (atcBtn) atcBtn.onclick = function(e) { e.preventDefault(); performAddToCart(false); };
       if (quickBuyBtn) quickBuyBtn.onclick = function(e) { e.preventDefault(); performAddToCart(true); };
 
+      // 9. Sticky ATC Bar
       const stickyBar = document.getElementById('StickyATC');
       const stickyBtn = document.getElementById('StickyATCBtn');
       if (stickyBar && atcBtn) {
