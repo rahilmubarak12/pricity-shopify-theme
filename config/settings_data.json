@@ -60,17 +60,17 @@
           "discover_button_text_ar": "استكشف التشكيلة",
           "cart_upsell_enabled": true,
           "cart_upsell_title": "You May Also Like",
-          "cart_upsell_title_ar": "قد يعجبك أيضاً",
+          "cart_upsell_title_ar": "يمكن يعجبك بعد",
           "cart_upsell_collection": "",
           "enable_installments": true,
           "installments_provider": "Tabby",
           "installments_text": "4 payments of",
-          "installments_text_ar": "أو قسمها على 4 دفعات بقيمة",
+          "installments_text_ar": "4 دفعات كل دفعه",
           "installments_split": 4,
           "checkout_button_text": "Guest Checkout",
           "checkout_button_text_ar": "إتمام الطلب",
           "secure_checkout_text": "Secure Checkout",
-          "secure_checkout_text_ar": "دفع إلكتروني آمن ومشفّر"
+          "secure_checkout_text_ar": "كمل الدفع الآمن"
         }
       },
       "product-modal": {
