@@ -217,113 +217,295 @@
 </section>
 
 <script>
-  (function() {
-    function setupCatalogFilter() {
-      const catalog = document.getElementById('shop-catalog');
-      if (!catalog) return;
+  document.addEventListener('DOMContentLoaded', () => {
+    const catalog = document.getElementById('shop-catalog');
+    if (!catalog) return;
 
-      const isAr = catalog.getAttribute('data-lang') === 'ar';
-      const cards = catalog.querySelectorAll('.product-card');
-      const catBtns = catalog.querySelectorAll('.category-filter-btn');
-      const subBtns = catalog.querySelectorAll('.subcategory-filter-btn');
-      const emptyState = catalog.querySelector('.catalog-empty-state');
-      const countText = catalog.querySelector('.catalog-count');
+    const isArabic = catalog.getAttribute('data-lang') === 'ar';
+    const cards = catalog.querySelectorAll('.product-card');
+    const categoryBtns = catalog.querySelectorAll('.category-filter-btn');
+    const emptyState = catalog.querySelector('.catalog-empty-state');
+    const countText = catalog.querySelector('.catalog-count');
+    const titleText = catalog.querySelector('.catalog-title');
+    const titleBase = titleText.getAttribute('data-title-base');
+    const resetBtn = catalog.querySelector('.catalog-reset-btn');
 
-      let curCat = 'all';
-      let curSub = 'all';
+    let activeCategory = 'all';
+    let activeSubcategory = 'all';
 
-      function runFilter() {
-        let count = 0;
+    const getSubcategoryBtns = () => catalog.querySelectorAll('.subcategory-filter-btn');
 
-        cards.forEach(card => {
-          const cardCat = card.getAttribute('data-category') || 'unisex';
-          const cardSub = card.getAttribute('data-subcategory') || 'summer';
-          const onSale = card.getAttribute('data-on-sale') === 'true';
+    const updateSubcategoryPillsUI = (activeKey) => {
+      getSubcategoryBtns().forEach(b => {
+        const isSelected = b.getAttribute('data-subcategory') === activeKey;
+        b.style.color = '';
+        if (isSelected) {
+          b.classList.remove('bg-white', 'text-zinc-400', 'border-zinc-200', 'hover:text-[#1a1a1a]');
+          b.classList.add('bg-[#1a1a1a]', 'text-white', 'border-[#1a1a1a]');
+        } else {
+          b.classList.remove('bg-[#1a1a1a]', 'text-white', 'border-[#1a1a1a]');
+          b.classList.add('bg-white', 'text-zinc-400', 'border-zinc-200', 'hover:text-[#1a1a1a]');
+        }
+      });
+    };
 
-          // مطابقة الفئة الرئيسية
-          let matchCat = (curCat === 'all');
-          if (curCat === 'men') matchCat = (cardCat === 'men' || cardCat === 'unisex');
-          if (curCat === 'women') matchCat = (cardCat === 'women' || cardCat === 'unisex');
-          if (curCat === 'sale') matchCat = onSale;
-          if (curCat === 'new-drops') matchCat = true;
-
-          // مطابقة الفئة الفرعية
-          let matchSub = (curSub === 'all');
-          if (curSub === 'summer') matchSub = (cardSub === 'summer' || cardSub === 'shirt' || cardSub === 't-shirt');
-          else if (curSub === 'hoodie') matchSub = (cardSub === 'hoodie');
-          else if (curSub === 'sweatshirt') matchSub = (cardSub === 'sweatshirt');
-          else if (curSub === 'shirt' || curSub === 'sets') matchSub = (cardSub === 'shirt');
-          else if (curSub === 't-shirt') matchSub = (cardSub === 't-shirt');
-
-          if (matchCat && matchSub) {
-            card.style.display = '';
-            count++;
-          } else {
-            card.style.display = 'none';
-          }
-        });
-
-        if (countText) {
-          countText.innerHTML = isAr 
-            ? `عرض <span class="count-num">${count}</span> قطعة مميزة`
-            : `Showing <span class="count-num">${count}</span> premium pieces`;
+    const filterGrid = () => {
+      let visibleCount = 0;
+      
+      cards.forEach(card => {
+        const cat = card.getAttribute('data-category');
+        const sub = card.getAttribute('data-subcategory');
+        const collections = (card.getAttribute('data-collections') || '').split(',');
+        const isOnSale = card.getAttribute('data-on-sale') === 'true';
+        
+        let matchesCategory = false;
+        if (activeCategory === 'all') {
+          matchesCategory = true;
+        } else if (activeCategory === 'new-drops') {
+          const tags = (card.getAttribute('data-tags') || '').split(',');
+          matchesCategory = collections.includes('new-drops') || 
+                            collections.includes('new_drops') || 
+                            collections.includes('newdrops') || 
+                            tags.includes('new-drops') || 
+                            tags.includes('newdrops') || 
+                            tags.includes('new drops');
+        } else if (activeCategory === 'men') {
+          matchesCategory = (cat === 'men' || cat === 'unisex');
+        } else if (activeCategory === 'women') {
+          matchesCategory = (cat === 'women' || cat === 'unisex');
+        } else if (activeCategory === 'sale') {
+          matchesCategory = (isOnSale || collections.includes('sale') || collections.includes('archival-sale'));
         }
 
-        if (emptyState) {
-          emptyState.style.display = (count === 0) ? 'flex' : 'none';
+        let matchesSubcategory = false;
+        if (activeSubcategory === 'all') {
+          matchesSubcategory = true;
+        } else if (activeSubcategory === 'summer') {
+          matchesSubcategory = (sub !== 'hoodie' && sub !== 'sweatshirt');
+        } else {
+          matchesSubcategory = (sub === activeSubcategory);
+        }
+
+        if (matchesCategory && matchesSubcategory) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      if (isArabic) {
+        countText.innerHTML = `عرض <span class="count-num">${visibleCount}</span> قطعة مميزة`;
+      } else {
+        countText.innerHTML = `Showing <span class="count-num">${visibleCount}</span> premium pieces`;
+      }
+
+      if (activeCategory === 'men') {
+        titleText.textContent = isArabic ? "تشكيلة الرجال" : "Men's Archive";
+      } else if (activeCategory === 'women') {
+        titleText.textContent = isArabic ? "تشكيلة النساء" : "Women's Archive";
+      } else if (activeCategory === 'sale') {
+        titleText.textContent = isArabic ? "التخفيضات" : "Archival Sale";
+      } else if (activeCategory === 'new-drops') {
+        titleText.textContent = isArabic ? "وصل حديثاً" : "New Drops";
+      } else {
+        titleText.textContent = titleBase;
+      }
+
+      if (visibleCount === 0 && cards.length > 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+      }
+    };
+
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryBtns.forEach(b => {
+          b.classList.remove('text-[#1a1a1a]', 'font-bold', 'border-b', 'border-[#1a1a1a]');
+          b.classList.add('text-zinc-400');
+        });
+        btn.classList.add('text-[#1a1a1a]', 'font-bold', 'border-b', 'border-[#1a1a1a]');
+        btn.classList.remove('text-zinc-400');
+
+        activeCategory = btn.getAttribute('data-category');
+        activeSubcategory = 'all';
+        updateSubcategoryPillsUI('all');
+        filterGrid();
+      });
+    });
+
+    const setupSubcategoryHandlers = () => {
+      const subcategoryBtns = getSubcategoryBtns();
+      subcategoryBtns.forEach(btn => {
+        btn.onclick = () => {
+          activeSubcategory = btn.getAttribute('data-subcategory');
+          updateSubcategoryPillsUI(activeSubcategory);
+          filterGrid();
+        };
+      });
+    };
+    setupSubcategoryHandlers();
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        const defaultCategoryBtn = catalog.querySelector('.category-filter-btn[data-category="all"]');
+        const defaultSubcategoryBtn = catalog.querySelector('.subcategory-filter-btn[data-subcategory="all"]');
+        if (defaultCategoryBtn) defaultCategoryBtn.click();
+        if (defaultSubcategoryBtn) defaultSubcategoryBtn.click();
+      });
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const filterParam = urlParams.get('filter');
+    if (filterParam) {
+      const targetBtn = catalog.querySelector(`.category-filter-btn[data-category="${filterParam}"]`);
+      if (targetBtn) {
+        targetBtn.click();
+        catalog.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    const handleFilterLinkClick = (e) => {
+      const link = e.target.closest('a');
+      if (!link) return;
+
+      const href = link.getAttribute('href');
+      if (!href) return;
+
+      const isHomepage = window.location.pathname === '/' || window.location.pathname === '' || window.location.pathname === '/ar' || window.location.pathname === '/ar/';
+      if (!isHomepage) return;
+
+      let category = null;
+      const text = link.textContent.toLowerCase();
+      
+      if (href.includes('/collections/men') || href.includes('filter=men') || href === '#men') {
+        category = 'men';
+      } else if (href.includes('/collections/women') || href.includes('filter=women') || href === '#women') {
+        category = 'women';
+      } else if (href.includes('/collections/new-drops') || href.includes('/collections/newdrops') || href.includes('filter=new-drops') || href.includes('filter=newdrops') || href === '#new-drops') {
+        category = 'new-drops';
+      } else if (href.includes('/collections/sale') || href.includes('filter=sale') || href === '#sale') {
+        category = 'sale';
+      } else if (href.includes('/collections/all') || href.includes('filter=all') || href === '#all') {
+        category = 'all';
+      } else if (href.includes('#shop-catalog') || href === '#') {
+        if (text.includes('women') || text.includes('نساء')) {
+          category = 'women';
+        } else if (text.includes('men') || text.includes('رجال')) {
+          category = 'men';
+        } else if (text.includes('new drops') || text.includes('وصل حديثاً')) {
+          category = 'new-drops';
+        } else if (text.includes('sale') || text.includes('تخفيضات')) {
+          category = 'sale';
+        } else if (text.includes('shop now') || text.includes('all') || text.includes('الكل') || text.includes('تسوق')) {
+          category = 'all';
         }
       }
 
-      // أحداث أزرار الفئات العلوية
-      catBtns.forEach(btn => {
-        btn.onclick = function(e) {
-          e.preventDefault();
-          catBtns.forEach(b => {
-            b.classList.remove('text-[#1a1a1a]', 'font-bold', 'border-b', 'border-[#1a1a1a]');
-            b.classList.add('text-zinc-400');
-          });
-          btn.classList.add('text-[#1a1a1a]', 'font-bold', 'border-b', 'border-[#1a1a1a]');
-          btn.classList.remove('text-zinc-400');
+      if (category) {
+        e.preventDefault();
+        const btn = catalog.querySelector(`.category-filter-btn[data-category="${category}"]`);
+        if (btn) {
+          const mobileDrawer = document.getElementById('MobileNavDrawer');
+          if (mobileDrawer && !mobileDrawer.classList.contains('hidden')) {
+            const closeBtn = mobileDrawer.querySelector('.mobile-menu-close');
+            if (closeBtn) closeBtn.click();
+          }
 
-          curCat = btn.getAttribute('data-category') || 'all';
-          curSub = 'all';
+          btn.click();
+          catalog.scrollIntoView({ behavior: 'smooth', block: 'start' });
           
-          subBtns.forEach(b => {
-            const isAll = (b.getAttribute('data-subcategory') === 'all');
-            b.className = isAll 
-              ? "subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-[#1a1a1a] text-white border-[#1a1a1a]"
-              : "subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200";
-          });
+          if (category === 'all') {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('filter');
+            history.pushState(null, '', url.pathname + url.search);
+          } else {
+            history.pushState(null, '', `?filter=${category}`);
+          }
+        }
+      }
+    };
 
-          runFilter();
-        };
+    document.addEventListener('click', handleFilterLinkClick);
+
+    cards.forEach(card => {
+      const mobileTrigger = card.querySelector('.mobile-quick-add-trigger');
+      const mobilePopup = card.querySelector('.mobile-size-popup');
+      
+      if (mobileTrigger && mobilePopup) {
+        mobileTrigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isClosed = mobilePopup.classList.contains('hidden');
+          catalog.querySelectorAll('.mobile-size-popup').forEach(pop => pop.classList.add('hidden'));
+
+          if (isClosed) {
+            mobilePopup.classList.remove('hidden');
+          }
+        });
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.mobile-size-popup') || e.target.closest('.mobile-quick-add-trigger') || e.target.closest('.quick-add-size-btn')) return;
+      catalog.querySelectorAll('.mobile-size-popup').forEach(pop => pop.classList.add('hidden'));
+    });
+
+    document.addEventListener('click', (e) => {
+      const sizeBtn = e.target.closest('.quick-add-size-btn');
+      if (!sizeBtn || sizeBtn.disabled) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      let variantId = sizeBtn.getAttribute('data-variant-id');
+      if (!variantId) return;
+      if (variantId.includes('/')) variantId = variantId.split('/').pop();
+      variantId = parseInt(variantId, 10);
+      if (isNaN(variantId)) return;
+
+      const originalText = sizeBtn.textContent.trim();
+      sizeBtn.disabled = true;
+      sizeBtn.textContent = '...';
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          id: variantId,
+          quantity: 1
+        })
+      })
+      .then(res => {
+        if (!res.ok) return res.json().then(err => Promise.reject(err));
+        return res.json();
+      })
+      .then(item => {
+        sizeBtn.textContent = '\u2713';
+        document.dispatchEvent(new CustomEvent('cart:updated', {
+          detail: { item: item, openDrawer: true }
+        }));
+
+        setTimeout(() => {
+          sizeBtn.disabled = false;
+          sizeBtn.textContent = originalText;
+          const popup = sizeBtn.closest('.mobile-size-popup');
+          if (popup) popup.classList.add('hidden');
+        }, 1500);
+      })
+      .catch(err => {
+        console.error('AJAX quick add failed:', err);
+        sizeBtn.textContent = isArabic ? 'خطأ' : 'Error';
+        setTimeout(() => {
+          sizeBtn.disabled = false;
+          sizeBtn.textContent = originalText;
+        }, 1500);
       });
+    });
 
-      // أحداث أزرار الفئات الفرعية (الكبسولات)
-      subBtns.forEach(btn => {
-        btn.onclick = function(e) {
-          e.preventDefault();
-          curSub = btn.getAttribute('data-subcategory') || 'all';
-
-          subBtns.forEach(b => {
-            b.className = "subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200";
-          });
-          btn.className = "subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-[#1a1a1a] text-white border-[#1a1a1a]";
-
-          runFilter();
-        };
-      });
-
-      // تشغيل أولي مباشر
-      runFilter();
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', setupCatalogFilter);
-    } else {
-      setupCatalogFilter();
-    }
-  })();
+  });
 </script>
 
 {% schema %}
