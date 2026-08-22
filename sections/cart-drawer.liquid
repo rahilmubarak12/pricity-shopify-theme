@@ -1,12 +1,12 @@
 {% comment %}
   Cart Drawer Section
   Sliding cart drawer displaying items, free shipping progress, quantity adjustments, and Tabby installments.
-  Supports English & Arabic bilingual switching with interactive Flag switchers.
+  Supports English & Arabic bilingual switching.
 {% endcomment %}
 
 {%- liquid
   if request.locale.iso_code == 'ar'
-    assign bag_heading = 'السلة'
+    assign bag_heading = ' السلة'
     assign empty_bag_msg = section.settings.empty_cart_text_ar | default: 'حقيبة التسوق فارغة.'
     assign discover_btn_text = section.settings.discover_button_text_ar | default: 'استكشف التشكيلة'
     assign max_stock_msg = 'تم الوصول للحد الأقصى'
@@ -40,7 +40,7 @@
   <div 
     class="cart-drawer-panel w-full max-w-md bg-white h-full flex flex-col shadow-2xl border-l border-zinc-200 transform translate-x-full transition-transform duration-300 {% if request.locale.iso_code == 'ar' %}text-right{% endif %}"
   >
-    <!-- Header with Flag Switcher -->
+    <!-- Header -->
     <div class="p-8 border-b border-zinc-200 flex items-center justify-between">
       <div>
         <span class="text-[10px] font-mono-street text-zinc-400 uppercase tracking-[0.25em]">Apricity Officials</span>
@@ -48,53 +48,12 @@
           {{ bag_heading }} (<span class="cart-total-qty">{{ cart.item_count }}</span>)
         </h2>
       </div>
-
-      <div class="flex items-center gap-4">
-        <!-- Bilingual Flag Switcher in Cart Header -->
-        <div class="flex items-center gap-1.5 bg-zinc-100/90 p-1 rounded-full border border-zinc-200/70 shadow-inner">
-          <!-- Saudi Flag (Arabic) -->
-          <a 
-            href="/ar{{ request.path | remove_first: '/ar' }}" 
-            class="flag-btn flex items-center justify-center w-6 h-6 rounded-full overflow-hidden transition-all duration-300 {% if request.locale.iso_code == 'ar' %}ring-2 ring-zinc-950 scale-105 shadow-sm opacity-100{% else %}opacity-40 hover:opacity-100 hover:scale-105{% endif %}"
-            title="العربية (المملكة العربية السعودية)"
-            aria-label="تغيير اللغة إلى العربية"
-          >
-            <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
-              <path fill="#007a3d" d="M0 0h640v480H0z"/>
-              <g fill="#fff">
-                <path d="M170 310h300v16H170zm260-35c-15-5-25-15-30-25-10 15-20 20-40 25 15 5 25 15 30 25 10-15 20-20 40-25zM220 250h200v15H220z"/>
-              </g>
-            </svg>
-          </a>
-
-          <!-- UK Flag (English) -->
-          <a 
-            href="{{ request.path | remove_first: '/ar' | default: '/' }}" 
-            class="flag-btn flex items-center justify-center w-6 h-6 rounded-full overflow-hidden transition-all duration-300 {% if request.locale.iso_code != 'ar' %}ring-2 ring-zinc-950 scale-105 shadow-sm opacity-100{% else %}opacity-40 hover:opacity-100 hover:scale-105{% endif %}"
-            title="English (United Kingdom)"
-            aria-label="Switch language to English"
-          >
-            <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
-              <clipPath id="cart-uk-clip"><circle cx="320" cy="240" r="320"/></clipPath>
-              <g clip-path="url(#cart-uk-clip)">
-                <path fill="#012169" d="M0 0h640v480H0z"/>
-                <path fill="#fff" d="m75 0 245 180L565 0h75v60L435 240l205 180v60h-75L320 300 75 480H0v-60l205-180L0 60V0z"/>
-                <path fill="#c8102e" d="m425 285 215 155v40h-25L395 315zM0 440l190-140h35L35 480H0zM640 40 450 180h-35l190-140h35zM0 0l215 160h-35L0 25z"/>
-                <path fill="#fff" d="M240 0h160v480H240zM0 160h640v160H0z"/>
-                <path fill="#c8102e" d="M270 0h100v480H270zM0 190h640v100H0z"/>
-              </g>
-            </svg>
-          </a>
-        </div>
-
-        <!-- Close Button -->
-        <button type="button" class="cart-drawer-close p-2 text-zinc-400 hover:text-[#1a1a1a]" aria-label="Close">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" x2="6" y1="6" y2="18"></line>
-            <line x1="6" x2="18" y1="6" y2="18"></line>
-          </svg>
-        </button>
-      </div>
+      <button type="button" class="cart-drawer-close p-2 text-zinc-400 hover:text-[#1a1a1a]" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" x2="6" y1="6" y2="18"></line>
+          <line x1="6" x2="18" y1="6" y2="18"></line>
+        </svg>
+      </button>
     </div>
 
     <!-- Free Shipping Notice -->
