@@ -164,12 +164,12 @@
 
         assign is_winter = false
         assign title_lower = product.title | downcase
-        if title_lower contains 'hoodie' or title_lower contains 'sweatshirt'
+        if title_lower contains 'hoodie' or title_lower contains 'sweatshirt' or title_lower contains 'هودي' or title_lower contains 'هوديز' or title_lower contains 'سويت شيرت' or title_lower contains 'سويتشيرت'
           assign is_winter = true
         else
           for tag in product.tags
             assign tag_lower = tag | downcase
-            if tag_lower contains 'hoodie' or tag_lower contains 'sweatshirt'
+            if tag_lower contains 'hoodie' or tag_lower contains 'sweatshirt' or tag_lower contains 'هودي' or tag_lower contains 'هوديز' or tag_lower contains 'سويت شيرت' or tag_lower contains 'سويتشيرت'
               assign is_winter = true
               break
             endif
@@ -189,12 +189,12 @@
 
         assign is_winter = false
         assign title_lower = product.title | downcase
-        if title_lower contains 'hoodie' or title_lower contains 'sweatshirt'
+        if title_lower contains 'hoodie' or title_lower contains 'sweatshirt' or title_lower contains 'هودي' or title_lower contains 'هوديز' or title_lower contains 'سويت شيرت' or title_lower contains 'سويتشيرت'
           assign is_winter = true
         else
           for tag in product.tags
             assign tag_lower = tag | downcase
-            if tag_lower contains 'hoodie' or tag_lower contains 'sweatshirt'
+            if tag_lower contains 'hoodie' or tag_lower contains 'sweatshirt' or tag_lower contains 'هودي' or tag_lower contains 'هوديز' or tag_lower contains 'سويت شيرت' or tag_lower contains 'سويتشيرت'
               assign is_winter = true
               break
             endif
@@ -708,3 +708,4 @@
   ]
 }
 {% endschema %}
+
