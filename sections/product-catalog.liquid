@@ -233,11 +233,33 @@
     let activeCategory = 'all';
     let activeSubcategory = 'all';
 
+    // Keep filtering stable when Shopify translates subcategory filter keys in Arabic.
+    const normalizeSubcategoryKey = (key) => {
+      const keyMap = {
+        'الصيف': 'summer',
+        'تشكيلة الصيف': 'summer',
+        'سويت شيرت بقبعة': 'hoodie',
+        'هودي': 'hoodie',
+        'هوديز': 'hoodie',
+        'قميص': 'shirt',
+        'طقم': 'shirt',
+        'أطقم': 'shirt',
+        'كنزة بغطاء للرأس': 'sweatshirt',
+        'سويت شيرت': 'sweatshirt',
+        'سويتشيرت': 'sweatshirt',
+        'تي شيرت': 't-shirt',
+        'تيشيرت': 't-shirt',
+        'تيشيرت & توب': 't-shirt'
+      };
+
+      return keyMap[key] || key;
+    };
+
     const getSubcategoryBtns = () => catalog.querySelectorAll('.subcategory-filter-btn');
 
     const updateSubcategoryPillsUI = (activeKey) => {
       getSubcategoryBtns().forEach(b => {
-        const isSelected = b.getAttribute('data-subcategory') === activeKey;
+        const isSelected = normalizeSubcategoryKey(b.getAttribute('data-subcategory')) === activeKey;
         b.style.color = '';
         if (isSelected) {
           b.classList.remove('bg-white', 'text-zinc-400', 'border-zinc-200', 'hover:text-[#1a1a1a]');
@@ -339,7 +361,7 @@
       const subcategoryBtns = getSubcategoryBtns();
       subcategoryBtns.forEach(btn => {
         btn.onclick = () => {
-          activeSubcategory = btn.getAttribute('data-subcategory');
+          activeSubcategory = normalizeSubcategoryKey(btn.getAttribute('data-subcategory'));
           updateSubcategoryPillsUI(activeSubcategory);
           filterGrid();
         };
@@ -708,4 +730,6 @@
   ]
 }
 {% endschema %}
+
+
 
