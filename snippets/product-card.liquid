@@ -28,28 +28,30 @@
   
   # Check product title first for subcategory
   assign title_lower = product.title | downcase
-  if title_lower contains 't-shirt' or title_lower contains 'tee' or title_lower contains 'top'
+  if title_lower contains 't-shirt' or title_lower contains 'tee' or title_lower contains 'top' or title_lower contains 'تيشيرت' or title_lower contains 'تي شيرت' or title_lower contains 'توب'
     assign subcategory = 't-shirt'
-  elsif title_lower contains 'sweatshirt'
+  elsif title_lower contains 'sweatshirt' or title_lower contains 'سويت شيرت' or title_lower contains 'سويتشيرت'
     assign subcategory = 'sweatshirt'
-  elsif title_lower contains 'hoodie'
+  elsif title_lower contains 'hoodie' or title_lower contains 'هودي' or title_lower contains 'هوديز'
     assign subcategory = 'hoodie'
-  elsif title_lower contains 'set' or title_lower contains 'suit' or title_lower contains 'shirt'
+  elsif title_lower contains 'set' or title_lower contains 'suit' or title_lower contains 'shirt' or title_lower contains 'طقم' or title_lower contains 'أطقم' or title_lower contains 'قميص'
     assign subcategory = 'shirt'
   endif
 
   # Check tags (overrides/complements title)
   for tag in product.tags
     assign tag_lower = tag | downcase
-    if tag_lower == 'men' or tag_lower == 'women'
-      assign category = tag_lower
-    elsif tag_lower contains 't-shirt' or tag_lower contains 'tee' or tag_lower contains 'top'
+    if tag_lower == 'men' or tag_lower == 'رجال' or tag_lower == 'رجالي'
+      assign category = 'men'
+    elsif tag_lower == 'women' or tag_lower == 'نساء' or tag_lower == 'نسائي' or tag_lower == 'حريمي'
+      assign category = 'women'
+    elsif tag_lower contains 't-shirt' or tag_lower contains 'tee' or tag_lower contains 'top' or tag_lower contains 'تيشيرت' or tag_lower contains 'تي شيرت' or tag_lower contains 'توب'
       assign subcategory = 't-shirt'
-    elsif tag_lower contains 'sweatshirt'
+    elsif tag_lower contains 'sweatshirt' or tag_lower contains 'سويت شيرت' or tag_lower contains 'سويتشيرت'
       assign subcategory = 'sweatshirt'
-    elsif tag_lower contains 'hoodie'
+    elsif tag_lower contains 'hoodie' or tag_lower contains 'هودي' or tag_lower contains 'هوديز'
       assign subcategory = 'hoodie'
-    elsif tag_lower contains 'set' or tag_lower == 'shirt' or tag_lower == 'shirts'
+    elsif tag_lower contains 'set' or tag_lower == 'shirt' or tag_lower == 'shirts' or tag_lower contains 'طقم' or tag_lower contains 'أطقم' or tag_lower contains 'قميص'
       assign subcategory = 'shirt'
     endif
   endfor
@@ -58,15 +60,15 @@
   for c in product.collections
     assign col_lower = c.title | downcase
     assign col_handle = c.handle | downcase
-    if col_lower contains 't-shirt' or col_lower contains 'tee' or col_handle contains 't-shirt' or col_handle contains 'tshirt' or col_handle contains 'tee'
+    if col_lower contains 't-shirt' or col_lower contains 'tee' or col_lower contains 'تيشيرت' or col_lower contains 'تي شيرت' or col_lower contains 'توب' or col_handle contains 't-shirt' or col_handle contains 'tshirt' or col_handle contains 'tee'
       if subcategory == 'all'
         assign subcategory = 't-shirt'
       endif
-    elsif col_lower contains 'sweatshirt' or col_handle contains 'sweatshirt'
+    elsif col_lower contains 'sweatshirt' or col_lower contains 'سويت شيرت' or col_lower contains 'سويتشيرت' or col_handle contains 'sweatshirt'
       if subcategory == 'all'
         assign subcategory = 'sweatshirt'
       endif
-    elsif col_lower contains 'hoodie' or col_handle contains 'hoodie'
+    elsif col_lower contains 'hoodie' or col_lower contains 'هودي' or col_lower contains 'هوديز' or col_handle contains 'hoodie'
       if subcategory == 'all'
         assign subcategory = 'hoodie'
       endif
@@ -403,3 +405,7 @@
   </div>
 
 </div>
+
+
+
+
