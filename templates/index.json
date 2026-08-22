@@ -112,11 +112,19 @@
             "key": "shirt"
           }
         },
+        "subcategory_filter_QQbgdT": {
+          "type": "subcategory_filter",
+          "settings": {
+            "label": "Summer Collection",
+            "label_ar": "تشكيلة الصيف",
+            "key": "summer"
+          }
+        },
         "sub_sweatshirt": {
           "type": "subcategory_filter",
           "settings": {
             "label": "Sweatshirts",
-            "label_ar": "تشكيلة الصيف",
+            "label_ar": "سويت شيرت",
             "key": "sweatshirt"
           }
         },
@@ -133,6 +141,7 @@
         "sub_summer",
         "sub_hoodie",
         "sub_shirt",
+        "subcategory_filter_QQbgdT",
         "sub_sweatshirt",
         "sub_tshirt"
       ],
