@@ -1,6 +1,6 @@
 {% comment %}
   Header Section
-  Frosted glass scrolling navbar and mobile navigation drawer.
+  Frosted glass scrolling navbar, mobile navigation drawer, and interactive Flag Language Switcher (SA & UK).
 {% endcomment %}
 
 <style>
@@ -122,29 +122,53 @@
       <!-- CENTER: Logo & Wordmark -->
       <a href="{{ routes.root_url }}" class="flex flex-row items-center justify-center cursor-pointer select-none gap-3 sm:gap-4 no-underline">
         {%- if section.settings.logo != blank -%}
-          <img src="{{ section.settings.logo | image_url: width: 150 }}" alt="Logo" class="h-10 w-10 sm:h-14 sm:w-14 lg:h-16 lg:w-16 object-contain transition-all" width="1000" height="1000">
+          <img src="{{ section.settings.logo | image_url: width: 150 }}" alt="Logo" class="h-10 w-10 sm:h-14 sm:w-14 lg:h-16 lg:w-16 object-contain transition-all" width="150" height="64">
         {%- else -%}
-          <img src="{{ 'logo.png' | asset_url }}" alt="Logo" class="h-10 w-10 sm:h-14 sm:w-14 lg:h-16 lg:w-16 object-contain transition-all" onerror="this.style.display='none';" width="1000" height="1000">
+          <img src="{{ 'logo.png' | asset_url }}" alt="Logo" class="h-10 w-10 sm:h-14 sm:w-14 lg:h-16 lg:w-16 object-contain transition-all" onerror="this.style.display='none';" width="64" height="64">
         {%- endif -%}
         <span class="transition-all leading-none text-2xl sm:text-3xl lg:text-4xl apricity-wordmark" style="color: {{ section.settings.wordmark_color | default: '#3d4a6b' }};">
           {{ section.settings.wordmark_text | default: 'APRICITY' }}
         </span>
       </a>
 
-      <!-- RIGHT: Language Switcher, Currency & Icons -->
+      <!-- RIGHT: Flag Language Switcher, Currency & Icons -->
       <div class="flex items-center gap-3 sm:gap-6 lg:gap-8 justify-end text-sm sm:text-[17px] font-mono-street capitalize tracking-[0.1em] font-medium">
         
-        <!-- Desktop Language Switcher (AR / EN) -->
-        <div class="lang-switcher hidden lg:flex items-center gap-1.5 text-[12px] font-mono-street font-bold tracking-wider text-white transition-colors duration-300">
-          {%- if request.locale.iso_code == 'ar' -%}
-            <a href="{{ request.path | remove_first: '/ar' | default: '/' }}" class="opacity-60 hover:opacity-100 transition-opacity">EN</a>
-            <span class="opacity-30">|</span>
-            <span class="underline underline-offset-4">AR</span>
-          {%- else -%}
-            <span class="underline underline-offset-4">EN</span>
-            <span class="opacity-30">|</span>
-            <a href="/ar{{ request.path }}" class="opacity-60 hover:opacity-100 transition-opacity">AR</a>
-          {%- endif -%}
+        <!-- Desktop Flag Language Switcher (SA 🇸🇦 / UK 🇬🇧) -->
+        <div class="lang-switcher hidden lg:flex items-center gap-1.5 p-1 rounded-full bg-black/20 backdrop-blur-sm border border-white/20 transition-all duration-300">
+          <!-- Saudi Flag (Arabic) -->
+          <a 
+            href="/ar{{ request.path | remove_first: '/ar' }}" 
+            class="flag-btn flex items-center justify-center w-5 h-5 rounded-full overflow-hidden transition-all duration-300 {% if request.locale.iso_code == 'ar' %}ring-2 ring-white scale-110 shadow-sm opacity-100{% else %}opacity-40 hover:opacity-100 hover:scale-105{% endif %}"
+            title="العربية (المملكة العربية السعودية)"
+            aria-label="تغيير اللغة إلى العربية"
+          >
+            <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
+              <path fill="#007a3d" d="M0 0h640v480H0z"/>
+              <g fill="#fff">
+                <path d="M170 310h300v16H170zm260-35c-15-5-25-15-30-25-10 15-20 20-40 25 15 5 25 15 30 25 10-15 20-20 40-25zM220 250h200v15H220z"/>
+              </g>
+            </svg>
+          </a>
+
+          <!-- UK Flag (English) -->
+          <a 
+            href="{{ request.path | remove_first: '/ar' | default: '/' }}" 
+            class="flag-btn flex items-center justify-center w-5 h-5 rounded-full overflow-hidden transition-all duration-300 {% if request.locale.iso_code != 'ar' %}ring-2 ring-white scale-110 shadow-sm opacity-100{% else %}opacity-40 hover:opacity-100 hover:scale-105{% endif %}"
+            title="English (United Kingdom)"
+            aria-label="Switch language to English"
+          >
+            <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
+              <clipPath id="header-uk-clip"><circle cx="320" cy="240" r="320"/></clipPath>
+              <g clip-path="url(#header-uk-clip)">
+                <path fill="#012169" d="M0 0h640v480H0z"/>
+                <path fill="#fff" d="m75 0 245 180L565 0h75v60L435 240l205 180v60h-75L320 300 75 480H0v-60l205-180L0 60V0z"/>
+                <path fill="#c8102e" d="m425 285 215 155v40h-25L395 315zM0 440l190-140h35L35 480H0zM640 40 450 180h-35l190-140h35zM0 0l215 160h-35L0 25z"/>
+                <path fill="#fff" d="M240 0h160v480H240zM0 160h640v160H0z"/>
+                <path fill="#c8102e" d="M270 0h100v480H270zM0 190h640v100H0z"/>
+              </g>
+            </svg>
+          </a>
         </div>
 
         {%- if localization.available_countries.size > 1 -%}
@@ -176,7 +200,7 @@
         <button class="cart-drawer-trigger relative transition-all flex items-center gap-1.5 p-1 hover:opacity-80 text-current" aria-label="Bag">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sm:w-[24px] sm:h-[24px]">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-            <line x1="3" x2="21" y1="6" y2="6"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
           </svg>
           <span class="text-sm sm:text-base">
@@ -238,17 +262,41 @@
         {%- endif -%}
       {%- endif -%}
 
-      <!-- Mobile Language & Currency Selectors -->
-      <div class="pt-4 flex flex-col items-center justify-center gap-3">
-        <!-- Mobile Language Switcher Buttons -->
-        <div class="flex items-center gap-2 text-xs font-mono-street">
-          {%- if request.locale.iso_code == 'ar' -%}
-            <a href="{{ request.path | remove_first: '/ar' | default: '/' }}" class="px-3 py-1 border border-zinc-700 rounded-full text-zinc-400 hover:text-white transition-colors">English</a>
-            <span class="px-3 py-1 border border-white rounded-full text-white font-bold bg-zinc-800">العربية</span>
-          {%- else -%}
-            <span class="px-3 py-1 border border-white rounded-full text-white font-bold bg-zinc-800">English</span>
-            <a href="/ar{{ request.path }}" class="px-3 py-1 border border-zinc-700 rounded-full text-zinc-400 hover:text-white transition-colors">العربية</a>
-          {%- endif -%}
+      <!-- Mobile Language (Flags) & Currency Selectors -->
+      <div class="pt-4 flex flex-col items-center justify-center gap-4">
+        <!-- Mobile Flag Switcher -->
+        <div class="flex items-center gap-3 p-1.5 rounded-full bg-zinc-900 border border-zinc-800">
+          <a 
+            href="/ar{{ request.path | remove_first: '/ar' }}" 
+            class="flex items-center gap-2 px-3 py-1 rounded-full transition-all {% if request.locale.iso_code == 'ar' %}bg-zinc-800 text-white font-bold{% else %}text-zinc-400 opacity-60{% endif %}"
+          >
+            <div class="w-5 h-5 rounded-full overflow-hidden shrink-0">
+              <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
+                <path fill="#007a3d" d="M0 0h640v480H0z"/>
+                <path fill="#fff" d="M170 310h300v16H170zm260-35c-15-5-25-15-30-25-10 15-20 20-40 25 15 5 25 15 30 25 10-15 20-20 40-25zM220 250h200v15H220z"/>
+              </svg>
+            </div>
+            <span class="text-xs">العربية</span>
+          </a>
+
+          <a 
+            href="{{ request.path | remove_first: '/ar' | default: '/' }}" 
+            class="flex items-center gap-2 px-3 py-1 rounded-full transition-all {% if request.locale.iso_code != 'ar' %}bg-zinc-800 text-white font-bold{% else %}text-zinc-400 opacity-60{% endif %}"
+          >
+            <div class="w-5 h-5 rounded-full overflow-hidden shrink-0">
+              <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
+                <clipPath id="mobile-uk-clip"><circle cx="320" cy="240" r="320"/></clipPath>
+                <g clip-path="url(#mobile-uk-clip)">
+                  <path fill="#012169" d="M0 0h640v480H0z"/>
+                  <path fill="#fff" d="m75 0 245 180L565 0h75v60L435 240l205 180v60h-75L320 300 75 480H0v-60l205-180L0 60V0z"/>
+                  <path fill="#c8102e" d="m425 285 215 155v40h-25L395 315zM0 440l190-140h35L35 480H0zM640 40 450 180h-35l190-140h35zM0 0l215 160h-35L0 25z"/>
+                  <path fill="#fff" d="M240 0h160v480H240zM0 160h640v160H0z"/>
+                  <path fill="#c8102e" d="M270 0h100v480H270zM0 190h640v100H0z"/>
+                </g>
+              </svg>
+            </div>
+            <span class="text-xs">English</span>
+          </a>
         </div>
 
         {%- if localization.available_countries.size > 1 -%}
@@ -335,10 +383,15 @@
           el.classList.remove('text-white');
           el.classList.add('text-[#1a1a1a]');
         });
-        // Language Switcher color transition
+        // Language Switcher border/bg transition
         if (langSwitcher) {
-          langSwitcher.classList.remove('text-white');
-          langSwitcher.classList.add('text-[#1a1a1a]');
+          langSwitcher.classList.remove('bg-black/20', 'border-white/20');
+          langSwitcher.classList.add('bg-zinc-200/60', 'border-zinc-300');
+          const activeFlag = langSwitcher.querySelector('.flag-btn.ring-white');
+          if (activeFlag) {
+            activeFlag.classList.remove('ring-white');
+            activeFlag.classList.add('ring-zinc-950');
+          }
         }
       } else {
         navbar.classList.add('bg-gradient-to-b', 'from-black/50', 'to-transparent', 'text-white');
@@ -354,10 +407,15 @@
           el.classList.remove('text-[#1a1a1a]');
           el.classList.add('text-white');
         });
-        // Language Switcher restore white
+        // Language Switcher restore transparent/white
         if (langSwitcher) {
-          langSwitcher.classList.remove('text-[#1a1a1a]');
-          langSwitcher.classList.add('text-white');
+          langSwitcher.classList.add('bg-black/20', 'border-white/20');
+          langSwitcher.classList.remove('bg-zinc-200/60', 'border-zinc-300');
+          const activeFlag = langSwitcher.querySelector('.flag-btn.ring-zinc-950');
+          if (activeFlag) {
+            activeFlag.classList.remove('ring-zinc-950');
+            activeFlag.classList.add('ring-white');
+          }
         }
       }
     };
