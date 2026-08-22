@@ -92,7 +92,7 @@
           "type": "subcategory_filter",
           "settings": {
             "label": "Summer Collection",
-            "label_ar": "Summer Collection",
+            "label_ar": "تشكيلة الصيف",
             "key": "summer"
           }
         },
