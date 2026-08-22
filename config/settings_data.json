@@ -118,6 +118,17 @@
           "copyright_trailing_text": "All Rights Reserved.",
           "designed_text": "Designed in Saudi Arabia 🇸🇦"
         }
+      },
+      "our-story": {
+        "type": "our-story",
+        "settings": {
+          "title": "The Three-Year Rule",
+          "subheading": "APY",
+          "content": "<p>Apricity exists because we rarely agree. Unusual for a brand? Exactly. For years, our differences have shaped everything we build. One of us instinctively edits. The other instinctively pushes. We don't settle quickly. We don't meet in the middle just to move forward.</p><p>Most ideas don't survive that tension. They're questioned. Reduced. Challenged. Left alone. Revisited. If something feels obvious, it's gone. If it only works for the moment, it's gone.</p><p>And even if an idea survives us, it faces one final rule: The Three-Year Rule.</p><p>Before anything becomes APRICITY, we ask one question: Will this still make sense three years from now? Not next season. Not next drop. Three years.</p><p>If we can't see ourselves standing behind it with the same certainty, it doesn't exist. No trend protection. No hype insurance. No \"it'll do for now.\"</p><p>If it survives disagreement — and it survives time — it earns the name.</p><p>APRICITY is not the result of agreement. It's the result of something harder. Something slower. Something that lasts.</p>",
+          "title_ar": "قاعدة الثلاث سنوات",
+          "subheading_ar": "APRICITY",
+          "content_ar": "<p>أبريسيتي وُجدت لأننا نادرًا ما نتفق. غريب بالنسبة لعلامة تجارية؟ بالضبط.<br/><br/>لسنوات، كانت اختلافاتنا هي التي تشكّل كل ما نصنعه. أحدنا يميل بالفطرة إلى التعديل، والآخر يميل بالفطرة إلى الدفع نحو الأمام. لا نصل إلى اتفاق بسهولة، ولا نختار الحل الوسط لمجرد أن نمضي قدمًا.<br/><br/>معظم الأفكار لا تصمد أمام هذا الاختلاف. نناقشها، نختصرها، نتحداها، نتركها جانبًا، ثم نعود إليها من جديد. إذا بدت الفكرة واضحة أكثر من اللازم، نتخلى عنها. وإذا كانت صالحة للحظة فقط، نتخلى عنها أيضًا.<br/><br/>وحتى الفكرة التي تنجح في تجاوز اختلافاتنا، عليها أن تواجه قاعدتنا الأخيرة:<br/><br/>قاعدة الثلاث سنوات.<br/><br/>قبل أن تصبح أي فكرة جزءًا من APRICITY، نسأل سؤالًا واحدًا:<br/><br/>هل ستظل هذه الفكرة منطقية بعد ثلاث سنوات؟<br/><br/>ليس الموسم القادم.<br/>وليس الإطلاق القادم.<br/>بعد ثلاث سنوات.<br/><br/>إذا لم نستطع أن نرى أنفسنا نؤمن بها بنفس القناعة بعد كل هذا الوقت، فهي ببساطة لا تستحق أن تكون موجودة.<br/><br/>لا نحتمي بالترندات.<br/>لا نعتمد على الضجة.<br/>ولا نقول: «ستفي بالغرض الآن.»<br/><br/>إذا نجت الفكرة من الاختلاف…<br/>ونجت من اختبار الزمن…<br/>فهي تستحق اسم APRICITY.<br/><br/>APRICITY ليست نتيجة اتفاق.<br/>بل نتيجة شيء أصعب.<br/>أبطأ.<br/>وأكثر بقاءً.<br/><br/>شيء يدوم.</p>"
+        }
       }
     },
     "content_for_index": [],
