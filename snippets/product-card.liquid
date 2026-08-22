@@ -1,7 +1,5 @@
 {% comment %}
-  Product Card Snippet
-  Displays a single product card with hover image swap, mobile size picker, and custom color swatches.
-  Supports bilingual tagging & filtering (AR / EN) using handle, tags, and titles.
+  Product Card Snippet - Pure Fixed Attributes
 {% endcomment %}
 
 {%- liquid
@@ -12,7 +10,6 @@
     assign is_out_of_stock = false
   endif
 
-  # Calculate discounts
   assign is_on_sale = false
   assign money_off = 0
   if first_variant.compare_at_price > first_variant.price
@@ -20,76 +17,43 @@
     assign money_off = first_variant.compare_at_price | minus: first_variant.price
   endif
 
-  # Unified Lowercase Matching Sources (Handles are ALWAYS English and constant across languages)
-  assign title_lower = product.title | downcase
-  assign handle_lower = product.handle | downcase
-  assign type_lower = product.type | downcase
-  assign tags_str = product.tags | join: ' ' | downcase
+  # تصنيف دائم يعتمد على رابط المنتج الثابت
+  assign h = product.handle | downcase
+  assign t = product.tags | join: ' ' | downcase
   
-  capture collections_str
-    for c in product.collections
-      echo c.handle | downcase | append: ' ' | append: c.title | downcase | append: ' '
-    endfor
-  endcapture
-
-  assign all_text = title_lower | append: ' ' | append: handle_lower | append: ' ' | append: type_lower | append: ' ' | append: tags_str | append: ' ' | append: collections_str
-
-  # Determine Category (Men / Women / Unisex)
-  assign category = 'unisex'
-  if tags_str contains 'men' or handle_lower contains 'men' or all_text contains 'رجال' or all_text contains 'رجالي'
-    assign category = 'men'
-  elsif tags_str contains 'women' or handle_lower contains 'women' or all_text contains 'نساء' or all_text contains 'نسائي'
-    assign category = 'women'
-  endif
-
-  # Determine Subcategory (Fixed keys: summer, hoodie, shirt, sweatshirt, t-shirt)
-  assign subcategory = 'all'
-
-  if handle_lower contains 'hoodie' or all_text contains 'hoodie' or all_text contains 'هودي' or all_text contains 'هوديز'
-    assign subcategory = 'hoodie'
-  elsif handle_lower contains 'sweatshirt' or handle_lower contains 'turtleneck' or handle_lower contains 'crewneck' or all_text contains 'sweatshirt' or all_text contains 'سويت شيرت' or all_text contains 'بلوفر' or all_text contains 'sweater'
-    assign subcategory = 'sweatshirt'
-  elsif handle_lower contains 't-shirt' or handle_lower contains 'tshirt' or handle_lower contains 'tee' or all_text contains 't-shirt' or all_text contains 'tshirt' or all_text contains 'tee' or all_text contains 'تيشيرت' or all_text contains 'top' or all_text contains 'توب'
-    assign subcategory = 't-shirt'
-  elsif handle_lower contains 'set' or handle_lower contains 'linen' or handle_lower contains 'shirt' or all_text contains 'set' or all_text contains 'طقم' or all_text contains 'أطقم' or all_text contains 'suit' or all_text contains 'shirt' or all_text contains 'قميص' or all_text contains 'شورت'
-    assign subcategory = 'shirt'
+  # تحديد القسم الفرعي
+  assign subcat = 't-shirt'
+  if h contains 'hoodie' or t contains 'hoodie'
+    assign subcat = 'hoodie'
+  elsif h contains 'sweatshirt' or h contains 'turtleneck' or t contains 'sweatshirt'
+    assign subcat = 'sweatshirt'
+  elsif h contains 'set' or h contains 'linen' or h contains 'shirt' or t contains 'set'
+    assign subcat = 'shirt'
+  elsif h contains 't-shirt' or h contains 'tshirt' or h contains 'tee' or t contains 't-shirt'
+    assign subcat = 't-shirt'
   else
-    assign subcategory = 'summer'
+    assign subcat = 'summer'
   endif
 
-  # Gather collections handles
-  capture product_collections
-    for c in product.collections
-      echo c.handle
-      unless forloop.last
-        echo ','
-      endunless
-    endfor
-  endcapture
-
-  # Gather tags
-  capture product_tags
-    for tag in product.tags
-      echo tag | downcase
-      unless forloop.last
-        echo ','
-      endunless
-    endfor
-  endcapture
+  # تحديد القسم الرئيسي (رجال / نساء)
+  assign cat = 'unisex'
+  if t contains 'women' or h contains 'women' or h contains 'cropped'
+    assign cat = 'women'
+  elsif t contains 'men' or h contains 'men'
+    assign cat = 'men'
+  endif
 -%}
 
 <div 
   class="product-card group flex flex-col cursor-pointer relative" 
-  data-category="{{ category }}" 
-  data-subcategory="{{ subcategory }}" 
-  data-collections="{{ product_collections }}" 
-  data-tags="{{ product_tags }}"
+  data-category="{{ cat }}" 
+  data-subcategory="{{ subcat }}" 
+  data-handle="{{ h }}"
   data-on-sale="{{ is_on_sale }}"
   data-oos="{% if is_out_of_stock %}true{% else %}false{% endif %}"
   data-id="{{ stable_id }}"
   data-url="{{ product.url }}"
 >
-  
   <!-- Image Container -->
   <div class="relative h-[220px] sm:h-[380px] w-full bg-[#f3f2f0] overflow-hidden mb-3 sm:mb-4">
     {%- if is_out_of_stock -%}
@@ -104,7 +68,6 @@
       </span>
     {%- endif -%}
 
-    <!-- Main Product Image -->
     {%- if product.featured_image != blank -%}
       <img
         src="{{ product.featured_image | image_url: width: 600 }}"
@@ -112,174 +75,43 @@
         width="600"
         height="800"
         loading="lazy"
-        decoding="async"
-        class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0 will-change-opacity"
+        class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0"
       >
     {%- endif -%}
 
-    <!-- Secondary Hover Image -->
     {%- if product.images[1] != blank -%}
       <img
         src="{{ product.images[1] | image_url: width: 600 }}"
-        alt="{{ product.title | escape }} alternate view"
+        alt="{{ product.title | escape }}"
         width="600"
         height="800"
         loading="lazy"
-        decoding="async"
-        class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-all duration-500 will-change-opacity"
+        class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-all duration-500"
       >
     {%- endif -%}
   </div>
 
-  <!-- Product Details -->
+  <!-- Details -->
   <div class="flex flex-col gap-1">
     <span class="text-[9px] sm:text-[10px] font-mono-street text-zinc-400 uppercase tracking-[0.2em]">
       {{ product.type | default: 'Collection' }}
     </span>
 
     <div class="flex items-center justify-between gap-2">
-      <h3 class="font-heading font-semibold text-[14px] sm:text-[15px] text-[#1a1a1a] group-hover:text-zinc-500 transition-colors leading-snug flex-1 min-w-0 truncate">
+      <h3 class="font-heading font-semibold text-[14px] sm:text-[15px] text-[#1a1a1a] leading-snug flex-1 min-w-0 truncate">
         {{ product.title }}
       </h3>
-      {%- unless is_out_of_stock -%}
-        <button
-          type="button"
-          class="mobile-quick-add-trigger flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full border border-zinc-200 bg-white hover:bg-zinc-950 hover:border-zinc-950 hover:text-white text-zinc-600 transition-all duration-200 shadow-sm"
-          title="Quick add to cart"
-          onclick="event.stopPropagation();"
-          data-id="{{ stable_id }}"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
-          </svg>
-        </button>
-      {%- endunless -%}
     </div>
 
-    <!-- Mobile Size Picker Popup -->
-    <div
-      class="mobile-size-popup hidden absolute z-30 bg-white border border-zinc-200 rounded-xl shadow-xl p-3 left-0 right-0 mx-2"
-      style="bottom: calc(100% - 150px);"
-      data-id="{{ stable_id }}"
-    >
-      <p class="text-[9px] font-mono-street uppercase tracking-widest text-zinc-400 text-center mb-2">
-        {% if request.locale.iso_code == 'ar' %}اختر المقاس{% else %}Select Size{% endif %}
-      </p>
-      <div class="flex flex-wrap gap-1.5 justify-center">
-        {%- liquid
-          assign size_option_index = nil
-          for option in product.options_with_values
-            assign opt_name = option.name | downcase
-            if opt_name == 'size' or opt_name == 'sizes' or opt_name contains 'مقاس'
-              assign size_option_index = forloop.index0
-            endif
-          endfor
-        -%}
-        {%- for variant in product.variants -%}
-          {%- liquid
-            if size_option_index != nil
-              assign size_label = variant.options[size_option_index]
-            else
-              assign size_label = variant.title
-            endif
-          -%}
-          <button
-            type="button"
-            {% unless variant.available %}disabled{% endunless %}
-            class="quick-add-size-btn px-3 py-1.5 text-[10px] font-bold rounded uppercase tracking-wider transition {% if variant.available %}bg-zinc-950 text-white hover:bg-zinc-700 shadow active:scale-95{% else %}bg-zinc-100 text-zinc-300 cursor-not-allowed line-through{% endif %}"
-            data-variant-id="{{ variant.id }}"
-          >
-            {{ size_label }}
-          </button>
-        {%- endfor -%}
-      </div>
-    </div>
-
-    <!-- Price and Color Swatches -->
     <div class="flex items-center justify-between mt-1 pt-2 border-t border-zinc-100">
-      <div class="flex items-center gap-2">
-        <span class="font-mono-street font-semibold text-[12px] tracking-wide text-zinc-900">
-          {{ product.price | money_without_trailing_zeros }}
+      <span class="font-mono-street font-semibold text-[12px] tracking-wide text-zinc-900">
+        {{ product.price | money_without_trailing_zeros }}
+      </span>
+      {%- if is_on_sale -%}
+        <span class="font-mono-street text-[11px] tracking-wide text-zinc-400 line-through">
+          {{ first_variant.compare_at_price | money_without_trailing_zeros }}
         </span>
-        {%- if is_on_sale -%}
-          <span class="font-mono-street text-[11px] tracking-wide text-zinc-400 line-through">
-            {{ first_variant.compare_at_price | money_without_trailing_zeros }}
-          </span>
-        {%- endif -%}
-      </div>
-
-      <!-- Color Swatches Mapping -->
-      <div class="flex items-center gap-1.5">
-        {%- liquid
-          assign color_values = ''
-          for option in product.options_with_values
-            assign option_name = option.name | downcase
-            if option_name == 'color' or option_name == 'colour' or option_name contains 'لون'
-              assign color_values = option.values
-            endif
-          endfor
-        -%}
-        {%- if color_values != blank -%}
-          {%- for color in color_values limit: 4 -%}
-            {%- liquid
-              assign color_key = color | downcase | replace: ' ', ''
-              assign color_hex = '#9ca3af'
-              case color_key
-                when 'black' or 'onyx' or 'أسود' or 'اسود'
-                  assign color_hex = '#1a1a1a'
-                when 'white' or 'أبيض' or 'ابيض'
-                  assign color_hex = '#f5f5f5'
-                when 'offwhite' or 'أوفوايت'
-                  assign color_hex = '#f8f4ee'
-                when 'cream' or 'كريمي'
-                  assign color_hex = '#f5f0e8'
-                when 'beige' or 'بيج'
-                  assign color_hex = '#d4b896'
-                when 'linen' or 'كتان'
-                  assign color_hex = '#e8dcc8'
-                when 'sand' or 'رملي'
-                  assign color_hex = '#c2a882'
-                when 'grey' or 'gray' or 'رمادي'
-                  assign color_hex = '#9ca3af'
-                when 'charcoal' or 'فحمي'
-                  assign color_hex = '#374151'
-                when 'brown' or 'بني'
-                  assign color_hex = '#6b4226'
-                when 'camel' or 'جملي'
-                  assign color_hex = '#c19a6b'
-                when 'yellow' or 'أصفر' or 'اصفر'
-                  assign color_hex = '#facc15'
-                when 'butter' or 'زبدة'
-                  assign color_hex = '#f5e6a3'
-                when 'orange' or 'برتقالي'
-                  assign color_hex = '#f97316'
-                when 'red' or 'أحمر' or 'احمر'
-                  assign color_hex = '#dc2626'
-                when 'burgundy' or 'عنابي' or 'بورجوندي'
-                  assign color_hex = '#7f1d1d'
-                when 'pink' or 'وردي' or 'زهري'
-                  assign color_hex = '#f9a8d4'
-                when 'blush' or 'بلاش'
-                  assign color_hex = '#fbc8c8'
-                when 'blue' or 'أزرق' or 'ازرق'
-                  assign color_hex = '#2563eb'
-                when 'navy' or 'كحلي'
-                  assign color_hex = '#1a2744'
-                when 'green' or 'أخضر' or 'اخضر'
-                  assign color_hex = '#16a34a'
-                when 'olive' or 'زيتي'
-                  assign color_hex = '#6b7c41'
-              endcase
-            -%}
-            <span
-              class="w-4 h-4 rounded-full shadow-sm flex-shrink-0"
-              style="background-color: {{ color_hex }}; border: 1.5px solid #e4e4e7; outline: 1px solid rgba(0,0,0,0.06);"
-              title="{{ color }}"
-            ></span>
-          {%- endfor -%}
-        {%- endif -%}
-      </div>
+      {%- endif -%}
     </div>
   </div>
-
 </div>
