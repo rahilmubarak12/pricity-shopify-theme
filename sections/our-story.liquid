@@ -16,6 +16,10 @@
     gap: 64px;
     align-items: flex-start;
   }
+  .our-story-grid.is-rtl {
+    direction: rtl;
+    text-align: right;
+  }
   .our-story-img {
     width: 42%;
     flex-shrink: 0;
@@ -39,7 +43,7 @@
     text-transform: uppercase;
     color: #1a1a1a;
     margin: 0 0 8px 0;
-    line-height: 1.2;
+    line-height: 1.3;
   }
   .our-story-text .subheading {
     font-size: 10px;
@@ -51,9 +55,9 @@
   .our-story-text p,
   .story-content-richtext p {
     font-size: 15px;
-    line-height: 1.8;
+    line-height: 1.9;
     color: #444;
-    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-family: {% if request.locale.iso_code == 'ar' %}'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif{% else %}'IBM Plex Serif', Georgia, serif{% endif %};
     margin: 0 0 16px 0;
   }
   @media (max-width: 768px) {
@@ -72,7 +76,7 @@
 
 <div class="our-story-wrap">
   <div class="our-story-inner">
-    <div class="our-story-grid">
+    <div class="our-story-grid {% if request.locale.iso_code == 'ar' %}is-rtl{% endif %}">
 
       <div class="our-story-img">
         {%- if section.settings.image != blank -%}
@@ -83,16 +87,34 @@
       </div>
 
       <div class="our-story-text">
-        {%- if section.settings.title != blank -%}
-          <h1>{{ section.settings.title }}</h1>
-        {%- endif -%}
-        {%- if section.settings.subheading != blank -%}
-          <p class="subheading">{{ section.settings.subheading }}</p>
-        {%- endif -%}
-        {%- if section.settings.content != blank -%}
-          <div class="story-content-richtext">
-            {{ section.settings.content }}
-          </div>
+        {%- if request.locale.iso_code == 'ar' -%}
+          {%- if section.settings.title_ar != blank or section.settings.title != blank -%}
+            <h1>{{ section.settings.title_ar | default: section.settings.title }}</h1>
+          {%- endif -%}
+          {%- if section.settings.subheading_ar != blank or section.settings.subheading != blank -%}
+            <p class="subheading">{{ section.settings.subheading_ar | default: section.settings.subheading }}</p>
+          {%- endif -%}
+          {%- if section.settings.content_ar != blank -%}
+            <div class="story-content-richtext">
+              {{ section.settings.content_ar }}
+            </div>
+          {%- elsif section.settings.content != blank -%}
+            <div class="story-content-richtext">
+              {{ section.settings.content }}
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          {%- if section.settings.title != blank -%}
+            <h1>{{ section.settings.title }}</h1>
+          {%- endif -%}
+          {%- if section.settings.subheading != blank -%}
+            <p class="subheading">{{ section.settings.subheading }}</p>
+          {%- endif -%}
+          {%- if section.settings.content != blank -%}
+            <div class="story-content-richtext">
+              {{ section.settings.content }}
+            </div>
+          {%- endif -%}
         {%- endif -%}
       </div>
 
@@ -110,22 +132,53 @@
       "label": "Story Image"
     },
     {
+      "type": "header",
+      "content": "English Content"
+    },
+    {
       "type": "text",
       "id": "title",
-      "label": "Title",
+      "label": "Title (EN)",
       "default": "The Three-Year Rule"
     },
     {
       "type": "text",
       "id": "subheading",
-      "label": "Subheading",
+      "label": "Subheading (EN)",
       "default": "APY"
     },
     {
       "type": "richtext",
       "id": "content",
-      "label": "Story Content",
+      "label": "Story Content (EN)",
       "default": "<p>Apricity exists because we rarely agree. Unusual for a brand? Exactly. For years, our differences have shaped everything we build. One of us instinctively edits. The other instinctively pushes. We don't settle quickly. We don't meet in the middle just to move forward.</p><p>Most ideas don't survive that tension. They're questioned. Reduced. Challenged. Left alone. Revisited. If something feels obvious, it's gone. If it only works for the moment, it's gone.</p><p>And even if an idea survives us, it faces one final rule: The Three-Year Rule.</p><p>Before anything becomes APRICITY, we ask one question: Will this still make sense three years from now? Not next season. Not next drop. Three years.</p><p>If we can't see ourselves standing behind it with the same certainty, it doesn't exist. No trend protection. No hype insurance. No \"it'll do for now.\"</p><p>If it survives disagreement — and it survives time — it earns the name.</p><p>APRICITY is not the result of agreement. It's the result of something harder. Something slower. Something that lasts.</p>"
+    },
+    {
+      "type": "header",
+      "content": "المحتوى العربي (Arabic)"
+    },
+    {
+      "type": "text",
+      "id": "title_ar",
+      "label": "العنوان الرئيسي (AR)",
+      "default": "قاعدة الثلاث سنوات"
+    },
+    {
+      "type": "text",
+      "id": "subheading_ar",
+      "label": "العنوان الفرعي (AR)",
+      "default": "APRICITY"
+    },
+    {
+      "type": "richtext",
+      "id": "content_ar",
+      "label": "نص القصة (AR)",
+      "default": "<p>وُجدت APRICITY لأننا نادراً ما نتفق. هل هذا غير معتاد لعلامة تجارية؟ بالضبط. لسنوات، شكّلت اختلافاتنا كل ما نبنيه. أحدنا يميل بطبعه للاختزال والتهذيب، والآخر يميل للدفع نحو الأقصى. لا نرضى بالحلول السريعة، ولا نلتقي في المنتصف لمجرد المضي قدماً.</p><p>معظم الأفكار لا تنجو من هذا التوتر. يتم التشكيك فيها، تقليصها، تحديها، تركها جانباً، ثم إعادة النظر فيها. إذا بدا الشيء عادياً أو متوقعاً، يُستبعد. وإذا كان يصلح للحظة الحالية فقط، يُستبعد أيضاً.</p><p>وحتى لو نجت الفكرة منا، فإنها تواجه قاعدة نهائية واحدة: قاعدة الثلاث سنوات.</p><p>قبل أن يصبح أي ابتكار جزءاً من APRICITY، نطرح سؤالاً واحداً: هل سيظل هذا منطقياً بعد ثلاث سنوات من الآن؟ ليس الموسم القادم، ولا الإصدار القادم. ثلاث سنوات.</p><p>إذا لم نكن نرى أنفسنا نقف وراءه بنفس اليقين، فلن يكون له وجود. لا نتبع الصيحات العابرة، ولا نعتمد على بريق اللحظة، ولا نقبل بعبارة \"يفي بالغرض حالياً\".</p><p>إذا صمدت الفكرة أمام الاختلاف — وصمدت أمام اختبار الزمن — فإنها تستحق أن تحمل هذا الاسم.</p><p>APRICITY ليست ثمرة اتفاق سهل، بل هي نتاج لشيء أصعب، أبطأ، ويدوم طويلاً.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Our Story"
     }
   ]
 }
