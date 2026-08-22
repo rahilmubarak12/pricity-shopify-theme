@@ -113,7 +113,7 @@
     {%- assign subcat_blocks = section.blocks | where: 'type', 'subcategory_filter' -%}
     {%- if subcat_blocks.size > 0 -%}
       {%- for block in subcat_blocks -%}
-        <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="{{ block.settings.key | escape }}" {{ block.shopify_attributes }}>
+        <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="{{ block.settings.key | downcase | strip }}" {{ block.shopify_attributes }}>
           {%- if request.locale.iso_code == 'ar' -%}
             {{ block.settings.label_ar | default: block.settings.label | escape }}
           {%- else -%}
@@ -155,64 +155,13 @@
 
   <!-- GRID -->
   <div class="catalog-grid grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-8 sm:gap-x-6 sm:gap-y-12">
-    {%- liquid
-      assign rendered_count = 0
-      
-      for product in collection_obj.products
-        if rendered_count >= products_limit
-          break
-        endif
-
-        assign is_winter = false
-        assign title_lower = product.title | downcase
-        if title_lower contains 'hoodie' or title_lower contains 'sweatshirt'
-          assign is_winter = true
-        else
-          for tag in product.tags
-            assign tag_lower = tag | downcase
-            if tag_lower contains 'hoodie' or tag_lower contains 'sweatshirt'
-              assign is_winter = true
-              break
-            endif
-          endfor
-        endif
-
-        if is_winter == false
-          render 'product-card', product: product
-          assign rendered_count = rendered_count | plus: 1
-        endif
-      endfor
-
-      for product in collection_obj.products
-        if rendered_count >= products_limit
-          break
-        endif
-
-        assign is_winter = false
-        assign title_lower = product.title | downcase
-        if title_lower contains 'hoodie' or title_lower contains 'sweatshirt'
-          assign is_winter = true
-        else
-          for tag in product.tags
-            assign tag_lower = tag | downcase
-            if tag_lower contains 'hoodie' or tag_lower contains 'sweatshirt'
-              assign is_winter = true
-              break
-            endif
-          endfor
-        endif
-
-        if is_winter == true
-          render 'product-card', product: product
-          assign rendered_count = rendered_count | plus: 1
-        endif
-      endfor
-    -%}
-    {%- if rendered_count == 0 -%}
+    {%- for product in collection_obj.products limit: products_limit -%}
+      {% render 'product-card', product: product %}
+    {%- else -%}
       <p class="text-center col-span-full py-12 text-zinc-400 font-mono-street text-xs uppercase">
         {% if request.locale.iso_code == 'ar' %}لا توجد منتجات في هذه المجموعة حالياً.{% else %}No products in this collection.{% endif %}
       </p>
-    {%- endif -%}
+    {%- endfor -%}
   </div>
 
 </section>
@@ -254,35 +203,36 @@
       let visibleCount = 0;
       
       cards.forEach(card => {
-        const cat = card.getAttribute('data-category');
-        const sub = card.getAttribute('data-subcategory');
-        const collections = (card.getAttribute('data-collections') || '').split(',');
+        const cat = (card.getAttribute('data-category') || 'unisex').toLowerCase();
+        const sub = (card.getAttribute('data-subcategory') || 'all').toLowerCase();
+        const collections = (card.getAttribute('data-collections') || '').toLowerCase();
+        const tags = (card.getAttribute('data-tags') || '').toLowerCase();
         const isOnSale = card.getAttribute('data-on-sale') === 'true';
         
         let matchesCategory = false;
         if (activeCategory === 'all') {
           matchesCategory = true;
         } else if (activeCategory === 'new-drops') {
-          const tags = (card.getAttribute('data-tags') || '').split(',');
           matchesCategory = collections.includes('new-drops') || 
                             collections.includes('new_drops') || 
                             collections.includes('newdrops') || 
                             tags.includes('new-drops') || 
                             tags.includes('newdrops') || 
-                            tags.includes('new drops');
+                            tags.includes('new drops') ||
+                            tags.includes('جديد');
         } else if (activeCategory === 'men') {
           matchesCategory = (cat === 'men' || cat === 'unisex');
         } else if (activeCategory === 'women') {
           matchesCategory = (cat === 'women' || cat === 'unisex');
         } else if (activeCategory === 'sale') {
-          matchesCategory = (isOnSale || collections.includes('sale') || collections.includes('archival-sale'));
+          matchesCategory = (isOnSale || collections.includes('sale') || collections.includes('archival-sale') || tags.includes('sale') || tags.includes('تخفيضات'));
         }
 
         let matchesSubcategory = false;
         if (activeSubcategory === 'all') {
           matchesSubcategory = true;
         } else if (activeSubcategory === 'summer') {
-          matchesSubcategory = (sub !== 'hoodie' && sub !== 'sweatshirt');
+          matchesSubcategory = (sub === 'summer' || sub === 'shirt' || sub === 't-shirt');
         } else {
           matchesSubcategory = (sub === activeSubcategory);
         }
@@ -506,6 +456,8 @@
       });
     });
 
+    // Run initial filter on load
+    filterGrid();
   });
 </script>
 
@@ -630,7 +582,7 @@
       "min": 8,
       "max": 96,
       "step": 4,
-      "default": 24
+      "default": 48
     }
   ],
   "blocks": [
