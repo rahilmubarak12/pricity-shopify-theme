@@ -1,7 +1,7 @@
 {% comment %}
   Product Card Snippet
   Displays a single product card with hover image swap, mobile size picker, and custom color swatches.
-  Supports bilingual tagging & filtering (AR / EN).
+  Supports bilingual tagging & filtering (AR / EN) using handle, tags, and titles.
 {% endcomment %}
 
 {%- liquid
@@ -20,7 +20,7 @@
     assign money_off = first_variant.compare_at_price | minus: first_variant.price
   endif
 
-  # Unified Lowercase Matching Sources (Handles, Title, Tags, Types)
+  # Unified Lowercase Matching Sources (Handles are ALWAYS English and constant across languages)
   assign title_lower = product.title | downcase
   assign handle_lower = product.handle | downcase
   assign type_lower = product.type | downcase
@@ -32,29 +32,29 @@
     endfor
   endcapture
 
-  assign all_metadata = title_lower | append: ' ' | append: handle_lower | append: ' ' | append: type_lower | append: ' ' | append: tags_str | append: ' ' | append: collections_str
+  assign all_text = title_lower | append: ' ' | append: handle_lower | append: ' ' | append: type_lower | append: ' ' | append: tags_str | append: ' ' | append: collections_str
 
   # Determine Category (Men / Women / Unisex)
   assign category = 'unisex'
-  if tags_str contains 'men' or handle_lower contains 'men' or all_metadata contains 'رجال' or all_metadata contains 'رجالي'
+  if tags_str contains 'men' or handle_lower contains 'men' or all_text contains 'رجال' or all_text contains 'رجالي'
     assign category = 'men'
-  elsif tags_str contains 'women' or handle_lower contains 'women' or all_metadata contains 'نساء' or all_metadata contains 'نسائي'
+  elsif tags_str contains 'women' or handle_lower contains 'women' or all_text contains 'نساء' or all_text contains 'نسائي'
     assign category = 'women'
   endif
 
   # Determine Subcategory (Fixed keys: summer, hoodie, shirt, sweatshirt, t-shirt)
   assign subcategory = 'all'
 
-  if all_metadata contains 'summer' or all_metadata contains 'صيف' or all_metadata contains 'linen' or all_metadata contains 'كتان' or all_metadata contains 'shorts' or all_metadata contains 'شورت'
-    assign subcategory = 'summer'
-  elsif all_metadata contains 'hoodie' or all_metadata contains 'هودي' or all_metadata contains 'هوديز'
+  if handle_lower contains 'hoodie' or all_text contains 'hoodie' or all_text contains 'هودي' or all_text contains 'هوديز'
     assign subcategory = 'hoodie'
-  elsif all_metadata contains 'sweatshirt' or all_metadata contains 'سويت شيرت' or all_metadata contains 'بلوفر' or all_metadata contains 'sweater'
+  elsif handle_lower contains 'sweatshirt' or handle_lower contains 'turtleneck' or handle_lower contains 'crewneck' or all_text contains 'sweatshirt' or all_text contains 'سويت شيرت' or all_text contains 'بلوفر' or all_text contains 'sweater'
     assign subcategory = 'sweatshirt'
-  elsif all_metadata contains 't-shirt' or all_metadata contains 'tshirt' or all_metadata contains 'tee' or all_metadata contains 'تيشيرت' or all_metadata contains 'top' or all_metadata contains 'توب'
+  elsif handle_lower contains 't-shirt' or handle_lower contains 'tshirt' or handle_lower contains 'tee' or all_text contains 't-shirt' or all_text contains 'tshirt' or all_text contains 'tee' or all_text contains 'تيشيرت' or all_text contains 'top' or all_text contains 'توب'
     assign subcategory = 't-shirt'
-  elsif all_metadata contains 'set' or all_metadata contains 'طقم' or all_metadata contains 'أطقم' or all_metadata contains 'suit' or all_metadata contains 'shirt' or all_metadata contains 'قميص'
+  elsif handle_lower contains 'set' or handle_lower contains 'linen' or handle_lower contains 'shirt' or all_text contains 'set' or all_text contains 'طقم' or all_text contains 'أطقم' or all_text contains 'suit' or all_text contains 'shirt' or all_text contains 'قميص' or all_text contains 'شورت'
     assign subcategory = 'shirt'
+  else
+    assign subcategory = 'summer'
   endif
 
   # Gather collections handles
