@@ -1,5 +1,5 @@
 {% comment %}
-  Product Card Snippet - Pure Fixed Attributes
+  Product Card Snippet - Fixed Handle-Based Categorization
 {% endcomment %}
 
 {%- liquid
@@ -17,38 +17,37 @@
     assign money_off = first_variant.compare_at_price | minus: first_variant.price
   endif
 
-  # تصنيف دائم يعتمد على رابط المنتج الثابت
+  # 1. تحديد الفئة الفرعية بالاعتماد على رابط المنتج الدائم والثابت بالإنجليزية
   assign h = product.handle | downcase
   assign t = product.tags | join: ' ' | downcase
-  
-  # تحديد القسم الفرعي
-  assign subcat = 't-shirt'
-  if h contains 'hoodie' or t contains 'hoodie'
-    assign subcat = 'hoodie'
-  elsif h contains 'sweatshirt' or h contains 'turtleneck' or t contains 'sweatshirt'
-    assign subcat = 'sweatshirt'
-  elsif h contains 'set' or h contains 'linen' or h contains 'shirt' or t contains 'set'
-    assign subcat = 'shirt'
-  elsif h contains 't-shirt' or h contains 'tshirt' or h contains 'tee' or t contains 't-shirt'
-    assign subcat = 't-shirt'
+  assign title_lower = product.title | downcase
+
+  assign subcategory = 't-shirt'
+  if h contains 'hoodie' or t contains 'hoodie' or title_lower contains 'هودي' or title_lower contains 'hoodie'
+    assign subcategory = 'hoodie'
+  elsif h contains 'sweatshirt' or h contains 'turtleneck' or h contains 'crewneck' or t contains 'sweatshirt' or title_lower contains 'سويت شيرت' or title_lower contains 'sweatshirt'
+    assign subcategory = 'sweatshirt'
+  elsif h contains 'set' or h contains 'linen' or h contains 'shirt' or t contains 'set' or title_lower contains 'طقم' or title_lower contains 'أطقم' or title_lower contains 'قميص'
+    assign subcategory = 'shirt'
+  elsif h contains 't-shirt' or h contains 'tshirt' or h contains 'tee' or h contains 'top' or t contains 't-shirt' or title_lower contains 'تيشيرت' or title_lower contains 'توب'
+    assign subcategory = 't-shirt'
   else
-    assign subcat = 'summer'
+    assign subcategory = 'summer'
   endif
 
-  # تحديد القسم الرئيسي (رجال / نساء)
-  assign cat = 'unisex'
-  if t contains 'women' or h contains 'women' or h contains 'cropped'
-    assign cat = 'women'
-  elsif t contains 'men' or h contains 'men'
-    assign cat = 'men'
+  # 2. تحديد الفئة الرئيسية (رجال / نساء)
+  assign category = 'unisex'
+  if h contains 'women' or t contains 'women' or title_lower contains 'نساء' or title_lower contains 'نسائي'
+    assign category = 'women'
+  elsif h contains 'men' or t contains 'men' or title_lower contains 'رجال' or title_lower contains 'رجالي'
+    assign category = 'men'
   endif
 -%}
 
 <div 
   class="product-card group flex flex-col cursor-pointer relative" 
-  data-category="{{ cat }}" 
-  data-subcategory="{{ subcat }}" 
-  data-handle="{{ h }}"
+  data-category="{{ category }}" 
+  data-subcategory="{{ subcategory }}" 
   data-on-sale="{{ is_on_sale }}"
   data-oos="{% if is_out_of_stock %}true{% else %}false{% endif %}"
   data-id="{{ stable_id }}"
@@ -82,7 +81,7 @@
     {%- if product.images[1] != blank -%}
       <img
         src="{{ product.images[1] | image_url: width: 600 }}"
-        alt="{{ product.title | escape }}"
+        alt="{{ product.title | escape }} alternate view"
         width="600"
         height="800"
         loading="lazy"
@@ -101,6 +100,19 @@
       <h3 class="font-heading font-semibold text-[14px] sm:text-[15px] text-[#1a1a1a] leading-snug flex-1 min-w-0 truncate">
         {{ product.title }}
       </h3>
+      {%- unless is_out_of_stock -%}
+        <button
+          type="button"
+          class="mobile-quick-add-trigger flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full border border-zinc-200 bg-white hover:bg-zinc-950 hover:border-zinc-950 hover:text-white text-zinc-600 transition-all duration-200 shadow-sm"
+          title="Quick add to cart"
+          onclick="event.stopPropagation();"
+          data-id="{{ stable_id }}"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+        </button>
+      {%- endunless -%}
     </div>
 
     <div class="flex items-center justify-between mt-1 pt-2 border-t border-zinc-100">
