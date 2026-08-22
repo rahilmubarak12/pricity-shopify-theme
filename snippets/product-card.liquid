@@ -1,9 +1,7 @@
 {% comment %}
   Product Card Snippet
-  Displays a single product card with hover image swap, desktop quick-add tray, mobile size picker, and custom color swatches.
-  Accepts:
-  - product: {Product} The Shopify product object
-  - selected_collection: {String} (Optional) Active collection context
+  Displays a single product card with hover image swap, mobile size picker, and custom color swatches.
+  Supports bilingual tagging & filtering (AR / EN).
 {% endcomment %}
 
 {%- liquid
@@ -22,56 +20,42 @@
     assign money_off = first_variant.compare_at_price | minus: first_variant.price
   endif
 
-  # Determine category & subcategory tags for client filtering
-  assign category = 'unisex'
-  assign subcategory = 'all'
-  
-  # Check product title first for subcategory
+  # Unified Lowercase Matching Sources (Handles, Title, Tags, Types)
   assign title_lower = product.title | downcase
-  if title_lower contains 't-shirt' or title_lower contains 'tee' or title_lower contains 'top'
-    assign subcategory = 't-shirt'
-  elsif title_lower contains 'sweatshirt'
-    assign subcategory = 'sweatshirt'
-  elsif title_lower contains 'hoodie'
-    assign subcategory = 'hoodie'
-  elsif title_lower contains 'set' or title_lower contains 'suit' or title_lower contains 'shirt'
-    assign subcategory = 'shirt'
+  assign handle_lower = product.handle | downcase
+  assign type_lower = product.type | downcase
+  assign tags_str = product.tags | join: ' ' | downcase
+  
+  capture collections_str
+    for c in product.collections
+      echo c.handle | downcase | append: ' ' | append: c.title | downcase | append: ' '
+    endfor
+  endcapture
+
+  assign all_metadata = title_lower | append: ' ' | append: handle_lower | append: ' ' | append: type_lower | append: ' ' | append: tags_str | append: ' ' | append: collections_str
+
+  # Determine Category (Men / Women / Unisex)
+  assign category = 'unisex'
+  if tags_str contains 'men' or handle_lower contains 'men' or all_metadata contains 'رجال' or all_metadata contains 'رجالي'
+    assign category = 'men'
+  elsif tags_str contains 'women' or handle_lower contains 'women' or all_metadata contains 'نساء' or all_metadata contains 'نسائي'
+    assign category = 'women'
   endif
 
-  # Check tags (overrides/complements title)
-  for tag in product.tags
-    assign tag_lower = tag | downcase
-    if tag_lower == 'men' or tag_lower == 'women'
-      assign category = tag_lower
-    elsif tag_lower contains 't-shirt' or tag_lower contains 'tee' or tag_lower contains 'top'
-      assign subcategory = 't-shirt'
-    elsif tag_lower contains 'sweatshirt'
-      assign subcategory = 'sweatshirt'
-    elsif tag_lower contains 'hoodie'
-      assign subcategory = 'hoodie'
-    elsif tag_lower contains 'set' or tag_lower == 'shirt' or tag_lower == 'shirts'
-      assign subcategory = 'shirt'
-    endif
-  endfor
+  # Determine Subcategory (Fixed keys: summer, hoodie, shirt, sweatshirt, t-shirt)
+  assign subcategory = 'all'
 
-  # Check collections for subcategory (fallback if title/tags didn't match)
-  for c in product.collections
-    assign col_lower = c.title | downcase
-    assign col_handle = c.handle | downcase
-    if col_lower contains 't-shirt' or col_lower contains 'tee' or col_handle contains 't-shirt' or col_handle contains 'tshirt' or col_handle contains 'tee'
-      if subcategory == 'all'
-        assign subcategory = 't-shirt'
-      endif
-    elsif col_lower contains 'sweatshirt' or col_handle contains 'sweatshirt'
-      if subcategory == 'all'
-        assign subcategory = 'sweatshirt'
-      endif
-    elsif col_lower contains 'hoodie' or col_handle contains 'hoodie'
-      if subcategory == 'all'
-        assign subcategory = 'hoodie'
-      endif
-    endif
-  endfor
+  if all_metadata contains 'summer' or all_metadata contains 'صيف' or all_metadata contains 'linen' or all_metadata contains 'كتان' or all_metadata contains 'shorts' or all_metadata contains 'شورت'
+    assign subcategory = 'summer'
+  elsif all_metadata contains 'hoodie' or all_metadata contains 'هودي' or all_metadata contains 'هوديز'
+    assign subcategory = 'hoodie'
+  elsif all_metadata contains 'sweatshirt' or all_metadata contains 'سويت شيرت' or all_metadata contains 'بلوفر' or all_metadata contains 'sweater'
+    assign subcategory = 'sweatshirt'
+  elsif all_metadata contains 't-shirt' or all_metadata contains 'tshirt' or all_metadata contains 'tee' or all_metadata contains 'تيشيرت' or all_metadata contains 'top' or all_metadata contains 'توب'
+    assign subcategory = 't-shirt'
+  elsif all_metadata contains 'set' or all_metadata contains 'طقم' or all_metadata contains 'أطقم' or all_metadata contains 'suit' or all_metadata contains 'shirt' or all_metadata contains 'قميص'
+    assign subcategory = 'shirt'
+  endif
 
   # Gather collections handles
   capture product_collections
@@ -110,13 +94,13 @@
   <div class="relative h-[220px] sm:h-[380px] w-full bg-[#f3f2f0] overflow-hidden mb-3 sm:mb-4">
     {%- if is_out_of_stock -%}
       <span class="absolute top-3 right-3 bg-red-600 text-white text-[9px] sm:text-[10px] font-mono-street font-extrabold uppercase tracking-widest px-2.5 py-1 z-20 rounded-sm">
-        Out of Stock
+        {% if request.locale.iso_code == 'ar' %}نفدت الكمية{% else %}Out of Stock{% endif %}
       </span>
     {%- endif -%}
 
     {%- if is_on_sale and money_off > 0 -%}
       <span class="absolute top-3 left-3 bg-[#1a1a1a] text-white text-[9px] sm:text-[10px] font-mono-street font-extrabold uppercase tracking-widest px-2.5 py-1 z-20 rounded-sm shadow-md">
-        {{ money_off | money_without_trailing_zeros }} OFF
+        {{ money_off | money_without_trailing_zeros }} {% if request.locale.iso_code == 'ar' %}خصم{% else %}OFF{% endif %}
       </span>
     {%- endif -%}
 
@@ -145,8 +129,6 @@
         class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-all duration-500 will-change-opacity"
       >
     {%- endif -%}
-
-    <!-- Quick Add Size Tray (Desktop) removed -->
   </div>
 
   <!-- Product Details -->
@@ -180,13 +162,15 @@
       style="bottom: calc(100% - 150px);"
       data-id="{{ stable_id }}"
     >
-      <p class="text-[9px] font-mono-street uppercase tracking-widest text-zinc-400 text-center mb-2">Select Size</p>
+      <p class="text-[9px] font-mono-street uppercase tracking-widest text-zinc-400 text-center mb-2">
+        {% if request.locale.iso_code == 'ar' %}اختر المقاس{% else %}Select Size{% endif %}
+      </p>
       <div class="flex flex-wrap gap-1.5 justify-center">
         {%- liquid
           assign size_option_index = nil
           for option in product.options_with_values
             assign opt_name = option.name | downcase
-            if opt_name == 'size' or opt_name == 'sizes'
+            if opt_name == 'size' or opt_name == 'sizes' or opt_name contains 'مقاس'
               assign size_option_index = forloop.index0
             endif
           endfor
@@ -230,7 +214,7 @@
           assign color_values = ''
           for option in product.options_with_values
             assign option_name = option.name | downcase
-            if option_name == 'color' or option_name == 'colour'
+            if option_name == 'color' or option_name == 'colour' or option_name contains 'لون'
               assign color_values = option.values
             endif
           endfor
@@ -240,172 +224,51 @@
             {%- liquid
               assign color_key = color | downcase | replace: ' ', ''
               assign color_hex = '#9ca3af'
-              
-              if settings.custom_color_swatches != blank
-                assign custom_colors = settings.custom_color_swatches | newline_to_br | split: '<br />'
-                for line in custom_colors
-                  assign clean_line = line | strip | replace: '<br>', '' | replace: '<br/>', '' | replace: '\r', '' | replace: '\n', ''
-                  assign parts = clean_line | split: ':'
-                  if parts.size == 2
-                    assign swatch_name = parts[0] | strip | downcase | replace: ' ', ''
-                    if swatch_name == color_key
-                      assign color_hex = parts[1] | strip
-                      break
-                    endif
-                  endif
-                endfor
-              endif
-
-              if color_hex == '#9ca3af'
-                case color_key
-                when 'black' or 'onyx'
+              case color_key
+                when 'black' or 'onyx' or 'أسود' or 'اسود'
                   assign color_hex = '#1a1a1a'
-                when 'white'
+                when 'white' or 'أبيض' or 'ابيض'
                   assign color_hex = '#f5f5f5'
-                when 'offwhite'
+                when 'offwhite' or 'أوفوايت'
                   assign color_hex = '#f8f4ee'
-                when 'cream'
+                when 'cream' or 'كريمي'
                   assign color_hex = '#f5f0e8'
-                when 'ivory'
-                  assign color_hex = '#f8f4e8'
-                when 'ecru'
-                  assign color_hex = '#f0e6d3'
-                when 'beige'
+                when 'beige' or 'بيج'
                   assign color_hex = '#d4b896'
-                when 'linen'
+                when 'linen' or 'كتان'
                   assign color_hex = '#e8dcc8'
-                when 'sand'
+                when 'sand' or 'رملي'
                   assign color_hex = '#c2a882'
-                when 'stone'
-                  assign color_hex = '#a8a29e'
-                when 'taupe'
-                  assign color_hex = '#b5a99a'
-                when 'nude'
-                  assign color_hex = '#e8c9a0'
-                when 'grey' or 'gray'
+                when 'grey' or 'gray' or 'رمادي'
                   assign color_hex = '#9ca3af'
-                when 'charcoal'
+                when 'charcoal' or 'فحمي'
                   assign color_hex = '#374151'
-                when 'slate'
-                  assign color_hex = '#64748b'
-                when 'brown'
+                when 'brown' or 'بني'
                   assign color_hex = '#6b4226'
-                when 'camel'
+                when 'camel' or 'جملي'
                   assign color_hex = '#c19a6b'
-                when 'caramel'
-                  assign color_hex = '#c68642'
-                when 'khaki'
-                  assign color_hex = '#b8a87a'
-                when 'tan'
-                  assign color_hex = '#c4a882'
-                when 'chocolate'
-                  assign color_hex = '#3d1c02'
-                when 'mocha'
-                  assign color_hex = '#6b3a2a'
-                when 'walnut'
-                  assign color_hex = '#5c3317'
-                when 'yellow'
+                when 'yellow' or 'أصفر' or 'اصفر'
                   assign color_hex = '#facc15'
-                when 'mustard'
-                  assign color_hex = '#d97706'
-                when 'gold'
-                  assign color_hex = '#d4af37'
-                when 'buttercream'
-                  assign color_hex = '#f5e6c8'
-                when 'butter'
+                when 'butter' or 'زبدة'
                   assign color_hex = '#f5e6a3'
-                when 'lemon'
-                  assign color_hex = '#fef08a'
-                when 'orange'
+                when 'orange' or 'برتقالي'
                   assign color_hex = '#f97316'
-                when 'rust'
-                  assign color_hex = '#c2410c'
-                when 'coral'
-                  assign color_hex = '#fb7185'
-                when 'red'
+                when 'red' or 'أحمر' or 'احمر'
                   assign color_hex = '#dc2626'
-                when 'burgundy'
+                when 'burgundy' or 'عنابي' or 'بورجوندي'
                   assign color_hex = '#7f1d1d'
-                when 'wine'
-                  assign color_hex = '#6b1d2e'
-                when 'cherry'
-                  assign color_hex = '#990000'
-                when 'scarlet'
-                  assign color_hex = '#ff2400'
-                when 'tomato'
-                  assign color_hex = '#ff6347'
-                when 'pink'
+                when 'pink' or 'وردي' or 'زهري'
                   assign color_hex = '#f9a8d4'
-                when 'blush'
+                when 'blush' or 'بلاش'
                   assign color_hex = '#fbc8c8'
-                when 'blushpink'
-                  assign color_hex = '#f4b8c1'
-                when 'softpink'
-                  assign color_hex = '#f9c5ce'
-                when 'babypink'
-                  assign color_hex = '#f9c5d0'
-                when 'dustypink'
-                  assign color_hex = '#d4a0a0'
-                when 'rosepink'
-                  assign color_hex = '#f48fb1'
-                when 'hotpink'
-                  assign color_hex = '#ff69b4'
-                when 'mauve'
-                  assign color_hex = '#d4a5a5'
-                when 'rose'
-                  assign color_hex = '#f43f5e'
-                when 'fuchsia'
-                  assign color_hex = '#d946ef'
-                when 'magenta'
-                  assign color_hex = '#c026d3'
-                when 'purple'
-                  assign color_hex = '#7c3aed'
-                when 'lavender'
-                  assign color_hex = '#c4b5fd'
-                when 'violet'
-                  assign color_hex = '#7c3aed'
-                when 'lilac'
-                  assign color_hex = '#c8a2c8'
-                when 'plum'
-                  assign color_hex = '#673147'
-                when 'indigo'
-                  assign color_hex = '#4338ca'
-                when 'blue'
+                when 'blue' or 'أزرق' or 'ازرق'
                   assign color_hex = '#2563eb'
-                when 'navy'
+                when 'navy' or 'كحلي'
                   assign color_hex = '#1a2744'
-                when 'royal'
-                  assign color_hex = '#4169e1'
-                when 'cobalt'
-                  assign color_hex = '#0047ab'
-                when 'sky'
-                  assign color_hex = '#7dd3fc'
-                when 'lightblue'
-                  assign color_hex = '#93c5fd'
-                when 'babyblue'
-                  assign color_hex = '#89cff0'
-                when 'powder'
-                  assign color_hex = '#b0d4e8'
-                when 'denim'
-                  assign color_hex = '#1560bd'
-                when 'green'
+                when 'green' or 'أخضر' or 'اخضر'
                   assign color_hex = '#16a34a'
-                when 'olive'
+                when 'olive' or 'زيتي'
                   assign color_hex = '#6b7c41'
-                when 'sage'
-                  assign color_hex = '#7c9e6e'
-                when 'mint'
-                  assign color_hex = '#a7f3d0'
-                when 'teal'
-                  assign color_hex = '#0d9488'
-                when 'forest'
-                  assign color_hex = '#228b22'
-                when 'emerald'
-                  assign color_hex = '#059669'
-                when 'hunter'
-                  assign color_hex = '#355e3b'
-                when 'army'
-                  assign color_hex = '#4b5320'
               endcase
             -%}
             <span
