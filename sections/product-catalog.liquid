@@ -1,6 +1,7 @@
 {% comment %}
   Product Catalog Section
   Renders product grids with instant category and subcategory filtering, OOS handling, and size selector triggers.
+  Fully bilingual (EN / AR).
 {% endcomment %}
 
 {%- liquid
@@ -60,7 +61,7 @@
       </p>
     </div>
 
-    <!-- CATEGORY TOGGLE -->
+    <!-- 1. CATEGORY TOGGLE (TOP ROW) -->
     <div class="category-filters flex items-center gap-6 font-mono-street text-[11px] uppercase tracking-widest">
       <button type="button" class="category-filter-btn pb-0.5 transition text-[#1a1a1a] font-bold border-b border-[#1a1a1a]" data-category="all">
         {%- if request.locale.iso_code == 'ar' -%}
@@ -100,7 +101,7 @@
     </div>
   </div>
 
-  <!-- SUBCATEGORY PILLS -->
+  <!-- 2. SUBCATEGORY PILLS (BOTTOM ROW) -->
   <div class="subcategory-filters flex items-center gap-3 overflow-x-auto pb-6 scrollbar-none mb-12 select-none">
     <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-[#1a1a1a] text-white border-[#1a1a1a]" data-subcategory="all">
       {%- if request.locale.iso_code == 'ar' -%}
@@ -134,7 +135,7 @@
         {% if request.locale.iso_code == 'ar' %}سويت شيرت{% else %}Sweatshirts{% endif %}
       </button>
       <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="t-shirt">
-        {% if request.locale.iso_code == 'ar' %}تيشيرتات{% else %}T-Shirts & Tops{% endif %}
+        {% if request.locale.iso_code == 'ar' %}تيشيرتات وتوبات{% else %}T-Shirts & Tops{% endif %}
       </button>
     {%- endif -%}
   </div>
@@ -699,7 +700,7 @@
           "type": "subcategory_filter",
           "settings": {
             "label": "T-Shirts & Tops",
-            "label_ar": "تيشيرتات",
+            "label_ar": "تيشيرتات وتوبات",
             "key": "t-shirt"
           }
         }
