@@ -100,7 +100,7 @@
           "type": "subcategory_filter",
           "settings": {
             "label": "Hoodies",
-            "label_ar": "تشكيلة الصيف",
+            "label_ar": "هوديز",
             "key": "hoodie"
           }
         },
