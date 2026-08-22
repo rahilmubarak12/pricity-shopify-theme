@@ -1,6 +1,6 @@
 {% comment %}
   Header Section
-  Frosted glass scrolling navbar, mobile navigation drawer, and separated round Flag Language Switchers (SA & UK).
+  Frosted glass scrolling navbar, mobile navigation drawer, and compact separated round Flag Language Switchers (SA & UK).
 {% endcomment %}
 
 <style>
@@ -131,19 +131,20 @@
         </span>
       </a>
 
-      <!-- RIGHT: Flag Language Switcher, Currency & Icons -->
-      <div class="flex items-center gap-3 sm:gap-6 lg:gap-8 justify-end text-sm sm:text-[17px] font-mono-street capitalize tracking-[0.1em] font-medium">
+      <!-- RIGHT: Compact Flag Language Switcher, Currency & Icons -->
+      <div class="flex items-center gap-3 sm:gap-5 lg:gap-6 justify-end text-sm sm:text-[17px] font-mono-street capitalize tracking-[0.1em] font-medium">
         
-        <!-- Desktop Flag Language Switcher (Separated Round Buttons) -->
-        <div class="lang-switcher hidden lg:flex items-center gap-2.5">
+        <!-- Desktop Compact Flag Switcher -->
+        <div class="lang-switcher hidden lg:flex items-center gap-2">
           <!-- Saudi Flag (Arabic) -->
           <a 
             href="/ar{{ request.path | remove_first: '/ar' }}" 
-            class="flag-btn flex items-center justify-center w-6 h-6 rounded-full overflow-hidden transition-all duration-300 shadow-sm {% if request.locale.iso_code == 'ar' %}ring-2 ring-white scale-110 opacity-100{% else %}opacity-40 hover:opacity-90 hover:scale-105{% endif %}"
-            title="العربية (المملكة العربية السعودية)"
-            aria-label="تغيير اللغة إلى العربية"
+            class="flag-btn inline-block overflow-hidden transition-all duration-200 shrink-0 {% if request.locale.iso_code == 'ar' %}ring-2 ring-white scale-110 opacity-100{% else %}opacity-40 hover:opacity-90 hover:scale-105{% endif %}"
+            style="width: 20px; height: 20px; min-width: 20px; border-radius: 9999px;"
+            title="العربية"
+            aria-label="العربية"
           >
-            <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
+            <svg style="width: 100%; height: 100%; display: block; object-fit: cover;" viewBox="0 0 640 480">
               <path fill="#007a3d" d="M0 0h640v480H0z"/>
               <g fill="#fff">
                 <path d="M170 310h300v16H170zm260-35c-15-5-25-15-30-25-10 15-20 20-40 25 15 5 25 15 30 25 10-15 20-20 40-25zM220 250h200v15H220z"/>
@@ -154,13 +155,14 @@
           <!-- UK Flag (English) -->
           <a 
             href="{{ request.path | remove_first: '/ar' | default: '/' }}" 
-            class="flag-btn flex items-center justify-center w-6 h-6 rounded-full overflow-hidden transition-all duration-300 shadow-sm {% if request.locale.iso_code != 'ar' %}ring-2 ring-white scale-110 opacity-100{% else %}opacity-40 hover:opacity-90 hover:scale-105{% endif %}"
-            title="English (United Kingdom)"
-            aria-label="Switch language to English"
+            class="flag-btn inline-block overflow-hidden transition-all duration-200 shrink-0 {% if request.locale.iso_code != 'ar' %}ring-2 ring-white scale-110 opacity-100{% else %}opacity-40 hover:opacity-90 hover:scale-105{% endif %}"
+            style="width: 20px; height: 20px; min-width: 20px; border-radius: 9999px;"
+            title="English"
+            aria-label="English"
           >
-            <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
-              <clipPath id="header-uk-clip"><circle cx="320" cy="240" r="320"/></clipPath>
-              <g clip-path="url(#header-uk-clip)">
+            <svg style="width: 100%; height: 100%; display: block; object-fit: cover;" viewBox="0 0 640 480">
+              <clipPath id="header-uk-clip-small"><circle cx="320" cy="240" r="320"/></clipPath>
+              <g clip-path="url(#header-uk-clip-small)">
                 <path fill="#012169" d="M0 0h640v480H0z"/>
                 <path fill="#fff" d="m75 0 245 180L565 0h75v60L435 240l205 180v60h-75L320 300 75 480H0v-60l205-180L0 60V0z"/>
                 <path fill="#c8102e" d="m425 285 215 155v40h-25L395 315zM0 440l190-140h35L35 480H0zM640 40 450 180h-35l190-140h35zM0 0l215 160h-35L0 25z"/>
@@ -178,7 +180,7 @@
             <select
               name="country_code"
               onchange="document.getElementById('desktop-localization-form').submit()"
-              class="bg-transparent text-current text-[11px] tracking-wider border border-current/20 rounded-full px-3 py-1 appearance-none cursor-pointer hover:border-current/50 transition-colors outline-none"
+              class="bg-transparent text-current text-[11px] tracking-wider border border-current/20 rounded-full px-2.5 py-0.5 appearance-none cursor-pointer hover:border-current/50 transition-colors outline-none"
             >
               {%- for country in localization.available_countries -%}
                 <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %} style="background:#000;color:#fff;">
@@ -189,8 +191,8 @@
           </form>
         {%- endif -%}
 
-        <button class="search-drawer-trigger transition-colors flex items-center gap-2 p-1 hover:opacity-80 text-current" aria-label="Search">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sm:w-[24px] sm:h-[24px]">
+        <button class="search-drawer-trigger transition-colors flex items-center gap-1.5 p-1 hover:opacity-80 text-current" aria-label="Search">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
@@ -198,12 +200,12 @@
         </button>
 
         <button class="cart-drawer-trigger relative transition-all flex items-center gap-1.5 p-1 hover:opacity-80 text-current" aria-label="Bag">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sm:w-[24px] sm:h-[24px]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
           </svg>
-          <span class="text-sm sm:text-base">
+          <span class="text-sm">
             <span class="hidden sm:inline">{{ section.settings.cart_label | default: 'Cart' }} </span>(<span class="cart-count">{{ cart.item_count }}</span>)
           </span>
         </button>
@@ -262,7 +264,7 @@
         {%- endif -%}
       {%- endif -%}
 
-      <!-- Mobile Language (Flags) & Currency Selectors -->
+      <!-- Mobile Language & Currency Selectors -->
       <div class="pt-4 flex flex-col items-center justify-center gap-4">
         <!-- Mobile Flag Switcher -->
         <div class="flex items-center gap-3">
@@ -270,7 +272,7 @@
             href="/ar{{ request.path | remove_first: '/ar' }}" 
             class="flex items-center gap-2 px-3.5 py-1.5 rounded-full transition-all border {% if request.locale.iso_code == 'ar' %}bg-zinc-800 text-white border-zinc-600 font-bold{% else %}text-zinc-400 border-zinc-800 opacity-60{% endif %}"
           >
-            <div class="w-5 h-5 rounded-full overflow-hidden shrink-0">
+            <div class="w-4 h-4 rounded-full overflow-hidden shrink-0">
               <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
                 <path fill="#007a3d" d="M0 0h640v480H0z"/>
                 <g fill="#fff">
@@ -285,10 +287,10 @@
             href="{{ request.path | remove_first: '/ar' | default: '/' }}" 
             class="flex items-center gap-2 px-3.5 py-1.5 rounded-full transition-all border {% if request.locale.iso_code != 'ar' %}bg-zinc-800 text-white border-zinc-600 font-bold{% else %}text-zinc-400 border-zinc-800 opacity-60{% endif %}"
           >
-            <div class="w-5 h-5 rounded-full overflow-hidden shrink-0">
+            <div class="w-4 h-4 rounded-full overflow-hidden shrink-0">
               <svg class="w-full h-full object-cover" viewBox="0 0 640 480">
-                <clipPath id="mobile-uk-clip"><circle cx="320" cy="240" r="320"/></clipPath>
-                <g clip-path="url(#mobile-uk-clip)">
+                <clipPath id="mobile-uk-clip-sm"><circle cx="320" cy="240" r="320"/></clipPath>
+                <g clip-path="url(#mobile-uk-clip-sm)">
                   <path fill="#012169" d="M0 0h640v480H0z"/>
                   <path fill="#fff" d="m75 0 245 180L565 0h75v60L435 240l205 180v60h-75L320 300 75 480H0v-60l205-180L0 60V0z"/>
                   <path fill="#c8102e" d="m425 285 215 155v40h-25L395 315zM0 440l190-140h35L35 480H0zM640 40 450 180h-35l190-140h35zM0 0l215 160h-35L0 25z"/>
@@ -375,17 +377,14 @@
         navbar.classList.remove('bg-gradient-to-b', 'from-black/50', 'to-transparent', 'text-white');
         navbar.classList.add('bg-[#faf9f7]/85', 'backdrop-blur-md', 'border-b', 'border-zinc-200/40', 'shadow-sm', 'text-[#1a1a1a]');
 
-        // Nav links
         navbar.querySelectorAll('.nav-link-hover').forEach(el => {
           el.classList.remove('text-white/70');
           el.classList.add('text-zinc-500');
         });
-        // Icon buttons
         navbar.querySelectorAll('.search-drawer-trigger, .cart-drawer-trigger').forEach(el => {
           el.classList.remove('text-white');
           el.classList.add('text-[#1a1a1a]');
         });
-        // Active flag ring adjustment on scroll
         if (langSwitcher) {
           langSwitcher.querySelectorAll('.flag-btn.ring-white').forEach(el => {
             el.classList.remove('ring-white');
@@ -396,17 +395,14 @@
         navbar.classList.add('bg-gradient-to-b', 'from-black/50', 'to-transparent', 'text-white');
         navbar.classList.remove('bg-[#faf9f7]/85', 'backdrop-blur-md', 'border-b', 'border-zinc-200/40', 'shadow-sm', 'text-[#1a1a1a]');
 
-        // Nav links
         navbar.querySelectorAll('.nav-link-hover').forEach(el => {
           el.classList.remove('text-zinc-500');
           el.classList.add('text-white/70');
         });
-        // Icon buttons
         navbar.querySelectorAll('.search-drawer-trigger, .cart-drawer-trigger').forEach(el => {
           el.classList.remove('text-[#1a1a1a]');
           el.classList.add('text-white');
         });
-        // Restore white ring when on hero
         if (langSwitcher) {
           langSwitcher.querySelectorAll('.flag-btn.ring-zinc-950').forEach(el => {
             el.classList.remove('ring-zinc-950');
@@ -419,7 +415,6 @@
     window.addEventListener('scroll', handleScroll);
     handleScroll();
 
-    // Toggle Drawer Open
     if (mobileMenuOpenBtn) {
       mobileMenuOpenBtn.addEventListener('click', () => {
         mobileMenuOpen = true;
@@ -430,7 +425,6 @@
       });
     }
 
-    // Toggle Drawer Close
     if (mobileMenuCloseBtn) {
       mobileMenuCloseBtn.addEventListener('click', () => {
         mobileMenuOpen = false;
@@ -441,7 +435,6 @@
       });
     }
 
-    // Close drawer when clicking a link inside it
     mobileDrawer.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mobileMenuOpen = false;
