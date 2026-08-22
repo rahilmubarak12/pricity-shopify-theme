@@ -1,7 +1,6 @@
 {% comment %}
   Product Catalog Section
-  Renders product grids with instant category and subcategory filtering, OOS handling, and size selector triggers.
-  Fully bilingual (EN / AR) - Fixed filter execution.
+  Renders product grids with instant category and subcategory filtering.
 {% endcomment %}
 
 {%- liquid
@@ -109,9 +108,6 @@
     <p class="font-mono-street text-xs uppercase tracking-[0.25em] text-zinc-400">
       {% if request.locale.iso_code == 'ar' %}لم يتم العثور على منتجات{% else %}No products found{% endif %}
     </p>
-    <p class="text-zinc-300 text-sm font-light">
-      {% if request.locale.iso_code == 'ar' %}جرب تعديل خيارات التصفية{% else %}Try adjusting your filters{% endif %}
-    </p>
     <button type="button" class="catalog-reset-btn mt-2 px-8 py-3 bg-[#1a1a1a] text-white font-mono-street text-[11px] uppercase tracking-widest hover:bg-zinc-800 transition-colors">
       {% if request.locale.iso_code == 'ar' %}إعادة ضبط الفلاتر{% else %}Reset Filters{% endif %}
     </button>
@@ -141,8 +137,6 @@
       const categoryBtns = catalog.querySelectorAll('.category-filter-btn');
       const emptyState = catalog.querySelector('.catalog-empty-state');
       const countText = catalog.querySelector('.catalog-count');
-      const titleText = catalog.querySelector('.catalog-title');
-      const titleBase = titleText ? titleText.getAttribute('data-title-base') : '';
       const resetBtn = catalog.querySelector('.catalog-reset-btn');
 
       let activeCategory = 'all';
@@ -175,26 +169,25 @@
           if (activeCategory === 'all') {
             matchesCategory = true;
           } else if (activeCategory === 'new-drops') {
-            matchesCategory = collections.includes('new-drops') || 
-                              collections.includes('new_drops') || 
-                              collections.includes('newdrops') || 
-                              tags.includes('new-drops') || 
-                              tags.includes('newdrops') || 
-                              tags.includes('new drops') ||
-                              tags.includes('جديد');
+            matchesCategory = collections.includes('new-drops') || tags.includes('new-drops') || tags.includes('جديد');
           } else if (activeCategory === 'men') {
             matchesCategory = (cat === 'men' || cat === 'unisex');
           } else if (activeCategory === 'women') {
             matchesCategory = (cat === 'women' || cat === 'unisex');
           } else if (activeCategory === 'sale') {
-            matchesCategory = (isOnSale || collections.includes('sale') || collections.includes('archival-sale') || tags.includes('sale') || tags.includes('تخفيضات'));
+            matchesCategory = (isOnSale || collections.includes('sale') || tags.includes('sale') || tags.includes('تخفيضات'));
           }
 
           let matchesSubcategory = false;
           if (activeSubcategory === 'all') {
             matchesSubcategory = true;
           } else if (activeSubcategory === 'summer') {
-            matchesSubcategory = (sub === 'summer' || sub === 'shirt' || sub === 't-shirt');
+            // Summer Collection displays summer pieces, shirts, t-shirts, and everything that is not a winter hoodie/sweatshirt
+            matchesSubcategory = (sub === 'summer' || sub === 'shirt' || sub === 't-shirt' || (sub !== 'hoodie' && sub !== 'sweatshirt'));
+          } else if (activeSubcategory === 'shirt' || activeSubcategory === 'set' || activeSubcategory === 'sets') {
+            matchesSubcategory = (sub === 'shirt' || sub === 'set' || sub === 'sets');
+          } else if (activeSubcategory === 't-shirt' || activeSubcategory === 'tshirt' || activeSubcategory === 'tee') {
+            matchesSubcategory = (sub === 't-shirt' || sub === 'tshirt');
           } else {
             matchesSubcategory = (sub === activeSubcategory);
           }
@@ -212,20 +205,6 @@
             countText.innerHTML = `عرض <span class="count-num">${visibleCount}</span> قطعة مميزة`;
           } else {
             countText.innerHTML = `Showing <span class="count-num">${visibleCount}</span> premium pieces`;
-          }
-        }
-
-        if (titleText) {
-          if (activeCategory === 'men') {
-            titleText.textContent = isArabic ? "تشكيلة الرجال" : "Men's Archive";
-          } else if (activeCategory === 'women') {
-            titleText.textContent = isArabic ? "تشكيلة النساء" : "Women's Archive";
-          } else if (activeCategory === 'sale') {
-            titleText.textContent = isArabic ? "التخفيضات" : "Archival Sale";
-          } else if (activeCategory === 'new-drops') {
-            titleText.textContent = isArabic ? "وصل حديثاً" : "New Drops";
-          } else {
-            titleText.textContent = titleBase;
           }
         }
 
