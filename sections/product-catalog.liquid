@@ -1,6 +1,6 @@
 {% comment %}
   Product Catalog Section
-  Renders product grids with instant category and subcategory filtering.
+  Renders product grids with instant category and subcategory filtering, OOS handling, and size selector triggers.
 {% endcomment %}
 
 {%- liquid
@@ -25,13 +25,30 @@
       {%- liquid
         if request.locale.iso_code == 'ar'
           assign base_title = section.settings.title_ar | default: 'التشكيلة'
+          assign suffix = ''
+          if collection_obj.handle == 'new-drops'
+            assign suffix = ' · وصل حديثاً'
+          elsif collection_obj.handle == 'sale' or collection_obj.handle == 'archival-sale'
+            assign suffix = ' · التخفيضات'
+          elsif collection_obj.handle == 'summer-capsule' or collection_obj.handle == 'summer-drop'
+            assign suffix = ' · تشكيلة الصيف'
+          endif
         else
           assign base_title = section.settings.title | default: 'The Collection'
+          assign suffix = ''
+          if collection_obj.handle == 'new-drops'
+            assign suffix = ' · New Drops'
+          elsif collection_obj.handle == 'sale' or collection_obj.handle == 'archival-sale'
+            assign suffix = ' · Archival Sale'
+          elsif collection_obj.handle == 'summer-capsule' or collection_obj.handle == 'summer-drop'
+            assign suffix = ' · Summer Capsule'
+          endif
         endif
+        assign final_title = base_title | append: suffix
       -%}
       <h2 class="catalog-title font-heading font-extrabold text-3xl md:text-5xl uppercase text-[#1a1a1a] mt-1" 
-          data-title-base="{{ base_title }}">
-        {{ base_title }}
+          data-title-base="{{ final_title }}">
+        {{ final_title }}
       </h2>
 
       <p class="catalog-count text-[11px] text-zinc-400 font-mono-street tracking-wider mt-2 uppercase">
@@ -43,27 +60,47 @@
       </p>
     </div>
 
-    <!-- 1. CATEGORY TOGGLE (TOP ROW) -->
+    <!-- CATEGORY TOGGLE -->
     <div class="category-filters flex items-center gap-6 font-mono-street text-[11px] uppercase tracking-widest">
       <button type="button" class="category-filter-btn pb-0.5 transition text-[#1a1a1a] font-bold border-b border-[#1a1a1a]" data-category="all">
-        {%- if request.locale.iso_code == 'ar' -%}{{ section.settings.cat_all_label_ar | default: 'الكل' }}{%- else -%}{{ section.settings.cat_all_label | default: 'All' }}{%- endif -%}
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.cat_all_label_ar | default: 'الكل' }}
+        {%- else -%}
+          {{ section.settings.cat_all_label | default: 'All' }}
+        {%- endif -%}
       </button>
       <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="new-drops">
-        {%- if request.locale.iso_code == 'ar' -%}{{ section.settings.cat_new_label_ar | default: 'وصل حديثاً' }}{%- else -%}{{ section.settings.cat_new_label | default: 'New Drops' }}{%- endif -%}
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.cat_new_label_ar | default: 'وصل حديثاً' }}
+        {%- else -%}
+          {{ section.settings.cat_new_label | default: 'New Drops' }}
+        {%- endif -%}
       </button>
       <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="men">
-        {%- if request.locale.iso_code == 'ar' -%}{{ section.settings.cat_men_label_ar | default: 'رجال' }}{%- else -%}{{ section.settings.cat_men_label | default: 'Men' }}{%- endif -%}
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.cat_men_label_ar | default: 'رجال' }}
+        {%- else -%}
+          {{ section.settings.cat_men_label | default: 'Men' }}
+        {%- endif -%}
       </button>
       <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="women">
-        {%- if request.locale.iso_code == 'ar' -%}{{ section.settings.cat_women_label_ar | default: 'نساء' }}{%- else -%}{{ section.settings.cat_women_label | default: 'Women' }}{%- endif -%}
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.cat_women_label_ar | default: 'نساء' }}
+        {%- else -%}
+          {{ section.settings.cat_women_label | default: 'Women' }}
+        {%- endif -%}
       </button>
       <button type="button" class="category-filter-btn pb-0.5 transition text-zinc-400 hover:text-[#1a1a1a]" data-category="sale">
-        {%- if request.locale.iso_code == 'ar' -%}{{ section.settings.cat_sale_label_ar | default: 'التخفيضات' }}{%- else -%}{{ section.settings.cat_sale_label | default: 'Sale' }}{%- endif -%}
+        {%- if request.locale.iso_code == 'ar' -%}
+          {{ section.settings.cat_sale_label_ar | default: 'التخفيضات' }}
+        {%- else -%}
+          {{ section.settings.cat_sale_label | default: 'Sale' }}
+        {%- endif -%}
       </button>
     </div>
   </div>
 
-  <!-- 2. SUBCATEGORY PILLS (BOTTOM ROW) -->
+  <!-- SUBCATEGORY PILLS -->
   <div class="subcategory-filters flex items-center gap-3 overflow-x-auto pb-6 scrollbar-none mb-12 select-none">
     <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-[#1a1a1a] text-white border-[#1a1a1a]" data-subcategory="all">
       {%- if request.locale.iso_code == 'ar' -%}
@@ -72,11 +109,10 @@
         {{ section.settings.cat_all_label | default: 'All' }}
       {%- endif -%}
     </button>
-    
     {%- assign subcat_blocks = section.blocks | where: 'type', 'subcategory_filter' -%}
     {%- if subcat_blocks.size > 0 -%}
       {%- for block in subcat_blocks -%}
-        <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="{{ block.settings.key | downcase | strip }}" {{ block.shopify_attributes }}>
+        <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="{{ block.settings.key | escape }}" {{ block.shopify_attributes }}>
           {%- if request.locale.iso_code == 'ar' -%}
             {{ block.settings.label_ar | default: block.settings.label | escape }}
           {%- else -%}
@@ -98,7 +134,7 @@
         {% if request.locale.iso_code == 'ar' %}سويت شيرت{% else %}Sweatshirts{% endif %}
       </button>
       <button type="button" class="subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200" data-subcategory="t-shirt">
-        {% if request.locale.iso_code == 'ar' %}تيشيرتات وتوبات{% else %}T-Shirts & Tops{% endif %}
+        {% if request.locale.iso_code == 'ar' %}تيشيرتات{% else %}T-Shirts & Tops{% endif %}
       </button>
     {%- endif -%}
   </div>
@@ -108,6 +144,9 @@
     <p class="font-mono-street text-xs uppercase tracking-[0.25em] text-zinc-400">
       {% if request.locale.iso_code == 'ar' %}لم يتم العثور على منتجات{% else %}No products found{% endif %}
     </p>
+    <p class="text-zinc-300 text-sm font-light">
+      {% if request.locale.iso_code == 'ar' %}جرب تعديل خيارات التصفية{% else %}Try adjusting your filters{% endif %}
+    </p>
     <button type="button" class="catalog-reset-btn mt-2 px-8 py-3 bg-[#1a1a1a] text-white font-mono-street text-[11px] uppercase tracking-widest hover:bg-zinc-800 transition-colors">
       {% if request.locale.iso_code == 'ar' %}إعادة ضبط الفلاتر{% else %}Reset Filters{% endif %}
     </button>
@@ -115,152 +154,358 @@
 
   <!-- GRID -->
   <div class="catalog-grid grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-8 sm:gap-x-6 sm:gap-y-12">
-    {%- for product in collection_obj.products limit: products_limit -%}
-      {% render 'product-card', product: product %}
-    {%- else -%}
+    {%- liquid
+      assign rendered_count = 0
+      
+      for product in collection_obj.products
+        if rendered_count >= products_limit
+          break
+        endif
+
+        assign is_winter = false
+        assign title_lower = product.title | downcase
+        if title_lower contains 'hoodie' or title_lower contains 'sweatshirt'
+          assign is_winter = true
+        else
+          for tag in product.tags
+            assign tag_lower = tag | downcase
+            if tag_lower contains 'hoodie' or tag_lower contains 'sweatshirt'
+              assign is_winter = true
+              break
+            endif
+          endfor
+        endif
+
+        if is_winter == false
+          render 'product-card', product: product
+          assign rendered_count = rendered_count | plus: 1
+        endif
+      endfor
+
+      for product in collection_obj.products
+        if rendered_count >= products_limit
+          break
+        endif
+
+        assign is_winter = false
+        assign title_lower = product.title | downcase
+        if title_lower contains 'hoodie' or title_lower contains 'sweatshirt'
+          assign is_winter = true
+        else
+          for tag in product.tags
+            assign tag_lower = tag | downcase
+            if tag_lower contains 'hoodie' or tag_lower contains 'sweatshirt'
+              assign is_winter = true
+              break
+            endif
+          endfor
+        endif
+
+        if is_winter == true
+          render 'product-card', product: product
+          assign rendered_count = rendered_count | plus: 1
+        endif
+      endfor
+    -%}
+    {%- if rendered_count == 0 -%}
       <p class="text-center col-span-full py-12 text-zinc-400 font-mono-street text-xs uppercase">
         {% if request.locale.iso_code == 'ar' %}لا توجد منتجات في هذه المجموعة حالياً.{% else %}No products in this collection.{% endif %}
       </p>
-    {%- endfor -%}
+    {%- endif -%}
   </div>
 
 </section>
 
 <script>
-  (function() {
-    function initCatalog() {
-      const catalog = document.getElementById('shop-catalog');
-      if (!catalog) return;
+  document.addEventListener('DOMContentLoaded', () => {
+    const catalog = document.getElementById('shop-catalog');
+    if (!catalog) return;
 
-      const isArabic = catalog.getAttribute('data-lang') === 'ar';
-      const cards = catalog.querySelectorAll('.product-card');
-      const categoryBtns = catalog.querySelectorAll('.category-filter-btn');
-      const subcategoryBtns = catalog.querySelectorAll('.subcategory-filter-btn');
-      const emptyState = catalog.querySelector('.catalog-empty-state');
-      const countText = catalog.querySelector('.catalog-count');
-      const resetBtn = catalog.querySelector('.catalog-reset-btn');
+    const isArabic = catalog.getAttribute('data-lang') === 'ar';
+    const cards = catalog.querySelectorAll('.product-card');
+    const categoryBtns = catalog.querySelectorAll('.category-filter-btn');
+    const emptyState = catalog.querySelector('.catalog-empty-state');
+    const countText = catalog.querySelector('.catalog-count');
+    const titleText = catalog.querySelector('.catalog-title');
+    const titleBase = titleText.getAttribute('data-title-base');
+    const resetBtn = catalog.querySelector('.catalog-reset-btn');
 
-      let activeCategory = 'all';
-      let activeSubcategory = 'all';
+    let activeCategory = 'all';
+    let activeSubcategory = 'all';
 
-      const updateSubcategoryPillsUI = (activeKey) => {
-        subcategoryBtns.forEach(b => {
-          const isSelected = b.getAttribute('data-subcategory') === activeKey;
-          if (isSelected) {
-            b.className = "subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-[#1a1a1a] text-white border-[#1a1a1a]";
-          } else {
-            b.className = "subcategory-filter-btn px-5 py-2 rounded-full text-[11px] font-mono-street tracking-[0.15em] whitespace-nowrap border transition bg-white text-zinc-400 hover:text-[#1a1a1a] border-zinc-200";
-          }
-        });
-      };
+    const getSubcategoryBtns = () => catalog.querySelectorAll('.subcategory-filter-btn');
 
-      const filterGrid = () => {
-        let visibleCount = 0;
+    const updateSubcategoryPillsUI = (activeKey) => {
+      getSubcategoryBtns().forEach(b => {
+        const isSelected = b.getAttribute('data-subcategory') === activeKey;
+        b.style.color = '';
+        if (isSelected) {
+          b.classList.remove('bg-white', 'text-zinc-400', 'border-zinc-200', 'hover:text-[#1a1a1a]');
+          b.classList.add('bg-[#1a1a1a]', 'text-white', 'border-[#1a1a1a]');
+        } else {
+          b.classList.remove('bg-[#1a1a1a]', 'text-white', 'border-[#1a1a1a]');
+          b.classList.add('bg-white', 'text-zinc-400', 'border-zinc-200', 'hover:text-[#1a1a1a]');
+        }
+      });
+    };
 
-        cards.forEach(card => {
-          const cardCat = (card.getAttribute('data-category') || 'unisex').trim().toLowerCase();
-          const cardSub = (card.getAttribute('data-subcategory') || 'summer').trim().toLowerCase();
-          const isOnSale = card.getAttribute('data-on-sale') === 'true';
-
-          // مطابقة الفئة الرئيسية العلوية
-          let matchesCategory = false;
-          if (activeCategory === 'all' || activeCategory === 'new-drops') {
-            matchesCategory = true;
-          } else if (activeCategory === 'men') {
-            matchesCategory = (cardCat === 'men' || cardCat === 'unisex');
-          } else if (activeCategory === 'women') {
-            matchesCategory = (cardCat === 'women' || cardCat === 'unisex');
-          } else if (activeCategory === 'sale') {
-            matchesCategory = isOnSale;
-          }
-
-          // مطابقة الفئة الفرعية (الكبسولات)
-          let matchesSubcategory = false;
-          if (activeSubcategory === 'all') {
-            matchesSubcategory = true;
-          } else if (activeSubcategory === 'summer') {
-            matchesSubcategory = (cardSub !== 'hoodie' && cardSub !== 'sweatshirt');
-          } else if (activeSubcategory === 'shirt' || activeSubcategory === 'sets') {
-            matchesSubcategory = (cardSub === 'shirt');
-          } else if (activeSubcategory === 't-shirt') {
-            matchesSubcategory = (cardSub === 't-shirt');
-          } else if (activeSubcategory === 'hoodie') {
-            matchesSubcategory = (cardSub === 'hoodie');
-          } else if (activeSubcategory === 'sweatshirt') {
-            matchesSubcategory = (cardSub === 'sweatshirt');
-          } else {
-            matchesSubcategory = (cardSub === activeSubcategory);
-          }
-
-          if (matchesCategory && matchesSubcategory) {
-            card.classList.remove('hidden');
-            visibleCount++;
-          } else {
-            card.classList.add('hidden');
-          }
-        });
-
-        if (countText) {
-          countText.innerHTML = isArabic 
-            ? `عرض <span class="count-num">${visibleCount}</span> قطعة مميزة`
-            : `Showing <span class="count-num">${visibleCount}</span> premium pieces`;
+    const filterGrid = () => {
+      let visibleCount = 0;
+      
+      cards.forEach(card => {
+        const cat = card.getAttribute('data-category');
+        const sub = card.getAttribute('data-subcategory');
+        const collections = (card.getAttribute('data-collections') || '').split(',');
+        const isOnSale = card.getAttribute('data-on-sale') === 'true';
+        
+        let matchesCategory = false;
+        if (activeCategory === 'all') {
+          matchesCategory = true;
+        } else if (activeCategory === 'new-drops') {
+          const tags = (card.getAttribute('data-tags') || '').split(',');
+          matchesCategory = collections.includes('new-drops') || 
+                            collections.includes('new_drops') || 
+                            collections.includes('newdrops') || 
+                            tags.includes('new-drops') || 
+                            tags.includes('newdrops') || 
+                            tags.includes('new drops');
+        } else if (activeCategory === 'men') {
+          matchesCategory = (cat === 'men' || cat === 'unisex');
+        } else if (activeCategory === 'women') {
+          matchesCategory = (cat === 'women' || cat === 'unisex');
+        } else if (activeCategory === 'sale') {
+          matchesCategory = (isOnSale || collections.includes('sale') || collections.includes('archival-sale'));
         }
 
-        if (emptyState) {
-          if (visibleCount === 0 && cards.length > 0) {
-            emptyState.classList.remove('hidden');
-          } else {
-            emptyState.classList.add('hidden');
-          }
+        let matchesSubcategory = false;
+        if (activeSubcategory === 'all') {
+          matchesSubcategory = true;
+        } else if (activeSubcategory === 'summer') {
+          matchesSubcategory = (sub !== 'hoodie' && sub !== 'sweatshirt');
+        } else {
+          matchesSubcategory = (sub === activeSubcategory);
         }
-      };
 
-      categoryBtns.forEach(btn => {
-        btn.onclick = function(e) {
-          e.preventDefault();
-          categoryBtns.forEach(b => {
-            b.classList.remove('text-[#1a1a1a]', 'font-bold', 'border-b', 'border-[#1a1a1a]');
-            b.classList.add('text-zinc-400');
-          });
-          btn.classList.add('text-[#1a1a1a]', 'font-bold', 'border-b', 'border-[#1a1a1a]');
-          btn.classList.remove('text-zinc-400');
-
-          activeCategory = btn.getAttribute('data-category') || 'all';
-          activeSubcategory = 'all';
-          updateSubcategoryPillsUI('all');
-          filterGrid();
-        };
+        if (matchesCategory && matchesSubcategory) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
       });
 
+      if (isArabic) {
+        countText.innerHTML = `عرض <span class="count-num">${visibleCount}</span> قطعة مميزة`;
+      } else {
+        countText.innerHTML = `Showing <span class="count-num">${visibleCount}</span> premium pieces`;
+      }
+
+      if (activeCategory === 'men') {
+        titleText.textContent = isArabic ? "تشكيلة الرجال" : "Men's Archive";
+      } else if (activeCategory === 'women') {
+        titleText.textContent = isArabic ? "تشكيلة النساء" : "Women's Archive";
+      } else if (activeCategory === 'sale') {
+        titleText.textContent = isArabic ? "التخفيضات" : "Archival Sale";
+      } else if (activeCategory === 'new-drops') {
+        titleText.textContent = isArabic ? "وصل حديثاً" : "New Drops";
+      } else {
+        titleText.textContent = titleBase;
+      }
+
+      if (visibleCount === 0 && cards.length > 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+      }
+    };
+
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryBtns.forEach(b => {
+          b.classList.remove('text-[#1a1a1a]', 'font-bold', 'border-b', 'border-[#1a1a1a]');
+          b.classList.add('text-zinc-400');
+        });
+        btn.classList.add('text-[#1a1a1a]', 'font-bold', 'border-b', 'border-[#1a1a1a]');
+        btn.classList.remove('text-zinc-400');
+
+        activeCategory = btn.getAttribute('data-category');
+        activeSubcategory = 'all';
+        updateSubcategoryPillsUI('all');
+        filterGrid();
+      });
+    });
+
+    const setupSubcategoryHandlers = () => {
+      const subcategoryBtns = getSubcategoryBtns();
       subcategoryBtns.forEach(btn => {
-        btn.onclick = function(e) {
-          e.preventDefault();
-          activeSubcategory = (btn.getAttribute('data-subcategory') || 'all').trim().toLowerCase();
+        btn.onclick = () => {
+          activeSubcategory = btn.getAttribute('data-subcategory');
           updateSubcategoryPillsUI(activeSubcategory);
           filterGrid();
         };
       });
+    };
+    setupSubcategoryHandlers();
 
-      if (resetBtn) {
-        resetBtn.onclick = function(e) {
-          e.preventDefault();
-          const defaultCategoryBtn = catalog.querySelector('.category-filter-btn[data-category="all"]');
-          const defaultSubcategoryBtn = catalog.querySelector('.subcategory-filter-btn[data-subcategory="all"]');
-          if (defaultCategoryBtn) defaultCategoryBtn.click();
-          if (defaultSubcategoryBtn) defaultSubcategoryBtn.click();
-        };
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        const defaultCategoryBtn = catalog.querySelector('.category-filter-btn[data-category="all"]');
+        const defaultSubcategoryBtn = catalog.querySelector('.subcategory-filter-btn[data-subcategory="all"]');
+        if (defaultCategoryBtn) defaultCategoryBtn.click();
+        if (defaultSubcategoryBtn) defaultSubcategoryBtn.click();
+      });
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const filterParam = urlParams.get('filter');
+    if (filterParam) {
+      const targetBtn = catalog.querySelector(`.category-filter-btn[data-category="${filterParam}"]`);
+      if (targetBtn) {
+        targetBtn.click();
+        catalog.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    const handleFilterLinkClick = (e) => {
+      const link = e.target.closest('a');
+      if (!link) return;
+
+      const href = link.getAttribute('href');
+      if (!href) return;
+
+      const isHomepage = window.location.pathname === '/' || window.location.pathname === '' || window.location.pathname === '/ar' || window.location.pathname === '/ar/';
+      if (!isHomepage) return;
+
+      let category = null;
+      const text = link.textContent.toLowerCase();
+      
+      if (href.includes('/collections/men') || href.includes('filter=men') || href === '#men') {
+        category = 'men';
+      } else if (href.includes('/collections/women') || href.includes('filter=women') || href === '#women') {
+        category = 'women';
+      } else if (href.includes('/collections/new-drops') || href.includes('/collections/newdrops') || href.includes('filter=new-drops') || href.includes('filter=newdrops') || href === '#new-drops') {
+        category = 'new-drops';
+      } else if (href.includes('/collections/sale') || href.includes('filter=sale') || href === '#sale') {
+        category = 'sale';
+      } else if (href.includes('/collections/all') || href.includes('filter=all') || href === '#all') {
+        category = 'all';
+      } else if (href.includes('#shop-catalog') || href === '#') {
+        if (text.includes('women') || text.includes('نساء')) {
+          category = 'women';
+        } else if (text.includes('men') || text.includes('رجال')) {
+          category = 'men';
+        } else if (text.includes('new drops') || text.includes('وصل حديثاً')) {
+          category = 'new-drops';
+        } else if (text.includes('sale') || text.includes('تخفيضات')) {
+          category = 'sale';
+        } else if (text.includes('shop now') || text.includes('all') || text.includes('الكل') || text.includes('تسوق')) {
+          category = 'all';
+        }
       }
 
-      // تشغيل أولي مباشر عند تحميل الصفحة
-      filterGrid();
-    }
+      if (category) {
+        e.preventDefault();
+        const btn = catalog.querySelector(`.category-filter-btn[data-category="${category}"]`);
+        if (btn) {
+          const mobileDrawer = document.getElementById('MobileNavDrawer');
+          if (mobileDrawer && !mobileDrawer.classList.contains('hidden')) {
+            const closeBtn = mobileDrawer.querySelector('.mobile-menu-close');
+            if (closeBtn) closeBtn.click();
+          }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initCatalog);
-    } else {
-      initCatalog();
-    }
-  })();
+          btn.click();
+          catalog.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          
+          if (category === 'all') {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('filter');
+            history.pushState(null, '', url.pathname + url.search);
+          } else {
+            history.pushState(null, '', `?filter=${category}`);
+          }
+        }
+      }
+    };
+
+    document.addEventListener('click', handleFilterLinkClick);
+
+    cards.forEach(card => {
+      const mobileTrigger = card.querySelector('.mobile-quick-add-trigger');
+      const mobilePopup = card.querySelector('.mobile-size-popup');
+      
+      if (mobileTrigger && mobilePopup) {
+        mobileTrigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isClosed = mobilePopup.classList.contains('hidden');
+          catalog.querySelectorAll('.mobile-size-popup').forEach(pop => pop.classList.add('hidden'));
+
+          if (isClosed) {
+            mobilePopup.classList.remove('hidden');
+          }
+        });
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.mobile-size-popup') || e.target.closest('.mobile-quick-add-trigger') || e.target.closest('.quick-add-size-btn')) return;
+      catalog.querySelectorAll('.mobile-size-popup').forEach(pop => pop.classList.add('hidden'));
+    });
+
+    document.addEventListener('click', (e) => {
+      const sizeBtn = e.target.closest('.quick-add-size-btn');
+      if (!sizeBtn || sizeBtn.disabled) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      let variantId = sizeBtn.getAttribute('data-variant-id');
+      if (!variantId) return;
+      if (variantId.includes('/')) variantId = variantId.split('/').pop();
+      variantId = parseInt(variantId, 10);
+      if (isNaN(variantId)) return;
+
+      const originalText = sizeBtn.textContent.trim();
+      sizeBtn.disabled = true;
+      sizeBtn.textContent = '...';
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          id: variantId,
+          quantity: 1
+        })
+      })
+      .then(res => {
+        if (!res.ok) return res.json().then(err => Promise.reject(err));
+        return res.json();
+      })
+      .then(item => {
+        sizeBtn.textContent = '\u2713';
+        document.dispatchEvent(new CustomEvent('cart:updated', {
+          detail: { item: item, openDrawer: true }
+        }));
+
+        setTimeout(() => {
+          sizeBtn.disabled = false;
+          sizeBtn.textContent = originalText;
+          const popup = sizeBtn.closest('.mobile-size-popup');
+          if (popup) popup.classList.add('hidden');
+        }, 1500);
+      })
+      .catch(err => {
+        console.error('AJAX quick add failed:', err);
+        sizeBtn.textContent = isArabic ? 'خطأ' : 'Error';
+        setTimeout(() => {
+          sizeBtn.disabled = false;
+          sizeBtn.textContent = originalText;
+        }, 1500);
+      });
+    });
+
+  });
 </script>
 
 {% schema %}
@@ -384,7 +629,7 @@
       "min": 8,
       "max": 96,
       "step": 4,
-      "default": 48
+      "default": 24
     }
   ],
   "blocks": [
@@ -454,7 +699,7 @@
           "type": "subcategory_filter",
           "settings": {
             "label": "T-Shirts & Tops",
-            "label_ar": "تيشيرتات وتوبات",
+            "label_ar": "تيشيرتات",
             "key": "t-shirt"
           }
         }
