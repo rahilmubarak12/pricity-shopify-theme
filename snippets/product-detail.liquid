@@ -227,7 +227,7 @@
       <img 
         src="{{ featured_image | image_url: width: 1000 }}" 
         alt="{{ product.title | escape }}" 
-        class="product-main-image w-full h-auto object-contain transition-transform duration-700 ease-out hover:scale-110 cursor-zoom-in"
+        class="product-main-image w-full h-auto object-contain transition-transform duration-700 ease-out hover:scale-110 cursor-zoom-in" 
         width="1000" height="1000" />
     </div>
     {%- if images.size > 1 -%}
@@ -546,58 +546,45 @@
             {%- if product.metafields.custom.care_instructions != blank -%}
               {{ product.metafields.custom.care_instructions }}
             {%- else -%}
-              {% case product.handle %}
-                {% when 'oversized-dual-tone-sweatshirt' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
-                {% when 'oversized-sweatshirt-turtleneck' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
-                {% when 'overlap-neck-sweatshirt' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
-                {% when 'crewneck-oversized-sweatshirt' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
-                {% when 'hoodie-with-burgundy-piping' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not saline soak, bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
-                {% when 'hoodie-with-leather-piped-detailing' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not saline soak, bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
-                {% when 'all-in-well-hoodie' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not saline soak, bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
-                {% when 'apricity-leather-patch-hoodie' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not saline soak, bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
-                {% when 'double-collar-cropped-sweatshirt' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
-                {% when 'a-new-era-cropped-sweatshirt' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
-                {% when 'indulge-in-self-love-hoodie' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
-                {% when '3d-apricity-hoodie' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean </p><p>Cool iron if necessary</p>
-                {% when 'bayview-linen-set' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
-                {% when 'club-1932-t-shirt' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
-                {% when 'onyx-black' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
-                {% when 'onyx-gray' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
-                {% when 'echoes-of-silence-green' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
-                {% when 'echoes-of-silence-white' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
-                {% when 'staple-sand' %}
-                  <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
-                {% when 'apricity-blush' %}
-                  <p>Machine wash at 86°F / 30°C</p><p>Do not use chlorine bleach</p><p>Do not tumble dry</p><p>Maximum iron at 230°F / 110°C</p><p>Do not dry clean </p><p>Wash inside out. Dry separately </p>
-                {% when 'apy-butter-set' %}
-                  <p>Machine wash at 86°F / 30°C</p><p>Do not use chlorine bleach</p><p>Do not tumble dry</p><p>Maximum iron at 230°F / 110°C</p><p>Do not dry clean </p><p>Wash inside out. Dry separately </p>
-                {% else %}
-                  <ul class="space-y-1.5">
-                    <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Machine wash cold at 30°C, inside out</li>
-                    <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Do not tumble dry — hang to dry</li>
-                    <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Iron on low heat, inside out only</li>
-                    <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Do not bleach</li>
-                    <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Store folded to preserve shape</li>
-                  </ul>
-              {% endcase %}
+              {%- if request.locale.iso_code == 'ar' -%}
+                {% case product.handle %}
+                  {% when 'apricity-blush' or 'apy-butter-set' %}
+                    <p>غسيل آلي بدرجة حرارة 30° مئوية</p>
+                    <p>يُمنع استخدام مبيضات الكلور</p>
+                    <p>تجنب التجفيف الآلي بالمجفف</p>
+                    <p>الكي على درجة حرارة خفيفة (بحد أقصى 110° مئوية)</p>
+                    <p>يُمنع التنظيف الجاف</p>
+                    <p>يُغسل مقلوباً للداخل، ويُجفف منفرداً</p>
+                  {% when 'bayview-linen-set' %}
+                    <p>غسيل آلي بماء بارد، دورة خفيفة</p>
+                    <p>غسل الألوان الداكنة بشكل منفصل</p>
+                    <p>تجنب استخدام المبيضات، أو التجفيف الآلي، أو التنظيف الجاف</p>
+                    <p>كي خفيف عند الحاجة</p>
+                  {% else %}
+                    <ul class="space-y-1.5" dir="rtl">
+                      <li class="text-xs text-zinc-500 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>غسيل آلي بماء بارد عند 30° مئوية، مع قلب القطعة للداخل</li>
+                      <li class="text-xs text-zinc-500 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>تجنب التجفيف الآلي — يُفضل التعليق ليجف في الهواء</li>
+                      <li class="text-xs text-zinc-500 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>الكي على درجة حرارة منخفضة مع قلب القطعة للداخل فقط</li>
+                      <li class="text-xs text-zinc-500 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>يُمنع استخدام المبيضات أو التنظيف الجاف</li>
+                      <li class="text-xs text-zinc-500 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>تُحفظ القطعة مطوية للحفاظ على شكل القماش وقصته</li>
+                    </ul>
+                {% endcase %}
+              {%- else -%}
+                {% case product.handle %}
+                  {% when 'apricity-blush' or 'apy-butter-set' %}
+                    <p>Machine wash at 86°F / 30°C</p><p>Do not use chlorine bleach</p><p>Do not tumble dry</p><p>Maximum iron at 230°F / 110°C</p><p>Do not dry clean</p><p>Wash inside out. Dry separately</p>
+                  {% when 'oversized-dual-tone-sweatshirt' or 'oversized-sweatshirt-turtleneck' or 'overlap-neck-sweatshirt' or 'crewneck-oversized-sweatshirt' or 'hoodie-with-burgundy-piping' or 'hoodie-with-leather-piped-detailing' or 'all-in-well-hoodie' or 'apricity-leather-patch-hoodie' or 'double-collar-cropped-sweatshirt' or 'a-new-era-cropped-sweatshirt' or 'indulge-in-self-love-hoodie' or '3d-apricity-hoodie' or 'bayview-linen-set' or 'club-1932-t-shirt' or 'onyx-black' or 'onyx-gray' or 'echoes-of-silence-green' or 'echoes-of-silence-white' or 'staple-sand' %}
+                    <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
+                  {% else %}
+                    <ul class="space-y-1.5">
+                      <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Machine wash cold at 30°C, inside out</li>
+                      <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Do not tumble dry — hang to dry</li>
+                      <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Iron on low heat, inside out only</li>
+                      <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Do not bleach</li>
+                      <li class="text-xs text-zinc-400 flex items-start gap-2"><span class="mt-0.5 shrink-0">·</span>Store folded to preserve shape</li>
+                    </ul>
+                {% endcase %}
+              {%- endif -%}
             {%- endif -%}
           </div>
         </div>
