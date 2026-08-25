@@ -392,7 +392,7 @@
           <button type="button" class="accordion-header w-full flex items-center justify-between py-4 text-left group">
             <div class="flex items-center gap-3">
               <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40" width="16" height="16" />
-              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %} عشاق الأناقة{% else %}Attention style seekers{% endif %}</span>
+              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}عشاق الأناقة{% else %}Attention style seekers{% endif %}</span>
             </div>
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
@@ -400,52 +400,97 @@
             {%- if product.metafields.custom.attention_seekers != blank -%}
               {{ product.metafields.custom.attention_seekers }}
             {%- else -%}
-              {% case product.handle %}
-                {% when 'oversized-dual-tone-sweatshirt' %}
-                  <p>Blue and orange, bold and bright, get ready to stand out!</p>
-                {% when 'oversized-sweatshirt-turtleneck' %}
-                  <p>Slip me on, and let comfort lead the way!</p>
-                {% when 'overlap-neck-sweatshirt' %}
-                  <p>You want your wardrobe to level up, try this soft scuba sweatshirt</p>
-                {% when 'crewneck-oversized-sweatshirt' %}
-                  <p>Grab this piece, and let your style do the talking </p>
-                {% when 'hoodie-with-burgundy-piping' %}
-                  <p>For comfort and boldness in one, this hoodie has you covered</p>
-                {% when 'hoodie-with-leather-piped-detailing' %}
-                  <p>This hoodie doesn't follow trend, it sets them </p>
-                {% when 'all-in-well-hoodie' %}
-                  <p>Take the lead, wear the vibe</p>
-                {% when 'apricity-leather-patch-hoodie' %}
-                  <p>Own the Look in Brown</p>
-                {% when 'double-collar-cropped-sweatshirt' %}
-                  <p>Own the spotlight with a sweatshirt as bold as you are</p>
-                {% when 'a-new-era-cropped-sweatshirt' %}
-                  <p>Be the change. Be the era. Wear it like you mean it</p>
-                {% when 'indulge-in-self-love-hoodie' %}
-                  <p>Dare to be different. Own the look. Own the moment</p>
-                {% when '3d-apricity-hoodie' %}
-                  <p>Own your look, own your day, Midnight Navy never fails</p>
-                {% when 'bayview-linen-set' %}
-                  <p>Light linen, heavy presence. Walk freely and let Bay View BLVD. make the world notice you</p>
-                {% when 'club-1932-t-shirt' %}
-                  <p>Carrying the emblem of our homeland in our hearts, we walk boldly, proudly, and endlessly Saudi</p>
-                {% when 'onyx-black' %}
-                  <p>Strong and silent, they never chase attention, ONYX is the power they wear</p>
-                {% when 'onyx-gray' %}
-                  <p>Strong and silent, they never chase attention, ONYX is the power they wear</p>
-                {% when 'echoes-of-silence-green' %}
-                  <p>A perfect blend of power, style, and confidence for anyone who isn't afraid to be noticed</p>
-                {% when 'echoes-of-silence-white' %}
-                  <p>A perfect blend of power, style, and confidence for anyone who isn't afraid to be noticed</p>
-                {% when 'staple-sand' %}
-                  <p>Where minimal meets meaning</p>
-                {% when 'apricity-blush' %}
-                  <p>Soft enough to blush. Bold enough to own it</p>
-                {% when 'apy-butter-set' %}
-                  <p>Soft like butter. Sharp like attitude</p>
-                {% else %}
-                  {{ product.description }}
-              {% endcase %}
+              {%- if request.locale.iso_code == 'ar' -%}
+                {% case product.handle %}
+                  {% when 'oversized-dual-tone-sweatshirt' %}
+                    <p>أزرق وبرتقالي، جرأة وإشراق، استعد للتميز والظهور!</p>
+                  {% when 'oversized-sweatshirt-turtleneck' %}
+                    <p>ارتدِ القطعة، ودع الراحة تقود يومك!</p>
+                  {% when 'overlap-neck-sweatshirt' %}
+                    <p>إذا أردت الارتقاء بإطلالتك، جرب هذا السويت شيرت الناعم من قماش السكوبا.</p>
+                  {% when 'crewneck-oversized-sweatshirt' %}
+                    <p>اختر هذه القطعة، ودع أسلوبك يتحدث عنك.</p>
+                  {% when 'hoodie-with-burgundy-piping' %}
+                    <p>يمنحك هذا الهودي الراحة والجرأة في آن واحد لإطلالة متكاملة.</p>
+                  {% when 'hoodie-with-leather-piped-detailing' %}
+                    <p>هذا الهودي لا يتبع صيحات الموضة، بل يصنعها.</p>
+                  {% when 'all-in-well-hoodie' %}
+                    <p>تولّ القيادة، وعش الأجواء بأناقة.</p>
+                  {% when 'apricity-leather-patch-hoodie' %}
+                    <p>تألق بالإطلالة المميزة باللون البني.</p>
+                  {% when 'double-collar-cropped-sweatshirt' %}
+                    <p>اخطف الأنظار بسويت شيرت جريء يعبر عن تميزك.</p>
+                  {% when 'a-new-era-cropped-sweatshirt' %}
+                    <p>كن أنت التغيير. اصنع عصرك الخاص وارتدِ ما يعبر عنك بثقة.</p>
+                  {% when 'indulge-in-self-love-hoodie' %}
+                    <p>كن مختلفاً، وتفرد بإطلالتك وعش اللحظة.</p>
+                  {% when '3d-apricity-hoodie' %}
+                    <p>امتلك إطلالتك ويومك، فالكحلي الليلي دائماً خيار لا يخيب.</p>
+                  {% when 'bayview-linen-set' %}
+                    <p>كتان خفيف، وحضور استثنائي. تحرك بحرية ودع أناقتك تلفت أنظار العالم.</p>
+                  {% when 'club-1932-t-shirt' %}
+                    <p>نحمل شعار الوطن في قلوبنا، ونمشي بجرأة وفخر وانتماء سعودي دائم.</p>
+                  {% when 'onyx-black' or 'onyx-gray' %}
+                    <p>قوة هادئة وحضور لا يحتاج إلى لفت الانتباه، هذه هي قوة ONYX.</p>
+                  {% when 'echoes-of-silence-green' or 'echoes-of-silence-white' %}
+                    <p>مزيج مثالي من القوة والأناقة والثقة لكل من لا يخشى لفت الأنظار.</p>
+                  {% when 'staple-sand' %}
+                    <p>حيث تلتقي البساطة المطلقة بالمعنى والتميز.</p>
+                  {% when 'apricity-blush' %}
+                    <p>رقة كافية لتلفت الأنظار، وجرأة كافية لتتفردي بها.</p>
+                  {% when 'apy-butter-set' %}
+                    <p>نعومة تشبه الزبدة، وحضور يفرض أناقته.</p>
+                  {% else %}
+                    {{ product.description }}
+                {% endcase %}
+              {%- else -%}
+                {% case product.handle %}
+                  {% when 'oversized-dual-tone-sweatshirt' %}
+                    <p>Blue and orange, bold and bright, get ready to stand out!</p>
+                  {% when 'oversized-sweatshirt-turtleneck' %}
+                    <p>Slip me on, and let comfort lead the way!</p>
+                  {% when 'overlap-neck-sweatshirt' %}
+                    <p>You want your wardrobe to level up, try this soft scuba sweatshirt</p>
+                  {% when 'crewneck-oversized-sweatshirt' %}
+                    <p>Grab this piece, and let your style do the talking </p>
+                  {% when 'hoodie-with-burgundy-piping' %}
+                    <p>For comfort and boldness in one, this hoodie has you covered</p>
+                  {% when 'hoodie-with-leather-piped-detailing' %}
+                    <p>This hoodie doesn't follow trend, it sets them </p>
+                  {% when 'all-in-well-hoodie' %}
+                    <p>Take the lead, wear the vibe</p>
+                  {% when 'apricity-leather-patch-hoodie' %}
+                    <p>Own the Look in Brown</p>
+                  {% when 'double-collar-cropped-sweatshirt' %}
+                    <p>Own the spotlight with a sweatshirt as bold as you are</p>
+                  {% when 'a-new-era-cropped-sweatshirt' %}
+                    <p>Be the change. Be the era. Wear it like you mean it</p>
+                  {% when 'indulge-in-self-love-hoodie' %}
+                    <p>Dare to be different. Own the look. Own the moment</p>
+                  {% when '3d-apricity-hoodie' %}
+                    <p>Own your look, own your day, Midnight Navy never fails</p>
+                  {% when 'bayview-linen-set' %}
+                    <p>Light linen, heavy presence. Walk freely and let Bay View BLVD. make the world notice you</p>
+                  {% when 'club-1932-t-shirt' %}
+                    <p>Carrying the emblem of our homeland in our hearts, we walk boldly, proudly, and endlessly Saudi</p>
+                  {% when 'onyx-black' %}
+                    <p>Strong and silent, they never chase attention, ONYX is the power they wear</p>
+                  {% when 'onyx-gray' %}
+                    <p>Strong and silent, they never chase attention, ONYX is the power they wear</p>
+                  {% when 'echoes-of-silence-green' %}
+                    <p>A perfect blend of power, style, and confidence for anyone who isn't afraid to be noticed</p>
+                  {% when 'echoes-of-silence-white' %}
+                    <p>A perfect blend of power, style, and confidence for anyone who isn't afraid to be noticed</p>
+                  {% when 'staple-sand' %}
+                    <p>Where minimal meets meaning</p>
+                  {% when 'apricity-blush' %}
+                    <p>Soft enough to blush. Bold enough to own it</p>
+                  {% when 'apy-butter-set' %}
+                    <p>Soft like butter. Sharp like attitude</p>
+                  {% else %}
+                    {{ product.description }}
+                {% endcase %}
+              {%- endif -%}
             {%- endif -%}
           </div>
         </div>
@@ -529,15 +574,15 @@
                   {% when 'bayview-linen-set' %}
                     <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
                   {% when 'club-1932-t-shirt' %}
-                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                    <p>Carrying the emblem of our homeland in our hearts, we walk boldly, proudly, and endlessly Saudi</p>
                   {% when 'onyx-black' %}
-                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                    <p>Strong and silent, they never chase attention, ONYX is the power they wear</p>
                   {% when 'onyx-gray' %}
-                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                    <p>Strong and silent, they never chase attention, ONYX is the power they wear</p>
                   {% when 'echoes-of-silence-green' %}
-                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                    <p>A perfect blend of power, style, and confidence for anyone who isn't afraid to be noticed</p>
                   {% when 'echoes-of-silence-white' %}
-                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                    <p>A perfect blend of power, style, and confidence for anyone who isn't afraid to be noticed</p>
                   {% when 'staple-sand' %}
                     <p>Designed for a relaxed oversized look that suits everyone</p><p>Female model is 5'4" (163 cm) and wears size S/M</p><p>Male model is 6'1" (185 cm) and wears size M/L</p>
                   {% when 'apricity-blush' %}
@@ -998,7 +1043,7 @@
         });
       });
 
-      // 5. SizeハンClicks
+      // 5. Size Clicks
       container.querySelectorAll('.option-size-container').forEach(sizeWrap => {
         const optIndex = parseInt(sizeWrap.getAttribute('data-option-index'), 10);
         sizeWrap.querySelectorAll('.size-option-btn').forEach(btn => {
