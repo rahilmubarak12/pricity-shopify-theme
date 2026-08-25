@@ -392,7 +392,7 @@
           <button type="button" class="accordion-header w-full flex items-center justify-between py-4 text-left group">
             <div class="flex items-center gap-3">
               <img src="{{ 'logo.png' | asset_url }}" alt="" class="h-4 w-4 object-contain opacity-40" width="16" height="16" />
-              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %}اللي يحبون التفاصيل{% else %}Attention style seekers{% endif %}</span>
+              <span class="text-sm text-zinc-700 font-medium tracking-wide">{% if request.locale.iso_code == 'ar' %} عشاق الأناقة{% else %}Attention style seekers{% endif %}</span>
             </div>
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
@@ -668,7 +668,7 @@
           data-variant-id="{{ current_variant.id }}"
           {% unless current_variant.available %}disabled{% endunless %}
         >
-          {% if request.locale.iso_code == 'ar' %}اشترِالآن{% else %}Quick Buy{% endif %}
+          {% if request.locale.iso_code == 'ar' %}اشترِ الآن{% else %}Quick Buy{% endif %}
         </button>
       </div>
 
