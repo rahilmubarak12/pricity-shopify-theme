@@ -482,53 +482,72 @@
           <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed prose prose-sm max-w-none prose-zinc">
             {%- if product.metafields.custom.size_fit != blank -%}
               {{ product.metafields.custom.size_fit }}
+            {%- elsif product.metafields.custom.size_and_fit != blank -%}
+              {{ product.metafields.custom.size_and_fit }}
             {%- else -%}
-              {% case product.handle %}
-                {% when 'oversized-dual-tone-sweatshirt' %}
-                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
-                {% when 'oversized-sweatshirt-turtleneck' %}
-                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL </p>
-                {% when 'overlap-neck-sweatshirt' %}
-                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
-                {% when 'crewneck-oversized-sweatshirt' %}
-                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
-                {% when 'hoodie-with-burgundy-piping' %}
-                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
-                {% when 'hoodie-with-leather-piped-detailing' %}
-                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
-                {% when 'all-in-well-hoodie' %}
-                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
-                {% when 'apricity-leather-patch-hoodie' %}
-                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
-                {% when 'double-collar-cropped-sweatshirt' %}
-                  <p>Designed for a flattering and comfortable fit</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p>
-                {% when 'a-new-era-cropped-sweatshirt' %}
-                  <p>Designed for a flattering and comfortable fit</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p>
-                {% when 'indulge-in-self-love-hoodie' %}
-                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
-                {% when '3d-apricity-hoodie' %}
-                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
-                {% when 'bayview-linen-set' %}
-                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
-                {% when 'club-1932-t-shirt' %}
-                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
-                {% when 'onyx-black' %}
-                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
-                {% when 'onyx-gray' %}
-                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
-                {% when 'echoes-of-silence-green' %}
-                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
-                {% when 'echoes-of-silence-white' %}
-                  <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
-                {% when 'staple-sand' %}
-                  <p>Designed for a relaxed oversized look that suits everyone</p><p>Female model is 5'4" (163 cm) and wears size S/M</p><p>Male model is 6'1" (185 cm) and wears size M/L</p>
-                {% when 'apricity-blush' %}
-                  <p>Designed exclusively for women, offering a flattering close-to-body fit</p><p>Model is 5'4" (163 cm) and wears size S/M</p>
-                {% when 'apy-butter-set' %}
-                  <p>Designed exclusively for women, offering a flattering close-to-body fit</p><p>Model is 5'4" (163 cm) and wears size S/M</p>
-                {% else %}
-                  {{ product.description }}
-              {% endcase %}
+              {%- if request.locale.iso_code == 'ar' -%}
+                {% case product.handle %}
+                  {% when 'oversized-dual-tone-sweatshirt' or 'oversized-sweatshirt-turtleneck' or 'overlap-neck-sweatshirt' or 'crewneck-oversized-sweatshirt' or 'hoodie-with-burgundy-piping' or 'hoodie-with-leather-piped-detailing' or 'all-in-well-hoodie' or 'apricity-leather-patch-hoodie' or 'indulge-in-self-love-hoodie' or '3d-apricity-hoodie' %}
+                    <p>قصة عملية تناسب الجنسين بإطلالة مريحة وأنيقة على الجميع.</p><p>المودل النسائية: الطول 169 سم (5'5") وترتدي مقاس M/L.</p><p>المودل الرجالي: الطول 187 سم (6'1") ويرتدي مقاس L/XL.</p>
+                  {% when 'double-collar-cropped-sweatshirt' or 'a-new-era-cropped-sweatshirt' %}
+                    <p>مصمم بقصة جذابة ومريحة تبرز القوام بأناقة.</p><p>المودل النسائية: الطول 169 سم (5'5") وترتدي مقاس M/L.</p>
+                  {% when 'bayview-linen-set' or 'club-1932-t-shirt' or 'onyx-black' or 'onyx-gray' or 'echoes-of-silence-green' or 'echoes-of-silence-white' %}
+                    <p>قصة عملية تناسب الجنسين بإطلالة مريحة وأنيقة على الجميع.</p><p>المودل النسائية: الطول 173 سم (5'6") وترتدي مقاس S/M.</p><p>المودل الرجالي: الطول 184 سم (6'0") ويرتدي مقاس M/L.</p>
+                  {% when 'staple-sand' %}
+                    <p>مصمم بقَصّة أوفر سايز (Oversized) مريحة تناسب الجميع.</p><p>المودل النسائية: الطول 163 سم (5'4") وترتدي مقاس S/M.</p><p>المودل الرجالي: الطول 185 سم (6'1") ويرتدي مقاس M/L.</p>
+                  {% when 'apricity-blush' or 'apy-butter-set' %}
+                    <p>مصمم خصيصاً للنساء بقَصّة محددة للقوام وجذابة ومريحة.</p><p>طول المودل: 163 سم (5'4") وترتدي مقاس S/M.</p>
+                  {% else %}
+                    {{ product.description }}
+                {% endcase %}
+              {%- else -%}
+                {% case product.handle %}
+                  {% when 'oversized-dual-tone-sweatshirt' %}
+                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                  {% when 'oversized-sweatshirt-turtleneck' %}
+                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL </p>
+                  {% when 'overlap-neck-sweatshirt' %}
+                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                  {% when 'crewneck-oversized-sweatshirt' %}
+                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                  {% when 'hoodie-with-burgundy-piping' %}
+                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                  {% when 'hoodie-with-leather-piped-detailing' %}
+                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                  {% when 'all-in-well-hoodie' %}
+                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                  {% when 'apricity-leather-patch-hoodie' %}
+                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                  {% when 'double-collar-cropped-sweatshirt' %}
+                    <p>Designed for a flattering and comfortable fit</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p>
+                  {% when 'a-new-era-cropped-sweatshirt' %}
+                    <p>Designed for a flattering and comfortable fit</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p>
+                  {% when 'indulge-in-self-love-hoodie' %}
+                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                  {% when '3d-apricity-hoodie' %}
+                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'5'' / 169 cm and wears size M/L </p><p>Male model is 6'1'' / 187 cm and wears size L/XL</p>
+                  {% when 'bayview-linen-set' %}
+                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                  {% when 'club-1932-t-shirt' %}
+                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                  {% when 'onyx-black' %}
+                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                  {% when 'onyx-gray' %}
+                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                  {% when 'echoes-of-silence-green' %}
+                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                  {% when 'echoes-of-silence-white' %}
+                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                  {% when 'staple-sand' %}
+                    <p>Designed for a relaxed oversized look that suits everyone</p><p>Female model is 5'4" (163 cm) and wears size S/M</p><p>Male model is 6'1" (185 cm) and wears size M/L</p>
+                  {% when 'apricity-blush' %}
+                    <p>Designed exclusively for women, offering a flattering close-to-body fit</p><p>Model is 5'4" (163 cm) and wears size S/M</p>
+                  {% when 'apy-butter-set' %}
+                    <p>Designed exclusively for women, offering a flattering close-to-body fit</p><p>Model is 5'4" (163 cm) and wears size S/M</p>
+                  {% else %}
+                    {{ product.description }}
+                {% endcase %}
+              {%- endif -%}
             {%- endif -%}
           </div>
         </div>
@@ -545,6 +564,8 @@
           <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed prose prose-sm max-w-none prose-zinc">
             {%- if product.metafields.custom.care_instructions != blank -%}
               {{ product.metafields.custom.care_instructions }}
+            {%- elsif product.metafields.custom.take_care != blank -%}
+              {{ product.metafields.custom.take_care }}
             {%- else -%}
               {%- if request.locale.iso_code == 'ar' -%}
                 {% case product.handle %}
@@ -977,7 +998,7 @@
         });
       });
 
-      // 5. Size Clicks
+      // 5. SizeハンClicks
       container.querySelectorAll('.option-size-container').forEach(sizeWrap => {
         const optIndex = parseInt(sizeWrap.getAttribute('data-option-index'), 10);
         sizeWrap.querySelectorAll('.size-option-btn').forEach(btn => {
