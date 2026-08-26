@@ -210,11 +210,9 @@
           </div>
         {%- endif -%}
 
-        <!-- Black Checkout Button -->
         <a 
           href="/checkout" 
-          class="w-full py-4 text-white font-mono-street text-[11px] font-extrabold uppercase tracking-[0.2em] bg-black hover:bg-zinc-900 hover:shadow-lg active:scale-[0.99] transition-all duration-300 ease-in-out flex items-center justify-center gap-2 no-underline"
-          style="background-color: #000000 !important; color: #ffffff !important;"
+          class="w-full py-4 text-white font-mono-street text-[11px] font-extrabold uppercase tracking-[0.2em] bg-[#000000] hover:bg-zinc-800 hover:shadow-lg active:scale-[0.99] transition-all duration-300 ease-in-out flex items-center justify-center gap-2 no-underline"
         >
           <span>{{ checkout_btn_label }}</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="{% if request.locale.iso_code == 'ar' %}rotate-180{% endif %}">
