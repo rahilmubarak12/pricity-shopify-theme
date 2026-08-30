@@ -355,6 +355,26 @@
       </button>
     </div>
   </div>
+
+  <!-- Search Drawer -->
+  <div id="SearchDrawer" class="hidden fixed inset-0 z-[10000] bg-black/60 backdrop-blur-sm p-4 sm:p-8" role="dialog" aria-modal="true" aria-labelledby="SearchDrawerTitle">
+    <div class="mx-auto mt-[12vh] w-full max-w-2xl bg-[#faf9f7] p-5 shadow-2xl sm:p-8">
+      <div class="mb-5 flex items-center justify-between gap-4">
+        <h2 id="SearchDrawerTitle" class="font-mono-street text-sm uppercase tracking-[0.18em] text-[#1a1a1a]">{{ section.settings.search_label | default: 'Search' }}</h2>
+        <button type="button" class="search-drawer-close p-2 text-zinc-500 transition-colors hover:text-[#1a1a1a]" aria-label="Close search">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <form action="{{ routes.search_url }}" method="get" role="search" class="flex border-b border-zinc-400">
+        <input type="hidden" name="options[prefix]" value="last">
+        <input class="search-drawer-input min-w-0 flex-1 bg-transparent px-0 py-3 text-base text-[#1a1a1a] outline-none placeholder:text-zinc-400" type="search" name="q" placeholder="{{ section.settings.search_label | default: 'Search' }}" autocomplete="off">
+        <button type="submit" class="px-3 text-[#1a1a1a] transition-opacity hover:opacity-60" aria-label="Submit search">
+          <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+      </form>
+    </div>
+  </div>
 </header>
 
 <script>
@@ -363,6 +383,8 @@
     const mobileMenuOpenBtn = document.querySelector('.mobile-menu-trigger');
     const mobileMenuCloseBtn = document.querySelector('.mobile-menu-close');
     const mobileDrawer = document.getElementById('MobileNavDrawer');
+    const searchDrawer = document.getElementById('SearchDrawer');
+    const searchInput = searchDrawer?.querySelector('.search-drawer-input');
 
     let mobileMenuOpen = false;
 
@@ -414,6 +436,34 @@
 
     window.addEventListener('scroll', handleScroll);
     handleScroll();
+
+    const openSearchDrawer = () => {
+      if (!searchDrawer) return;
+      searchDrawer.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+      window.setTimeout(() => searchInput?.focus(), 0);
+    };
+
+    const closeSearchDrawer = () => {
+      if (!searchDrawer) return;
+      searchDrawer.classList.add('hidden');
+      if (!mobileMenuOpen) document.body.classList.remove('overflow-hidden');
+    };
+
+    document.querySelectorAll('.search-drawer-trigger').forEach(trigger => {
+      trigger.addEventListener('click', openSearchDrawer);
+    });
+
+    searchDrawer?.querySelector('.search-drawer-close')?.addEventListener('click', closeSearchDrawer);
+    searchDrawer?.addEventListener('click', event => {
+      if (event.target === searchDrawer) closeSearchDrawer();
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && searchDrawer && !searchDrawer.classList.contains('hidden')) {
+        closeSearchDrawer();
+      }
+    });
 
     if (mobileMenuOpenBtn) {
       mobileMenuOpenBtn.addEventListener('click', () => {
