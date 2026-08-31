@@ -3,7 +3,10 @@
   Upload this file to: templates/search.liquid
 {% endcomment %}
 
-{%- assign is_arabic = request.locale.iso_code == 'ar' -%}
+{%- assign is_arabic = false -%}
+{%- if request.locale.iso_code == 'ar' -%}
+  {%- assign is_arabic = true -%}
+{%- endif -%}
 
 <style>
   .apricity-search-page {
@@ -175,3 +178,5 @@
     </div>
   </main>
 {% endpaginate %}
+
+
