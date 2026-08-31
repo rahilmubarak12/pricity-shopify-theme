@@ -13,13 +13,11 @@
           {% if is_arabic %}اكتشف{% else %}Discover{% endif %}
         </span>
 
-        <h1 class="mt-2 font-heading text-3xl font-extrabold uppercase text-[#1a1a1a] md:text-5xl">
-          {% if search.performed %}
-            {% if is_arabic %}نتائج البحث{% else %}Search Results{% endif %}
-          {% else %}
+        {% unless search.performed %}
+          <h1 class="mt-2 font-heading text-3xl font-extrabold uppercase text-[#1a1a1a] md:text-5xl">
             {% if is_arabic %}ابحث في المتجر{% else %}Search the Store{% endif %}
-          {% endif %}
-        </h1>
+          </h1>
+        {% endunless %}
 
         {% if search.performed %}
           <p class="mt-4 font-mono-street text-[11px] uppercase tracking-wider text-zinc-400">
