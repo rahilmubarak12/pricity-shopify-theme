@@ -13,7 +13,10 @@
     color: #1a1a1a;
   }
 
-  .apricity-search-wrap { max-width: 80rem; margin: 0 auto; }
+  .apricity-search-wrap {
+    max-width: 80rem;
+    margin: 0 auto;
+  }
 
   .apricity-search-heading {
     max-width: 42rem;
@@ -39,7 +42,9 @@
     text-transform: uppercase;
   }
 
-  .apricity-search-count { margin-top: 1.25rem; }
+  .apricity-search-count {
+    margin-top: 1.25rem;
+  }
 
   .apricity-search-empty {
     display: flex;
@@ -59,11 +64,20 @@
     color: #8a8a8a;
   }
 
-  .apricity-search-empty__text { margin: 0; color: #6b6b6b; font-size: 0.95rem; }
+  .apricity-search-empty__text {
+    margin: 0;
+    color: #6b6b6b;
+    font-size: 0.95rem;
+  }
 
   @media (max-width: 749px) {
-    .apricity-search-page { padding-top: 11rem; }
-    .apricity-search-heading { margin-bottom: 2.5rem; }
+    .apricity-search-page {
+      padding-top: 11rem;
+    }
+
+    .apricity-search-heading {
+      margin-bottom: 2.5rem;
+    }
   }
 </style>
 
@@ -82,6 +96,10 @@
         {% endunless %}
 
         {% if search.performed %}
+          <h1 class="apricity-search-title">
+            {% if is_arabic %}نتائج البحث{% else %}Search Results{% endif %}
+          </h1>
+
           <p class="apricity-search-count">
             {% if is_arabic %}
               {{ search.results_count }} نتيجة لـ «{{ search.terms | escape }}»
@@ -94,6 +112,7 @@
 
       {% if search.performed %}
         {% assign has_products = false %}
+
         <div class="grid grid-cols-2 gap-x-3 gap-y-8 sm:gap-x-6 sm:gap-y-12 lg:grid-cols-3 xl:grid-cols-4">
           {% for item in search.results %}
             {% if item.object_type == 'product' %}
@@ -108,6 +127,7 @@
             <p class="apricity-search-empty__title">
               {% if is_arabic %}لم نعثر على منتجات مطابقة{% else %}No matching products found{% endif %}
             </p>
+
             <p class="apricity-search-empty__text">
               {% if is_arabic %}جرّب كلمة بحث أخرى.{% else %}Try a different search term.{% endif %}
             </p>
@@ -116,27 +136,39 @@
       {% else %}
         <div class="apricity-search-empty">
           <p class="apricity-search-empty__title">
-            {% if is_arabic %}اكتب ما تبحث عنه بالأعلى{% else %}Enter a search term above{% endif %}
+            {% if is_arabic %}اكتب ما تبحث عنه في خانة البحث بالأعلى{% else %}Enter a search term above{% endif %}
           </p>
         </div>
       {% endif %}
 
       {% if paginate.pages > 1 %}
-        <nav class="mt-16 flex items-center justify-center gap-2 font-mono-street text-[11px] uppercase tracking-widest" role="navigation" aria-label="Pagination">
+        <nav
+          class="mt-16 flex items-center justify-center gap-2 font-mono-street text-[11px] uppercase tracking-widest"
+          role="navigation"
+          aria-label="{% if is_arabic %}ترقيم الصفحات{% else %}Pagination{% endif %}"
+        >
           {% if paginate.previous %}
-            <a class="px-3 py-2 text-zinc-400 transition-colors hover:text-[#1a1a1a]" href="{{ paginate.previous.url }}">{% if is_arabic %}السابق{% else %}Previous{% endif %}</a>
+            <a class="px-3 py-2 text-zinc-400 transition-colors hover:text-[#1a1a1a]" href="{{ paginate.previous.url }}">
+              {% if is_arabic %}السابق{% else %}Previous{% endif %}
+            </a>
           {% endif %}
 
           {% for part in paginate.parts %}
             {% if part.is_link %}
-              <a class="px-3 py-2 text-zinc-400 transition-colors hover:text-[#1a1a1a]" href="{{ part.url }}">{{ part.title }}</a>
+              <a class="px-3 py-2 text-zinc-400 transition-colors hover:text-[#1a1a1a]" href="{{ part.url }}">
+                {{ part.title }}
+              </a>
             {% else %}
-              <span class="px-3 py-2 {% if part.title == paginate.current_page %}bg-[#1a1a1a] text-white{% else %}text-zinc-400{% endif %}">{{ part.title }}</span>
+              <span class="px-3 py-2 {% if part.title == paginate.current_page %}bg-[#1a1a1a] text-white{% else %}text-zinc-400{% endif %}">
+                {{ part.title }}
+              </span>
             {% endif %}
           {% endfor %}
 
           {% if paginate.next %}
-            <a class="px-3 py-2 text-zinc-400 transition-colors hover:text-[#1a1a1a]" href="{{ paginate.next.url }}">{% if is_arabic %}التالي{% else %}Next{% endif %}</a>
+            <a class="px-3 py-2 text-zinc-400 transition-colors hover:text-[#1a1a1a]" href="{{ paginate.next.url }}">
+              {% if is_arabic %}التالي{% else %}Next{% endif %}
+            </a>
           {% endif %}
         </nav>
       {% endif %}
