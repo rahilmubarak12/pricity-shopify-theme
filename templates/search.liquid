@@ -6,9 +6,9 @@
 {%- assign is_arabic = request.locale.iso_code == 'ar' -%}
 
 {% paginate search.results by 24 %}
-  <main class="min-h-screen bg-[#faf9f7] px-6 py-20 md:px-16 md:py-24" {% if is_arabic %}dir="rtl"{% endif %}>
+  <main class="min-h-screen bg-[#faf9f7] px-6 pb-20 pt-52 md:px-16 md:pb-24 md:pt-56" {% if is_arabic %}dir="rtl"{% endif %}>
     <div class="mx-auto max-w-7xl">
-      <header class="mb-12 border-b border-zinc-200 pb-8 md:mb-16">
+      <header class="mb-10 md:mb-14">
         <span class="font-mono-street text-[11px] uppercase tracking-[0.25em] text-zinc-400">
           {% if is_arabic %}اكتشف{% else %}Discover{% endif %}
         </span>
@@ -21,13 +21,8 @@
           {% endif %}
         </h1>
 
-        <form action="{{ routes.search_url }}" method="get" role="search" class="mt-8 flex max-w-2xl border-b border-[#1a1a1a]">
-          <input type="hidden" name="options[prefix]" value="last">
-          <input class="min-w-0 flex-1 bg-transparent py-3 text-base text-[#1a1a1a] outline-none placeholder:text-zinc-400" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{% if is_arabic %}ابحث عن منتج{% else %}Search for a product{% endif %}" autocomplete="off">
-        </form>
-
         {% if search.performed %}
-          <p class="mt-5 font-mono-street text-[11px] uppercase tracking-wider text-zinc-400">
+          <p class="mt-4 font-mono-street text-[11px] uppercase tracking-wider text-zinc-400">
             {% if is_arabic %}
               {{ search.results_count }} نتيجة لـ «{{ search.terms | escape }}»
             {% else %}
@@ -49,7 +44,7 @@
         </div>
 
         {% unless has_products %}
-          <div class="flex min-h-72 flex-col items-center justify-center border-y border-zinc-200 py-16 text-center">
+          <div class="flex min-h-72 flex-col items-center justify-center py-16 text-center">
             <p class="font-mono-street text-xs uppercase tracking-[0.22em] text-zinc-400">
               {% if is_arabic %}لم نعثر على منتجات مطابقة{% else %}No matching products found{% endif %}
             </p>
@@ -59,7 +54,7 @@
           </div>
         {% endunless %}
       {% else %}
-        <div class="flex min-h-72 items-center justify-center border-y border-zinc-200 py-16 text-center">
+        <div class="flex min-h-72 items-center justify-center py-16 text-center">
           <p class="font-mono-street text-xs uppercase tracking-[0.22em] text-zinc-400">
             {% if is_arabic %}اكتب ما تبحث عنه بالأعلى{% else %}Enter a search term above{% endif %}
           </p>
