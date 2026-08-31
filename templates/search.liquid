@@ -6,7 +6,7 @@
 {%- assign is_arabic = request.locale.iso_code == 'ar' -%}
 
 {% paginate search.results by 24 %}
-  <main class="min-h-screen bg-[#faf9f7] px-6 pb-20 pt-72 md:px-16 md:pb-24 md:pt-80" {% if is_arabic %}dir="rtl"{% endif %}>
+  <main class="min-h-screen bg-[#faf9f7] px-6 pb-20 md:px-16 md:pb-24" style="padding-top: 17rem;" {% if is_arabic %}dir="rtl"{% endif %}>
     <div class="mx-auto max-w-7xl">
       <header class="mb-10 md:mb-14">
         <span class="font-mono-street text-[11px] uppercase tracking-[0.25em] text-zinc-400">
