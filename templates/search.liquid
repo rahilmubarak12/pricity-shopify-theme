@@ -24,9 +24,6 @@
         <form action="{{ routes.search_url }}" method="get" role="search" class="mt-8 flex max-w-2xl border-b border-[#1a1a1a]">
           <input type="hidden" name="options[prefix]" value="last">
           <input class="min-w-0 flex-1 bg-transparent py-3 text-base text-[#1a1a1a] outline-none placeholder:text-zinc-400" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{% if is_arabic %}ابحث عن منتج{% else %}Search for a product{% endif %}" autocomplete="off">
-          <button type="submit" class="px-3 text-[#1a1a1a] transition-opacity hover:opacity-60" aria-label="{% if is_arabic %}بحث{% else %}Search{% endif %}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          </button>
         </form>
 
         {% if search.performed %}
