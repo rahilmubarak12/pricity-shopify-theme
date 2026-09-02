@@ -836,6 +836,7 @@
       role="dialog"
       aria-modal="true"
       aria-label="{{ size_chart_title | escape }}"
+      onclick="if(event.target===this){ this.classList.add('hidden'); this.style.display='none'; document.body.classList.remove('overflow-hidden'); }"
     >
       <div
         class="bg-white w-full max-w-2xl rounded-2xl p-6 md:p-8 shadow-2xl flex flex-col relative max-h-[85vh] overflow-hidden"
@@ -856,6 +857,7 @@
           <button
             type="button"
             class="size-chart-modal-close p-1.5 rounded-full text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 transition-colors"
+            onclick="var sizeGuideModal=this.closest('.product-size-chart-modal'); if(sizeGuideModal){ sizeGuideModal.classList.add('hidden'); sizeGuideModal.style.display='none'; document.body.classList.remove('overflow-hidden'); } return false;"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" x2="6" y1="6" y2="18"></line>
@@ -903,13 +905,17 @@
         if (closeButton) {
           event.preventDefault();
           const sizeGuideModal = closeButton.closest('.product-size-chart-modal');
-          if (sizeGuideModal) sizeGuideModal.classList.add('hidden');
+          if (sizeGuideModal) {
+            sizeGuideModal.classList.add('hidden');
+            sizeGuideModal.style.display = 'none';
+          }
           document.body.classList.remove('overflow-hidden');
           return;
         }
 
         if (modal && event.target === modal) {
           modal.classList.add('hidden');
+          modal.style.display = 'none';
           document.body.classList.remove('overflow-hidden');
         }
       });
@@ -918,6 +924,7 @@
         if (event.key !== 'Escape') return;
         document.querySelectorAll('.product-size-chart-modal:not(.hidden)').forEach(function(modal) {
           modal.classList.add('hidden');
+          modal.style.display = 'none';
         });
         document.body.classList.remove('overflow-hidden');
       });
