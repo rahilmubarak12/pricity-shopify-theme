@@ -118,7 +118,7 @@
     endif
   endif
 
-  if product.handle == 'apricity-blush' or product.handle == 'blush-pink-womens-top' or product.handle == 'apy-butter-set' or combined_text contains 'yellow' or combined_text contains 'pink' or combined_text contains 'blush' or product.handle contains 'yellow' or product.handle contains 'pink' or product.handle contains 'blush'
+  if product.handle == 'apricity-blush' or product.handle == 'apy-butter-set' or combined_text contains 'yellow' or combined_text contains 'pink' or combined_text contains 'blush' or product.handle contains 'yellow' or product.handle contains 'pink' or product.handle contains 'blush'
     assign size_chart_key = 'none'
   endif
 -%}
@@ -397,10 +397,8 @@
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
           <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed prose prose-sm max-w-none prose-zinc whitespace-pre-line">
-            {%- assign custom_attention = product.metafields.custom.attention_seekers.value | default: product.metafields.custom.attention_seekers -%}
-            {%- assign custom_attention_clean = custom_attention | strip_html | strip -%}
-            {%- if custom_attention_clean != blank -%}
-              {{ custom_attention }}
+            {%- if product.metafields.custom.attention_seekers != blank -%}
+              {{ product.metafields.custom.attention_seekers }}
             {%- else -%}
               {%- if request.locale.iso_code == 'ar' -%}
                 {% case product.handle %}
@@ -438,12 +436,12 @@
                     <p>مزيج مثالي من القوة والأناقة والثقة لكل من لا يخشى لفت الأنظار.</p>
                   {% when 'staple-sand' %}
                     <p>حيث تلتقي البساطة المطلقة بالمعنى والتميز.</p>
-                  {% when 'apricity-blush', 'blush-pink-womens-top' %}
+                  {% when 'apricity-blush' %}
                     <p>رقة كافية لتلفت الأنظار، وجرأة كافية لتتفردي بها.</p>
                   {% when 'apy-butter-set' %}
                     <p>نعومة تشبه الزبدة، وحضور يفرض أناقته.</p>
                   {% else %}
-                    <p>صُممت هذه القطعة لمن يتحركون بين الثقة الهادئة والجرأة الأنيقة. تعبر Apricity Officials عن الشخص الذي يقدر الجودة دون مساومة.</p>
+                    {{ product.description }}
                 {% endcase %}
               {%- else -%}
                 {% case product.handle %}
@@ -485,12 +483,12 @@
                     <p>A perfect blend of power, style, and confidence for anyone who isn't afraid to be noticed</p>
                   {% when 'staple-sand' %}
                     <p>Where minimal meets meaning</p>
-                  {% when 'apricity-blush', 'blush-pink-womens-top' %}
+                  {% when 'apricity-blush' %}
                     <p>Soft enough to blush. Bold enough to own it</p>
                   {% when 'apy-butter-set' %}
                     <p>Soft like butter. Sharp like attitude</p>
                   {% else %}
-                    <p>Designed for those who move between worlds — from quiet confidence to bold statements. Apricity Officials speaks to the individual who appreciates quality without compromise. This piece is made for you.</p>
+                    {{ product.description }}
                 {% endcase %}
               {%- endif -%}
             {%- endif -%}
@@ -507,115 +505,12 @@
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
           <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed prose prose-sm max-w-none prose-zinc">
-            {%- assign custom_desc = product.metafields.custom.description.value | default: product.metafields.custom.description -%}
-            {%- assign custom_desc_clean = custom_desc | strip_html | strip -%}
-            {%- assign prod_desc_clean = product.description | strip_html | strip -%}
-            {%- if custom_desc_clean != blank -%}
-              {{ custom_desc }}
+            {%- if product.metafields.custom.description != blank -%}
+              {{ product.metafields.custom.description }}
+            {%- elsif product.description != blank -%}
+              {{ product.description }}
             {%- else -%}
-              {%- if request.locale.iso_code == 'ar' -%}
-                {% case product.handle %}
-                  {% when 'oversized-dual-tone-sweatshirt' %}
-                    <p>أضف لمسة من الحيوية إلى خزانتك مع هذا السويت شيرت المميز. يمتزج اللون الأزرق الغني مع لمسات برتقالية جذابة على الياقة والأساور لإطلالة رياضية وديناميكية مفعمة بالطاقة!</p><ul><li>اللون: أزرق كوبالت</li><li>الخامة: مزيج من قماش السكوبا الناعم والقطن – مريح وقابل للتنفس</li><li>عبارة ثلاثية الأبعاد بارزة: Apricity is like a warm affection that wraps around your soul</li><li>شعار 'APRICITY' بارز ثلاثي الأبعاد على الظهر</li><li>ياقة وأساور بتصميم مزدوج</li></ul>
-                  {% when 'oversized-sweatshirt-turtleneck' %}
-                    <p>سويت شيرت رمادي مميز يجمع بين الدفء والأناقة الفائقة. مصنوع من أقمشة ناعمة وفاخرة توفر لك أقصى درجات الراحة، مع تفاصيل ياقة فريدة وفتحات للإبهام تضفي لمسة عصرية لا تضاهى.</p><ul><li>اللون: رمادي فحمي</li><li>الخامة: مزيج فاخر من الفليس والقطن والبوليستر لتوفير الدفء والنعومة الفائقة</li><li>تطريز أنيق للشعار على الياقة العالية</li><li>تطريز 'APRICITY' على الظهر</li><li>أساور بلونين مع تفصيل رمادي فاتح عند فتحة الإبهام</li></ul>
-                  {% when 'overlap-neck-sweatshirt' %}
-                    <p>سويت شيرت أسود ناعم يتميز بتفاصيل خطوط أنيقة حول المرفقين وياقة متداخلة بلون أزرق جريء لإطلالة عصرية متجددة. تصميمه المتقن يجعله خياراً أساسياً لمن يقدرون الراحة والتميز.</p><ul><li>اللون: أسود</li><li>الخامة: مزيج ناعم من السكوبا والقطن – انسيابي وقابل للتنفس</li><li>ياقة متداخلة بلونين لمظهر عصري أنيق</li><li>باتش جلدي فاخر للشعار في الأمام</li><li>شعار بارز ثلاثي الأبعاد على الظهر</li><li>تفاصيل خطوط مميزة حول المرفقين</li></ul>
-                  {% when 'crewneck-oversized-sweatshirt' %}
-                    <p>ارتقِ بإطلالتك مع سويت شيرت أحمر تشيلي الجريء من Apricity. يتميز بشعار أسود بارز على الظهر يلفت الأنظار، ويجمع بين أقصى درجات الراحة والتصميم الجريء الواثق.</p><ul><li>اللون: أحمر تشيلي</li><li>الخامة: مزيج سكوبا وقطن ناعم – انسيابي وقابل للتنفس</li><li>شعار 'APRICITY' غائر على الياقة العالية</li><li>تطريز 'APRICITY' على الظهر</li><li>تطريز نصي أمامي ملهم</li></ul>
-                  {% when 'hoodie-with-burgundy-piping' %}
-                    <p>هودي بني أنيق يعيد تعريف الإطلالة اليومية بلمسات راقية، مع باتش جلدي وتفاصيل خطوط مزدوجة باللونين البني والبرغندي، بالإضافة إلى جيب داخلي برغندي يضفي طابعاً فريداً.</p><ul><li>اللون: بني قهوة</li><li>الخامة: مزيج سكوبا وقطن ناعم فائق الراحة</li><li>باتش جلدي أمامي بشعار 'APRICITY'</li><li>خطوط مزدوجة باللونين البني والبرغندي على الأكتاف وغطاء الرأس</li><li>جيب داخلي بلون برغندي</li></ul>
-                  {% when 'hoodie-with-leather-piped-detailing' %}
-                    <p>هودي أسود يجمع بين الفخامة والجرأة العصرية. يبرز الباتش الجلدي البارز والتفاصيل الجلدية الدقيقة المظهر الصناعي الفاخر، صُمم خصيصاً لمن يبحثون عن أسلوب متفرد.</p><ul><li>اللون: أسود</li><li>الخامة: مزيج سكوبا وقطن ناعم</li><li>باتش جلدي كبير مع شعار 'APRICITY' في الأمام</li><li>تفاصيل خطوط جلدية على الأكتاف والظهر وغطاء الرأس</li><li>باتش معدني جلدي على الظهر</li></ul>
-                  {% when 'all-in-well-hoodie' %}
-                    <p>هودي كريمي عاجي يمزج بين الأناقة والراحة مع لمسات زرقاء جذابة. القماش الكريمي الناعم يمنحك قاعدة مريحة بينما التباين اللوني يجعله قطعة مميزة تناسب جميع الإطلالات.</p><ul><li>اللون: عاجي كريمي</li><li>الخامة: مزيج فاخر من الفليس والقطن والبوليستر</li><li>طبقة ياقة داخلية بلون أزرق نابض بالحياة</li><li>تطريز 'All in well'</li><li>باتش نصي عند المعصم</li><li>تطريز 'APRICITY' أسفل غطاء الرأس</li></ul>
-                  {% when 'apricity-leather-patch-hoodie' %}
-                    <p>هودي بني يفيض بالفخامة والتميز، مزين بباتش جلدي كبير وشعار Apricity على الظهر. ناعم ومريح ومصنوع بعناية فائقة ليعكس الفخامة والأسلوب العصري.</p><ul><li>اللون: بني قهوة</li><li>الخامة: مزيج فاخر من الفليس والقطن والبوليستر</li><li>باتش جلدي كبير مع نص تعريفي لشعار Apricity</li><li>تطريز 'APRICITY' على الظهر</li></ul>
-                  {% when 'double-collar-cropped-sweatshirt' %}
-                    <p>سويت شيرت كروب كريمي عاجي بياقة خضراء مزدوجة صُمم لعشاق التميز. يمنحك تناسقاً رائعاً بين الراحة والجرأة، مع جيب مزدوج على الكتف بسحاب عصري.</p><ul><li>اللون: عاجي كريمي</li><li>الخامة: مزيج فاخر من الفليس والقطن والبوليستر</li><li>تطريز أمامي بشعار 'APRICITY'</li><li>جيب مزدوج على الكتف مع سحاب عملي وأنيق</li><li>ياقة مزدوجة بلمسات خضراء جذابة</li></ul>
-                  {% when 'a-new-era-cropped-sweatshirt' %}
-                    <p>سويت شيرت كروب بلون أزرق سماوي يضفي طاقة جديدة ومظهر متألق على إطلالتك، مع تطريز جريء يجمع بين الراحة والأناقة الواثقة.</p><ul><li>اللون: أزرق سماوي</li><li>الخامة: مزيج من الفرنش تيري والقطن لأقصى درجات الراحة</li><li>تطريز أمامي 'APRICITY'</li><li>تطريز خلفي لعبارة 'A New Era of Me'</li></ul>
-                  {% when 'indulge-in-self-love-hoodie' %}
-                    <p>استمتع بالدفء والأناقة مع هودي الأزرق السماوي المبهج. يجمع بين الطابع العصري والحرفية العالية مع فتحات إبهام وباتش جلدي فاخر على الجيب وغطاء الرأس.</p><ul><li>اللون: أزرق سماوي (Blissful Blue)</li><li>الخامة: مزيج فاخر من الفليس والقطن والبوليستر</li><li>تطريز الشعار وباتش جلدي أمامي</li><li>أساور بلونين مع فتحة للإبهام</li><li>تطريز خلفي لعبارة 'Indulge in Selflove'</li></ul>
-                  {% when '3d-apricity-hoodie' %}
-                    <p>اكتشف الأناقة العفوية مع هودي الكحلي الليلي. صُمم بلون كحلي غني يجمع بين الراحة والأناقة، مع تفاصيل بارزة وبطانة غطاء رأس بلون أرجواني داكن لمظهر جذاب.</p><ul><li>اللون: كحلي ليلي (Midnight Navy)</li><li>الخامة: مزيج سكوبا وقطن ناعم ومريح</li><li>شعار 'APRICITY' بارز في الأمام والظهر</li><li>أساور بلونين مع تفصيل أرجواني عند الإبهام</li><li>بطانة غطاء رأس بلون أرجواني مميز</li></ul>
-                  {% when 'bayview-linen-set' %}
-                    <p>طقم كتان خفيف بلون زبدة الكريمة يتألف من قميص مريح بتطريز أنيق وشورت مريح مطابق. مثالي للأيام المشمسة والنزهات الصيفية وعطلات نهاية الأسبوع.</p><ul><li>اللون: زبدة الكريمة (Buttercream)</li><li>الخامة: كتان بوليستر فاخر وخفيف الوزن وقابل للتنفس</li><li>تطريز أمامي لراكب أمواج بسيط وأنيق</li><li>طباعة خلفية لعبارة صيفية مميزة</li><li>شورت بحزام خصر مطاطي مريح يحمل شعار APRICITY</li></ul>
-                  {% when 'club-1932-t-shirt' %}
-                    <p>تيشيرت كريمي أنيق يحمل رمزية وفخراً بالهوية السعودية، مزين بطباعة 'CLUB 1932' إشارة لعام تأسيس المملكة مع رسالة اعتزاز بالوطن على الظهر.</p><ul><li>اللون: كريمي</li><li>الخامة: ليكرا فاخرة – ناعمة ومطاطية وقابلة للتنفس</li><li>طباعة أمامية لشعار 'CLUB 1932' مع رسم سيف بسيط</li><li>طباعة خلفية باللون العنابي تعبر عن الفخر والانتماء</li></ul>
-                  {% when 'onyx-black' %}
-                    <p>تيشيرت أسود يعبر عن القوة الصامتة والأناقة الجريئة، مصنوع من خامة ليكرا فاخرة مع طباعة أمامية نقية وتفاصيل مميزة على الظهر.</p><ul><li>اللون: أسود</li><li>الخامة: ليكرا فاخرة – مريحة وقابلة للتنفس</li><li>شعار APRICITY نقي في الأمام وطباعة مميزة على الظهر</li><li>باتش منسوج فريد بعبارة 'FEAR NONE – ONYX'</li></ul>
-                  {% when 'onyx-gray' %}
-                    <p>تيشيرت رمادي يجسد القوة الهادئة والأناقة اليومية الواثقة، صُنع من خامة ليكرا ناعمة ومريحة.</p><ul><li>اللون: رمادي</li><li>الخامة: ليكرا فاخرة – ناعمة وقابلة للتنفس</li><li>شعار APRICITY نقي في الأمام وطباعة مميزة على الظهر</li><li>باتش منسوج فريد بعبارة 'FEAR NONE – ONYX'</li></ul>
-                  {% when 'echoes-of-silence-green' %}
-                    <p>تيشيرت كلاسيكي أخضر لمحبي البساطة والقوة، مصنوع من قطن جيرسي ثقيل ومريح يدوم طويلاً.</p><ul><li>اللون: أخضر</li><li>الخامة: جيرسي ثقيل، 100% قطن – ناعم ومريح</li><li>شعار APRICITY أنيق في الأمام</li><li>تصميم خلفي استثنائي بنص معكوس رأسياً واقتباس مميز</li></ul>
-                  {% when 'echoes-of-silence-white' %}
-                    <p>تيشيرت أبيض أنيق يجمع بين الراحة الكلاسيكية والتميز العصري، مصنوع من قطن جيرسي فاخر.</p><ul><li>اللون: أبيض</li><li>الخامة: جيرسي ثقيل، 100% قطن – ناعم ومريح</li><li>شعار APRICITY أنيق في الأمام</li><li>تصميم خلفي استثنائي بنص معكوس رأسياً واقتباس مميز</li></ul>
-                  {% when 'staple-sand' %}
-                    <p>قطعة أساسية معاد ابتكارها بتفاصيل دقيقة. صُنع هذا التيشيرت بلون بيج رملي من قماش الفرنش تيري الناعم لتوفير الراحة والأناقة مع خطوط مميزة على الظهر والأكمام.</p><ul><li>اللون: بيج رملي</li><li>الخامة: فرنش تيري – ناعم وقابل للتنفس ومريح</li><li>باتش أمامي بسيط مع تطريز بني لشعار 'apricity'</li><li>خطوط تصميم هادئة تضيف عمقاً للإطلالة</li></ul>
-                  {% when 'apricity-blush', 'blush-pink-womens-top' %}
-                    <p>توب نسائي بلون وردي ناعم صُمم ليحدد القوام بقَصّة أنيقة وجذابة، مع تفصيل معدني ذهبي فاخر عند الكتف وتطريز أبيض أنيق للشعار على الظهر.</p><ul><li>اللون: وردي ناعم (Blush Pink)</li><li>الخامة: قماش جيرسي (95% قطن، 5% ليكرا) – ناعم وقابل للتنفس</li><li>تفصيل كتف معدني ذهبي لشعار APRICITY</li><li>تطريز خلفي أبيض لشعار APRICITY</li></ul>
-                  {% when 'apy-butter-set' %}
-                    <p>طقم بلون زبدة الكريمة يجمع بين الخطوط النظيفة والقصة المحددة للقوام والبنطال الواسع لإطلالة صيفية مريحة وأنيقة تفرض حضورها.</p><ul><li>اللون: زبدة الكريمة (Butter Cream)</li><li>خامة التوب: جيرسي (95% قطن، 5% ليكرا)</li><li>خامة البنطال: فرنش تيري (100% قطن)</li><li>تطريز أمامي 'APY' وقفل معدني ذهبي على الظهر</li><li>جيبان خلفيان بتطريز أنيق</li></ul>
-                  {% else %}
-                    {% if product.description != blank and prod_desc_clean != blank %}
-                      {{ product.description }}
-                    {% else %}
-                      <p>صُممت هذه القطعة بخامات فاخرة وعناية فائقة لتجمع بين الراحة اليومية والأناقة المعاصرة التي تدوم طويلاً.</p>
-                    {% endif %}
-                {% endcase %}
-              {%- else -%}
-                {% case product.handle %}
-                  {% when 'oversized-dual-tone-sweatshirt' %}
-                    <p>Brighten up your wardrobe with this eye-catching sweatshirt. The rich blue base is complemented by vibrant orange accents on the neckline and cuffs, giving it a sporty, dynamic feel. A fun and energetic addition to your style!</p><ul><li>Color : Cobalt Blue </li><li>Material: Soft Scuba & Cotton Blend – smooth, breathable</li><li>Bold 3D embossed text – Apricity is like a warm affection that wraps around your soul – bringing an inspiring message to life in striking texture.</li><li>Back 3D embossed 'APRICITY'</li><li>Double Collar Neck & Cuffs</li></ul>
-                  {% when 'oversized-sweatshirt-turtleneck' %}
-                    <p>This cozy and stylish, uniquely gray sweatshirt is a must-have for you! Made from soft, high-quality fabric, it offers warmth and comfort. Featuring unique neck details and thumb holes for added flair, its combination of style and coziness is unmatched</p><ul><li>Color: Charcoal Gray </li><li>Material: A premium blend of fleece, cotton, and polyester, offering ultimate warmth softness</li><li>Embroidery logo on the turtleneck for a stylish touch</li><li>Back embroidery of 'APRICITY' </li><li>Two-tone grey cuffs, featuring a lighter grey accent at the thumb hole</li></ul>
-                  {% when 'overlap-neck-sweatshirt' %}
-                    <p>This soft black sweatshirt boasts stylish elbow line details and bold blue overlapping neck accents for a modern edge. Its clean black base and unique design make it a must-have for those who value fashion-forward yet comfortable pieces.</p><ul><li>Color : Black</li><li>Material : Soft Scuba & Cotton Blend – smooth, breathable</li><li>Two-tone overlapping neck for a modern, stylish look</li><li>Front leather patch logo</li><li>Back 3D embossed logo </li><li>Around elbow line details</li></ul>
-                  {% when 'crewneck-oversized-sweatshirt' %}
-                    <p>Step up your style game with the Apricity Chili Red Sweatshirt. This statement piece features a bold black logo on the back that's sure to turn heads. Perfect for those who aren't afraid to be noticed, this sweatshirt combines comfort, quality, and a daring style that says "look at me"</p><ul><li>Color : Chili Red</li><li>Material : Soft Scuba & Cotton Blend – smooth, breathable</li><li>Debossed 'APRICITY'on the turtleneck for a stylish touch</li><li>Back embroidery 'APRICITY'</li><li>Front embroidery Text – shine so brightly that others can't escape the warmth of your presence –</li></ul>
-                  {% when 'hoodie-with-burgundy-piping' %}
-                    <p>This brown hoodie redefines casual wear with a refined design. It features a textured look, a leather patch on the front, and double-line details in brown and burgundy, complemented by a burgundy inner pocket. Unique line details around the hood add a sharp, dynamic touch</p><ul><li>Color : Coffee Brown</li><li>Material : Soft Scuba & Cotton Blend – smooth, breathable</li><li>Front leather patch 'APRICITY'</li><li>Double-line details in brown and burgundy on the shoulders and hood create a modern, refined look</li><li>Burgundy inner pocket</li></ul>
-                  {% when 'hoodie-with-leather-piped-detailing' %}
-                    <p>Black hoodie from Apricity brings together luxury and edge. The embossed leather logo patch on the front exudes sophistication, while the metal leather patch and sleek leather piping add a modern, industrial twist. Crafted for ultimate comfort, this hoodie is designed for those who demand style with substance</p><ul><li>Color : Black</li><li>Material : Soft Scuba & Cotton Blend – smooth, breathable</li><li>Bold, large leather patch with 'APRICITY' on the front for a standout look</li><li>Leather line details on the shoulders, hood and back </li><li>Back leather metal patch 'APRICITY'</li></ul>
-                  {% when 'all-in-well-hoodie' %}
-                    <p>This ivory cream hoodie blends elegance and trendiness with subtle blue details for a twist. The soft cream fabric provides a cozy base, while the blue accents offer a stylish contrast, making it a standout and versatile piece for any casual outfit</p><ul><li>Color: Ivory Cream</li><li>Material: A premium blend of fleece, cotton, and polyester, offering ultimate warmth softness</li><li>Vibrant blue inner neck layer, adding a bold, refreshing contrast</li><li>Embroidery 'All in well' </li><li>Cuff patch text – Apricity (n.) The warmth of the sun in the winter –</li><li>Under the hood Embroidery 'APRICITY' </li></ul>
-                  {% when 'apricity-leather-patch-hoodie' %}
-                    <p>The Brown Hoodie That Speaks Volumes—crafted in rich brown, featuring a leather patch and the Apricity logo on the back. Soft, comfortable, and full of unique details, it's the perfect blend of luxury and style.</p><ul><li>Color: Coffee Brown</li><li>Material: A premium blend of fleece, cotton, and polyester, offering ultimate warmth softness</li><li>Bold, large leather patch with text – Apricity (n.) The warmth of the sun in the winter – </li><li>Back embroidery 'APRICITY' </li></ul>
-                  {% when 'double-collar-cropped-sweatshirt' %}
-                    <p>Get ready to make a statement! This Ivory Cream Cropped Sweatshirt with a bold Green Double collar is designed for the trendsetter in you. With its fresh, eye-catching color combination, this piece brings comfort and style together effortlessly</p><ul><li>Color: Ivory Cream</li><li>Material: A premium blend of fleece, cotton, and polyester, offering ultimate warmth softness</li><li>Front embroidery 'APRICITY' </li><li>shoulder double pocket—one with a sleek zipper, and one open for easy access. Perfect for storing your lipstick while hanging out!</li><li>Double collar featuring green accents</li></ul>
-                  {% when 'a-new-era-cropped-sweatshirt' %}
-                    <p>Bring a fresh vibe to your look with this cropped sweatshirt. The soft sky blue tone pairs with bold embroidery details, making it the perfect mix of comfort and statement style. A new era, your way.</p><ul><li>Color: Sky Blue</li><li>Material: Material: Blend of french terry and cotton, for ultimate comfort </li><li>Front embroidery 'APRICITY' </li><li>Back embroidery text – A New Era of Me –</li></ul>
-                  {% when 'indulge-in-self-love-hoodie' %}
-                    <p>Stay cozy and stylish in our Blissful Blue hoodie, designed for comfort and a contemporary aesthetic. Combining urban edge with premium craftsmanship, it offers an elevated look that's impossible to miss! Thumbhole cuffs add a touch of flair, while the leather patch on the pocket and hood adds a refined, high-end feel</p><ul><li>Color: Blissful Blue</li><li>Material: A premium blend of fleece, cotton, and polyester, offering ultimate warmth softness</li><li>Front embroidery logo</li><li>Front pocket leather patch 'APRICITY' </li><li>two-tone cuffs with a cream accent at the thumb hole for added style</li><li>leather and embroidered logos on the hood add standout style</li><li>Back embroidery text – Indulge in Selflove –</li></ul>
-                  {% when '3d-apricity-hoodie' %}
-                    <p>Discover effortless style with our Midnight Navy Hoodie. Crafted in rich navy, it combines comfort and sophistication, with subtle embossed branding and a dark purple hood lining for a unique pop of color an essential wardrobe addition</p><ul><li>Color : Midnight Navy</li><li>Material : Soft Scuba & Cotton Blend – smooth, breathable</li><li>Front embossed 'APRICITY'</li><li>Two-tone cuffs with a dark purple accent at the thumb hole for added style</li><li>Bold, large text embossed with 'APRICITY' on the back for a standout look</li><li>Vibrant purple inner hood</li></ul>
-                  {% when 'bayview-linen-set' %}
-                    <p>A breezy buttercream linen set featuring a relaxed-fit shirt with an embroidered sketch of a surfer holding a board, paired with matching comfy shorts. Perfect for sunny days, beach strolls, or chilled weekends</p><ul><li>Color: Buttercream</li><li>Material: Premium Poly Linen Orbit, lightweight, breathable</li><li>Front Print: embroidery of a minimalist surfer figure holding a board, adding a playful, artistic</li><li>Back Print: Printed text on the back: "the summer nights when everything comes alive – by APY" Evoking the magic and energy of summer evenings</li><li>Bottoms Design: Coordinated shorts with an elastic waistband for ease and comfort. Finished with the distinctive APRICITY logo, adding a touch of signature style</li></ul>
-                  {% when 'club-1932-t-shirt' %}
-                    <p>This meaningful and stylish cream-colored T-shirt is a must-have for anyone proud of their Saudi identity. Featuring a clean front design with the refined "CLUB 1932" print, a tribute to the founding year of Saudi Arabia, and a bold message on the back, this piece blends heritage with modern style. A statement of pride, unity, and timeless identity</p><ul><li>Color: Cream</li><li>Material: Premium Lycra – breathable, stretchy, and soft to the touch</li><li>Front Print: "CLUB 1932" with a minimalist sword graphic, symbolizing pride and legacy</li><li>Back Print: "I'M SAUDI ENOUGH – to be the strength behind the flag" in deep maroon</li></ul>
-                  {% when 'onyx-black' %}
-                    <p>Unleash your inner power with this black T-shirt, designed for those who carry strength silently and style boldly</p><ul><li>Color: Black</li><li>Material: Premium Lycra – breathable, stretchy, and soft to the touch</li><li>Front Print: A clean and minimal APRICITY logo that adds a sleek, modern touch to the design</li><li>Back Print: Features "APRICITY" boldly written across the back in a handwritten</li></ul><p>Patch: A distinctive woven patch with the phrases: "FEAR NONE – ONYX – POWER RUNS DEEP, SO DO YOU"</p>
-                  {% when 'onyx-gray' %}
-                    <p>Unleash your inner power with this black T-shirt, designed for those who carry strength silently and style boldly.</p><ul><li>Color: Gray</li><li>Material: Premium Lycra – breathable, stretchy, and soft to the touch</li><li>Front Print: A clean and minimal APRICITY logo that adds a sleek, modern touch to the design</li><li>Back Print: Features "APRICITY" boldly written across the back in a handwritten</li><li>Patch: A distinctive woven patch with the phrases: "FEAR NONE – ONYX – POWER RUNS DEEP, SO DO YOU"</li></ul>
-                  {% when 'echoes-of-silence-green' %}
-                    <p>Showcase your style with this classic green T-shirt, crafted for those who appreciate simplicity and strength.</p><ul><li>Color: Green</li><li>Material: Single heavy jersey, 100% cotton – offering a durable, soft, and comfortable fit. </li><li>Front Print: Simple and sleek with the "APRICITY" logo, reflecting a modern, stylish design.</li><li>Back Print: A unique design that features vertically reversed text, drawing attention. The quote at the bottom adds depth: "I no longer fear the silence. It speaks now in echoes, in buried truths, in the language of quiet survival."</li></ul>
-                  {% when 'echoes-of-silence-white' %}
-                    <p>Showcase your style with this classic white T-shirt, crafted for those who appreciate simplicity and strength.</p><ul><li>Color: White</li><li>Material: Single heavy jersey, 100% cotton – offering a durable, soft, and comfortable fit. </li><li>Front Print: Simple and sleek with the "APRICITY" logo, reflecting a modern, stylish design.</li><li>Back Print: A unique design that features vertically reversed text, drawing attention. The quote at the bottom adds depth: "I no longer fear the silence. It speaks now in echoes, in buried truths, in the language of quiet survival."</li></ul>
-                  {% when 'staple-sand' %}
-                    <p>A clean staple piece redefined with subtle statement details. Crafted from soft French Terry fabric, this sand-beige T-shirt delivers structure with comfort. Designed with a relaxed silhouette and refined crew neck, it's elevated by subtle line detailing across the back and sleeves that adds depth and quiet character. Understated, yet intentional.</p><ul><li>Color: Sand Beige</li><li>Material: French Terry – soft, breathable, structured, and comfortable</li><li>Front Detail: Minimal patch with brown "apricity" embroidery</li></ul>
-                  {% when 'apricity-blush', 'blush-pink-womens-top' %}
-                    <p>Feminine essential designed to elevate everyday styling. This soft blush-pink top is crafted to contour the body with a clean, flattering silhouette while maintaining a minimal aesthetic. Delicate logo metal detailing at the shoulder adds a refined statement touch. </p><p>Features a soft blush pink tone with subtle variations between front and back, creating added depth, and may appear slightly different due to lighting and photography.</p><ul><li>Color: Blush Pink</li><li>Material: Jersey fabric (95% cotton, 5% lycra) – soft, breathable, and comfortable</li><li>Shoulder Detail: Gold-tone logo metal accent</li><li>Back Detail: White "APRICITY" embroidery</li></ul>
-                  {% when 'apy-butter-set' %}
-                    <p>A butter-cream set that plays on contrast — clean lines, defined shape, and unapologetic presence. Soft in tone yet striking in attitude, it's designed to sculpt, define, and quietly command attention with every movement.</p><p>Note: The pants feature a soft tonal shift between front and back, creating a subtle contrast that adds depth and dimension for a naturally dynamic summer look. Colors may appear slightly different due to lighting and photography.</p><ul><li>Color: Butter Cream</li><li>Top Material: Jersey fabric (95% cotton, 5% lycra)</li><li>Pants Material: French Terry (100% cotton)</li><li>Front Embroidery: "APY"</li><li>Back Closure: Gold-tone logo metal accent</li><li>Back Pockets: Two pockets with embroidered logo</li></ul>
-                  {% else %}
-                    {% if product.description != blank and prod_desc_clean != blank %}
-                      {{ product.description }}
-                    {% else %}
-                      <p>Crafted with premium quality materials, this piece embodies Apricity's dedication to contemporary silhouette and timeless street style. Designed for comfort and lasting durability.</p>
-                    {% endif %}
-                {% endcase %}
-              {%- endif -%}
+              {{ product.description }}
             {%- endif -%}
           </div>
         </div>
@@ -630,10 +525,10 @@
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
           <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed prose prose-sm max-w-none prose-zinc">
-            {%- assign custom_size_fit = product.metafields.custom.size_fit.value | default: product.metafields.custom.size_fit | default: product.metafields.custom.size_and_fit.value | default: product.metafields.custom.size_and_fit -%}
-            {%- assign custom_size_fit_clean = custom_size_fit | strip_html | strip -%}
-            {%- if custom_size_fit_clean != blank -%}
-              {{ custom_size_fit }}
+            {%- if product.metafields.custom.size_fit != blank -%}
+              {{ product.metafields.custom.size_fit }}
+            {%- elsif product.metafields.custom.size_and_fit != blank -%}
+              {{ product.metafields.custom.size_and_fit }}
             {%- else -%}
               {%- if request.locale.iso_code == 'ar' -%}
                 {% case product.handle %}
@@ -645,10 +540,10 @@
                     <p>قصة عملية تناسب الجنسين بإطلالة مريحة وأنيقة على الجميع.</p><p>المودل النسائية: الطول 173 سم (5'6") وترتدي مقاس S/M.</p><p>المودل الرجالي: الطول 184 سم (6'0") ويرتدي مقاس M/L.</p>
                   {% when 'staple-sand' %}
                     <p>مصمم بقَصّة أوفر سايز (Oversized) مريحة تناسب الجميع.</p><p>المودل النسائية: الطول 163 سم (5'4") وترتدي مقاس S/M.</p><p>المودل الرجالي: الطول 185 سم (6'1") ويرتدي مقاس M/L.</p>
-                  {% when 'apricity-blush', 'blush-pink-womens-top' or 'apy-butter-set' %}
+                  {% when 'apricity-blush' or 'apy-butter-set' %}
                     <p>مصمم خصيصاً للنساء بقَصّة محددة للقوام وجذابة ومريحة.</p><p>طول المودل: 163 سم (5'4") وترتدي مقاس S/M.</p>
                   {% else %}
-                    <p>مصمم بقصة عملية تناسب الجميع. نوصي باختيار مقاسك المعتاد لإطلالة قياسية مريحة، أو مقاس أكبر لإطلالة أوفر سايز عصرية.</p>
+                    {{ product.description }}
                 {% endcase %}
               {%- else -%}
                 {% case product.handle %}
@@ -679,24 +574,23 @@
                   {% when 'bayview-linen-set' %}
                     <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
                   {% when 'club-1932-t-shirt' %}
-                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                    <p>Carrying the emblem of our homeland in our hearts, we walk boldly, proudly, and endlessly Saudi</p>
                   {% when 'onyx-black' %}
-                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                    <p>Strong and silent, they never chase attention, ONYX is the power they wear</p>
                   {% when 'onyx-gray' %}
-                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                    <p>Strong and silent, they never chase attention, ONYX is the power they wear</p>
                   {% when 'echoes-of-silence-green' %}
-                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                    <p>A perfect blend of power, style, and confidence for anyone who isn't afraid to be noticed</p>
                   {% when 'echoes-of-silence-white' %}
-                    <p>Designed for a versatile unisex fit, it looks great on everyone</p><p>Female model is 5'6" (173 cm) and wears size S/M</p><p>Male model is 6'0" (184 cm) and wears size M/L</p>
+                    <p>A perfect blend of power, style, and confidence for anyone who isn't afraid to be noticed</p>
                   {% when 'staple-sand' %}
                     <p>Designed for a relaxed oversized look that suits everyone</p><p>Female model is 5'4" (163 cm) and wears size S/M</p><p>Male model is 6'1" (185 cm) and wears size M/L</p>
-                  {% when 'apricity-blush', 'blush-pink-womens-top' %}
+                  {% when 'apricity-blush' %}
                     <p>Designed exclusively for women, offering a flattering close-to-body fit</p><p>Model is 5'4" (163 cm) and wears size S/M</p>
                   {% when 'apy-butter-set' %}
                     <p>Designed exclusively for women, offering a flattering close-to-body fit</p><p>Model is 5'4" (163 cm) and wears size S/M</p>
                   {% else %}
-                    <p>Designed for a versatile unisex fit, it looks great on everyone.</p>
-                    <p class="text-xs text-zinc-400 mt-2">Recommended: Go for your normal size for a relaxed standard fit, or size up for an oversized streetwear look.</p>
+                    {{ product.description }}
                 {% endcase %}
               {%- endif -%}
             {%- endif -%}
@@ -713,14 +607,14 @@
             <span class="accordion-plus text-zinc-400 text-xl transition-transform duration-300">+</span>
           </button>
           <div class="accordion-body hidden pb-5 px-1 text-sm text-zinc-500 leading-relaxed prose prose-sm max-w-none prose-zinc">
-            {%- assign custom_care = product.metafields.custom.care_instructions.value | default: product.metafields.custom.care_instructions | default: product.metafields.custom.take_care.value | default: product.metafields.custom.take_care -%}
-            {%- assign custom_care_clean = custom_care | strip_html | strip -%}
-            {%- if custom_care_clean != blank -%}
-              {{ custom_care }}
+            {%- if product.metafields.custom.care_instructions != blank -%}
+              {{ product.metafields.custom.care_instructions }}
+            {%- elsif product.metafields.custom.take_care != blank -%}
+              {{ product.metafields.custom.take_care }}
             {%- else -%}
               {%- if request.locale.iso_code == 'ar' -%}
                 {% case product.handle %}
-                  {% when 'apricity-blush', 'blush-pink-womens-top' or 'apy-butter-set' %}
+                  {% when 'apricity-blush' or 'apy-butter-set' %}
                     <p>غسيل آلي بدرجة حرارة 30° مئوية</p>
                     <p>يُمنع استخدام مبيضات الكلور</p>
                     <p>تجنب التجفيف الآلي</p>
@@ -786,7 +680,7 @@
                     <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
                   {% when 'staple-sand' %}
                     <p>Machine wash cold, gentle cycle</p><p>Wash dark colors separately</p><p>Do not bleach, tumble dry, iron print, or dry clean</p><p>Cool iron if necessary</p>
-                  {% when 'apricity-blush', 'blush-pink-womens-top' %}
+                  {% when 'apricity-blush' %}
                     <p>Machine wash at 86°F / 30°C</p><p>Do not use chlorine bleach</p><p>Do not tumble dry</p><p>Maximum iron at 230°F / 110°C</p><p>Do not dry clean </p><p>Wash inside out. Dry separately </p>
                   {% when 'apy-butter-set' %}
                     <p>Machine wash at 86°F / 30°C</p><p>Do not use chlorine bleach</p><p>Do not tumble dry</p><p>Maximum iron at 230°F / 110°C</p><p>Do not dry clean </p><p>Wash inside out. Dry separately </p>
@@ -938,6 +832,9 @@
   {%- if size_chart_html != blank -%}
     <div
       class="product-size-chart-modal hidden fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-label="{{ size_chart_title | escape }}"
     >
       <div
         class="bg-white w-full max-w-2xl rounded-2xl p-6 md:p-8 shadow-2xl flex flex-col relative max-h-[85vh] overflow-hidden"
@@ -980,6 +877,51 @@
       </div>
     </div>
   {%- endif -%}
+
+  <script>
+    /* Independent Size Guide controls: works even if the product UI script is interrupted. */
+    if (!window.apricitySizeGuideEventsBound) {
+      window.apricitySizeGuideEventsBound = true;
+
+      document.addEventListener('click', function(event) {
+        const guideButton = event.target.closest('.size-guide-trigger-btn');
+        const closeButton = event.target.closest('.size-chart-modal-close');
+        const modal = event.target.closest('.product-size-chart-modal');
+
+        if (guideButton) {
+          event.preventDefault();
+          const productContainer = guideButton.closest('.product-detail-wrapper');
+          const sizeGuideModal = productContainer && productContainer.querySelector('.product-size-chart-modal');
+          if (sizeGuideModal) {
+            sizeGuideModal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+          }
+          return;
+        }
+
+        if (closeButton) {
+          event.preventDefault();
+          const sizeGuideModal = closeButton.closest('.product-size-chart-modal');
+          if (sizeGuideModal) sizeGuideModal.classList.add('hidden');
+          document.body.classList.remove('overflow-hidden');
+          return;
+        }
+
+        if (modal && event.target === modal) {
+          modal.classList.add('hidden');
+          document.body.classList.remove('overflow-hidden');
+        }
+      });
+
+      document.addEventListener('keydown', function(event) {
+        if (event.key !== 'Escape') return;
+        document.querySelectorAll('.product-size-chart-modal:not(.hidden)').forEach(function(modal) {
+          modal.classList.add('hidden');
+        });
+        document.body.classList.remove('overflow-hidden');
+      });
+    }
+  </script>
 
   <!-- Product JSON for Variant Checking Script -->
   <script type="application/json" class="product-raw-json">
