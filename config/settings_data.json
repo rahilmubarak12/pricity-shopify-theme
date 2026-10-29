@@ -149,6 +149,11 @@
         "type": "shopify://apps/google-search-console-by-mp/blocks/head-meta/019c4b41-f7c5-7366-86bc-ac95bf831b40",
         "disabled": false,
         "settings": {}
+      },
+      "2567389343055140935": {
+        "type": "shopify://apps/microsoft-clarity/blocks/clarity_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea",
+        "disabled": false,
+        "settings": {}
       }
     }
   },
