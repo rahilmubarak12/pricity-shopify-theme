@@ -11,23 +11,31 @@
   "sections": {
     "hero_video": {
       "type": "hero-video",
+      "custom_css": [
+        ".bg-gradient-to-t {display: none;}",
+        "@media (min-width: 769px) {.-mt-10 {margin: 140px auto 0 6vw; max-width: 44vw; text-align: start; } .-mt-10 h1 {font-size: min(4.5rem, 3.8vw); } .max-w-xl {margin-inline-start: 0; } .-mt-10 > .flex {justify-content: flex-start; }}",
+        "@media (max-width: 768px) {div[class*=\"h-[90vh]\"] {align-items: flex-end; } .-mt-10 {margin-top: 0; padding-bottom: 28px; } .-mt-10 h1, .max-w-xl {display: none; } .-mt-10 a {padding-top: 12px; padding-bottom: 12px; }}"
+      ],
       "settings": {
-        "subtitle": "Summer Capsule '26",
+        "subtitle": "Winter Capsule '26",
         "title": "APRICITY OFFICIALS",
         "description": "Elevated essentials with a refined modern fit.",
         "btn_1_label": "Shop Now",
         "btn_2_label": "Men",
         "btn_3_label": "Women",
-        "subtitle_ar": "صيف 2026",
+        "subtitle_ar": "شتاء 2026",
         "title_ar": "APRICITY OFFICIALS",
         "description_ar": "أساسيات بستَايل راقٍ وقَصّات عصرية تضبط إطلالتك",
         "btn_1_label_ar": "تسوق الآن",
         "btn_2_label_ar": "رجال",
         "btn_3_label_ar": "نسائي",
-        "btn_1_url": "",
-        "btn_2_url": "",
-        "btn_3_url": "",
-        "video_url": ""
+        "btn_1_url": "/#shop-catalog",
+        "btn_2_url": "/?filter=men#shop-catalog",
+        "btn_3_url": "/?filter=women#shop-catalog",
+        "show_video": false,
+        "video_url": "",
+        "image_desktop": "shopify://shop_images/hero-winter_d9237ebd-e05d-4079-92ce-529504b13c1d.jpg",
+        "image_mobile": "shopify://shop_images/hero-winter-mobile_0dd96597-fb6e-4996-bd35-d71f28790628.jpg"
       }
     },
     "collections_grid": {
