@@ -15,7 +15,7 @@
       <img src="{{ 'hero-photo.jpg' | asset_url }}" alt="Hero Background" class="absolute inset-0 w-full h-full object-cover object-center z-0" width="1000" height="1000">
     {%- endif -%}
   </picture>
-
+  {%- if section.settings.show_video -%}
   <!-- Video -->
   <video
     autoplay
@@ -33,7 +33,7 @@
       <source src="{{ 'hero-video.mp4' | asset_url }}" type="video/mp4">
     {%- endif -%}
   </video>
-
+  {%- endif -%}
   <!-- Thin bottom gradient overlay -->
   <div class="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-black/70 to-transparent pointer-events-none z-20"></div>
 
@@ -250,6 +250,7 @@
       "type": "header",
       "content": "Video Settings"
     },
+    {"type": "checkbox", "id": "show_video", "label": "Show background video", "default": true},
     {
       "type": "url",
       "id": "video_url",
