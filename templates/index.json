@@ -149,6 +149,7 @@
         "card_left_text_ar": "اختيارنا",
         "card_right_text_ar": "شتاء 2026",
         "image": "shopify://shop_images/jpeg.jpg",
+        "show_video": false,
         "video_url": ""
       }
     },
