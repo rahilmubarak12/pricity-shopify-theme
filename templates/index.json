@@ -94,36 +94,37 @@
     "collections_grid": {
       "type": "collections-grid",
       "settings": {
+        "show_card_4": false,
         "subtitle": "Collections",
         "title": "Explore the Archive",
         "season_label": "Season '26",
         "subtitle_ar": "التشكيلات",
         "title_ar": "استكشف التشكيلة موسم 2026",
         "season_label_ar": "موسم 2026",
-        "collection_1_title": "Men",
-        "collection_1_title_ar": "رجالي",
-        "collection_1_tag": "Category",
-        "collection_1_tag_ar": "تصنيف",
-        "collection_1_cta": "Shop Collection →",
-        "collection_1_cta_ar": "تسوق رجالي →",
-        "collection_1_url": "/?filter=men#shop-catalog",
-        "collection_1_image": "shopify://shop_images/BK01Manfrontfacefix.jpg",
-        "collection_2_title": "Women",
-        "collection_2_title_ar": "نسائي",
-        "collection_2_tag": "Category",
-        "collection_2_tag_ar": "تصنيف",
+        "collection_1_title": "Wear Your Warmth",
+        "collection_1_title_ar": "Wear Your Warmth",
+        "collection_1_tag": "The New Sets",
+        "collection_1_tag_ar": "الأطقم الجديدة",
+        "collection_1_cta": "Shop the Sets →",
+        "collection_1_cta_ar": "تسوق الأطقم ←",
+        "collection_1_url": "/?filter=wear-your-warmth#shop-catalog",
+        "collection_1_image": "shopify://shop_images/BK13Couplefrontedit.jpg",
+        "collection_2_title": "In Good Company",
+        "collection_2_title_ar": "In Good Company",
+        "collection_2_tag": "Hoodies & Sweatshirts",
+        "collection_2_tag_ar": "هوديز وسويت شيرتات",
         "collection_2_cta": "Shop Collection →",
-        "collection_2_cta_ar": "تسوق نسائي →",
-        "collection_2_url": "/?filter=women#shop-catalog",
-        "collection_2_image": "shopify://shop_images/N02_Navy_woman_front_full_length_edit.jpg",
-        "collection_3_title": "New Drops",
-        "collection_3_title_ar": "وصل حديثاً",
-        "collection_3_tag": "Capsule",
-        "collection_3_tag_ar": "إصدار حصري",
-        "collection_3_cta": "Discover Pieces →",
-        "collection_3_cta_ar": "شوف الجديد →",
-        "collection_3_url": "/?filter=new-drops#shop-catalog",
-        "collection_3_image": "shopify://shop_images/BK13Couplefrontedit.jpg",
+        "collection_2_cta_ar": "تسوق المجموعة ←",
+        "collection_2_url": "/?filter=in-good-company#shop-catalog",
+        "collection_2_image": "shopify://shop_images/1U5A9017.jpg",
+        "collection_3_title": "Let the Sun In",
+        "collection_3_title_ar": "Let the Sun In",
+        "collection_3_tag": "Summer",
+        "collection_3_tag_ar": "الصيف",
+        "collection_3_cta": "Shop Summer →",
+        "collection_3_cta_ar": "تسوق الصيف ←",
+        "collection_3_url": "/?filter=summer#shop-catalog",
+        "collection_3_image": "shopify://shop_images/IMG_6462_1.jpg",
         "collection_4_title": "SALE",
         "collection_4_title_ar": "خصومات الموسم",
         "collection_4_tag": "Seasonal",
@@ -154,11 +155,27 @@
     "product_catalog": {
       "type": "product-catalog",
       "blocks": {
+        "sub_wyw": {
+          "type": "subcategory_filter",
+          "settings": {
+            "label": "Wear Your Warmth",
+            "label_ar": "Wear Your Warmth",
+            "key": "wear-your-warmth"
+          }
+        },
+        "sub_igc": {
+          "type": "subcategory_filter",
+          "settings": {
+            "label": "In Good Company",
+            "label_ar": "In Good Company",
+            "key": "in-good-company"
+          }
+        },
         "sub_summer": {
           "type": "subcategory_filter",
           "settings": {
-            "label": "Summer Collection",
-            "label_ar": "تشكيلة الصيف",
+            "label": "Let the Sun In",
+            "label_ar": "Let the Sun In",
             "key": "summer"
           }
         },
@@ -196,6 +213,8 @@
         }
       },
       "block_order": [
+        "sub_wyw",
+        "sub_igc",
         "sub_summer",
         "sub_hoodie",
         "sub_shirt",
