@@ -107,6 +107,7 @@
         "collection_1_cta": "Shop Collection →",
         "collection_1_cta_ar": "تسوق رجالي →",
         "collection_1_url": "/?filter=men#shop-catalog",
+        "collection_1_image": "shopify://shop_images/BK01Manfrontfacefix.jpg",
         "collection_2_title": "Women",
         "collection_2_title_ar": "نسائي",
         "collection_2_tag": "Category",
@@ -114,6 +115,7 @@
         "collection_2_cta": "Shop Collection →",
         "collection_2_cta_ar": "تسوق نسائي →",
         "collection_2_url": "/?filter=women#shop-catalog",
+        "collection_2_image": "shopify://shop_images/N02_Navy_woman_front_full_length_edit.jpg",
         "collection_3_title": "New Drops",
         "collection_3_title_ar": "وصل حديثاً",
         "collection_3_tag": "Capsule",
@@ -121,13 +123,15 @@
         "collection_3_cta": "Discover Pieces →",
         "collection_3_cta_ar": "شوف الجديد →",
         "collection_3_url": "/?filter=new-drops#shop-catalog",
+        "collection_3_image": "shopify://shop_images/BK13Couplefrontedit.jpg",
         "collection_4_title": "SALE",
         "collection_4_title_ar": "خصومات الموسم",
         "collection_4_tag": "Seasonal",
         "collection_4_tag_ar": "موسمي",
         "collection_4_cta": "Shop Sale →",
         "collection_4_cta_ar": "تسوق التخفيضات →",
-        "collection_4_url": "/?filter=sale#shop-catalog"
+        "collection_4_url": "/?filter=sale#shop-catalog",
+        "collection_4_image": "shopify://shop_images/IMG_6462_1.jpg"
       }
     },
     "fabric_detail": {
