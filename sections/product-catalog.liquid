@@ -256,6 +256,7 @@
     };
 
     const getSubcategoryBtns = () => catalog.querySelectorAll('.subcategory-filter-btn');
+    const findPill = (key) => Array.from(getSubcategoryBtns()).find(b => normalizeSubcategoryKey(b.getAttribute('data-subcategory')) === normalizeSubcategoryKey(key));
 
     const updateSubcategoryPillsUI = (activeKey) => {
       getSubcategoryBtns().forEach(b => {
@@ -279,6 +280,9 @@
         const sub = card.getAttribute('data-subcategory');
         const collections = (card.getAttribute('data-collections') || '').split(',');
         const isOnSale = card.getAttribute('data-on-sale') === 'true';
+        const cardTags = (card.getAttribute('data-tags') || '').split(',').map(t => t.trim());
+        const isWinterTagged = cardTags.includes('winter');
+        const isWinterSet = (sub === 'shirt' && isWinterTagged);
         
         let matchesCategory = false;
         if (activeCategory === 'all') {
@@ -302,8 +306,12 @@
         let matchesSubcategory = false;
         if (activeSubcategory === 'all') {
           matchesSubcategory = true;
-        } else if (activeSubcategory === 'summer') {
-          matchesSubcategory = (sub !== 'hoodie' && sub !== 'sweatshirt' && !(card.getAttribute('data-tags') || '').split(',').map(t => t.trim()).includes('winter'));
+        } else if (activeSubcategory === 'summer' || activeSubcategory === 'let-the-sun-in') {
+          matchesSubcategory = (sub !== 'hoodie' && sub !== 'sweatshirt' && !isWinterTagged);
+        } else if (activeSubcategory === 'wear-your-warmth') {
+          matchesSubcategory = isWinterSet;
+        } else if (activeSubcategory === 'in-good-company') {
+          matchesSubcategory = ((sub === 'hoodie' || sub === 'sweatshirt' || isWinterTagged) && !isWinterSet);
         } else {
           matchesSubcategory = (sub === activeSubcategory);
         }
@@ -332,6 +340,12 @@
         titleText.textContent = isArabic ? "وصل حديثاً" : "New Drops";
       } else {
         titleText.textContent = titleBase;
+      }
+
+      const collectionPillKeys = ['wear-your-warmth', 'in-good-company', 'let-the-sun-in', 'summer'];
+      if (activeCategory === 'all' && collectionPillKeys.includes(activeSubcategory)) {
+        const activePill = findPill(activeSubcategory);
+        if (activePill) titleText.textContent = activePill.textContent.trim();
       }
 
       if (visibleCount === 0 && cards.length > 0) {
@@ -381,9 +395,14 @@
     const urlParams = new URLSearchParams(window.location.search);
     const filterParam = urlParams.get('filter');
     if (filterParam) {
-      const targetBtn = catalog.querySelector(`.category-filter-btn[data-category="${filterParam}"]`);
+      let targetBtn = null;
+      try { targetBtn = catalog.querySelector(`.category-filter-btn[data-category="${filterParam}"]`); } catch (err) {}
+      const targetPill = (targetBtn || filterParam === 'all') ? null : findPill(filterParam);
       if (targetBtn) {
         targetBtn.click();
+        catalog.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (targetPill) {
+        targetPill.click();
         catalog.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
@@ -397,6 +416,29 @@
 
       const isHomepage = window.location.pathname === '/' || window.location.pathname === '' || window.location.pathname === '/ar' || window.location.pathname === '/ar/';
       if (!isHomepage) return;
+
+      const pillMatch = href.match(/[?&]filter=([^&#]+)/);
+      if (pillMatch) {
+        let pillKey = pillMatch[1];
+        try { pillKey = decodeURIComponent(pillKey); } catch (err) {}
+        pillKey = normalizeSubcategoryKey(pillKey);
+        const isCategoryKey = ['all', 'men', 'women', 'new-drops', 'newdrops', 'sale'].includes(pillKey);
+        const pill = isCategoryKey ? null : findPill(pillKey);
+        if (pill) {
+          e.preventDefault();
+          const mobileDrawer = document.getElementById('MobileNavDrawer');
+          if (mobileDrawer && !mobileDrawer.classList.contains('hidden')) {
+            const closeBtn = mobileDrawer.querySelector('.mobile-menu-close');
+            if (closeBtn) closeBtn.click();
+          }
+          const allCategoryBtn = catalog.querySelector('.category-filter-btn[data-category="all"]');
+          if (allCategoryBtn) allCategoryBtn.click();
+          pill.click();
+          catalog.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          history.pushState(null, '', `?filter=${pillKey}`);
+          return;
+        }
+      }
 
       let category = null;
       const text = link.textContent.toLowerCase();
@@ -676,7 +718,7 @@
           "id": "key",
           "label": "Filter Key (Matching subcategory tag)",
           "default": "summer",
-          "info": "Values like: all, summer, hoodie, shirt, sweatshirt, t-shirt."
+          "info": "Values like: all, summer, hoodie, shirt, sweatshirt, t-shirt. Collections: wear-your-warmth (winter sets), in-good-company (other winter pieces), summer or let-the-sun-in (summer)."
         }
       ]
     }
