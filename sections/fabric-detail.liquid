@@ -42,16 +42,17 @@
               <img 
                 src="{{ section.settings.image | image_url: width: 1000 }}" 
                 alt="Editorial Cover" 
-                class="fabric-image w-full h-full object-cover object-center transition-opacity duration-500 group-hover:opacity-0" 
+                class="fabric-image w-full h-full object-cover object-center transition-opacity duration-500{% if section.settings.show_video != false %} group-hover:opacity-0{% endif %}" 
                 width="1000" height="1000" />
             {%- else -%}
               <img 
                 src="{{ 'editorial-cover.jpg' | asset_url }}" 
                 alt="Editorial Cover" 
-                class="fabric-image w-full h-full object-cover object-center transition-opacity duration-500 group-hover:opacity-0" 
+                class="fabric-image w-full h-full object-cover object-center transition-opacity duration-500{% if section.settings.show_video != false %} group-hover:opacity-0{% endif %}" 
                 width="1000" height="1000" />
             {%- endif -%}
             
+            {%- if section.settings.show_video != false -%}
             <!-- Video - Hidden until hover -->
             <video 
               muted 
@@ -65,6 +66,7 @@
                 <source src="{{ 'editorial.mp4' | asset_url }}" type="video/mp4">
               {%- endif -%}
             </video>
+            {%- endif -%}
 
           </div>
           
@@ -195,6 +197,7 @@
       "id": "image",
       "label": "Cover Image"
     },
+    {"type": "checkbox", "id": "show_video", "label": "Show video on hover", "info": "Off = only the cover image shows (no video on hover or tap).", "default": true},
     {
       "type": "url",
       "id": "video_url",
