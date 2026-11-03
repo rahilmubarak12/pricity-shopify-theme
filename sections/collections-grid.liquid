@@ -32,14 +32,15 @@
   </div>
 
   <!-- Grid Items -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  {%- if section.settings.show_card_4 == false -%}<style>@media (min-width: 640px){#shopify-section-{{ section.id }} .grid.apy-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}}</style>{%- endif -%}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4{% if section.settings.show_card_4 == false %} apy-grid-3{% endif %}">
     
     <!-- Item 1: Men -->
     <a href="{{ section.settings.collection_1_url | default: '#' }}" class="group relative h-[460px] overflow-hidden cursor-pointer no-underline block">
       {%- if section.settings.collection_1_image != blank -%}
-        <img src="{{ section.settings.collection_1_image | image_url: width: 800 }}" alt="Men" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
+        <img src="{{ section.settings.collection_1_image | image_url: width: 800 }}" alt="{{ section.settings.collection_1_title | default: 'Men' | escape }}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
       {%- else -%}
-        <img src="{{ 'man-v2.jpg' | asset_url }}" alt="Men" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
+        <img src="{{ 'man-v2.jpg' | asset_url }}" alt="{{ section.settings.collection_1_title | default: 'Men' | escape }}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
       {%- endif -%}
       <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-8">
         <span class="text-[10px] font-mono-street tracking-[0.2em] text-white/60 uppercase">
@@ -69,9 +70,9 @@
     <!-- Item 2: Women -->
     <a href="{{ section.settings.collection_2_url | default: '#' }}" class="group relative h-[460px] overflow-hidden cursor-pointer no-underline block">
       {%- if section.settings.collection_2_image != blank -%}
-        <img src="{{ section.settings.collection_2_image | image_url: width: 800 }}" alt="Women" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
+        <img src="{{ section.settings.collection_2_image | image_url: width: 800 }}" alt="{{ section.settings.collection_2_title | default: 'Women' | escape }}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
       {%- else -%}
-        <img src="{{ 'woman-v2.jpg' | asset_url }}" alt="Women" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
+        <img src="{{ 'woman-v2.jpg' | asset_url }}" alt="{{ section.settings.collection_2_title | default: 'Women' | escape }}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
       {%- endif -%}
       <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-8">
         <span class="text-[10px] font-mono-street tracking-[0.2em] text-white/60 uppercase">
@@ -101,9 +102,9 @@
     <!-- Item 3: New Drops -->
     <a href="{{ section.settings.collection_3_url | default: '#' }}" class="group relative h-[460px] overflow-hidden cursor-pointer no-underline block">
       {%- if section.settings.collection_3_image != blank -%}
-        <img src="{{ section.settings.collection_3_image | image_url: width: 800 }}" alt="New Drops" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
+        <img src="{{ section.settings.collection_3_image | image_url: width: 800 }}" alt="{{ section.settings.collection_3_title | default: 'New Drops' | escape }}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
       {%- else -%}
-        <img src="{{ 'both-v2.jpg' | asset_url }}" alt="New Drops" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
+        <img src="{{ 'both-v2.jpg' | asset_url }}" alt="{{ section.settings.collection_3_title | default: 'New Drops' | escape }}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
       {%- endif -%}
       <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-8">
         <span class="text-[10px] font-mono-street tracking-[0.2em] text-white/60 uppercase">
@@ -130,12 +131,13 @@
       </div>
     </a>
 
+    {%- if section.settings.show_card_4 != false -%}
     <!-- Item 4: Sale -->
     <a href="{{ section.settings.collection_4_url | default: '#' }}" class="group relative h-[460px] overflow-hidden cursor-pointer no-underline block">
       {%- if section.settings.collection_4_image != blank -%}
-        <img src="{{ section.settings.collection_4_image | image_url: width: 800 }}" alt="Sale" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
+        <img src="{{ section.settings.collection_4_image | image_url: width: 800 }}" alt="{{ section.settings.collection_4_title | default: 'Sale' | escape }}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
       {%- else -%}
-        <img src="{{ 'sale-v2.jpg' | asset_url }}" alt="Sale" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
+        <img src="{{ 'sale-v2.jpg' | asset_url }}" alt="{{ section.settings.collection_4_title | default: 'Sale' | escape }}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" width="1000" height="1000">
       {%- endif -%}
       <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-8">
         <span class="text-[10px] font-mono-street tracking-[0.2em] text-white/60 uppercase">
@@ -161,6 +163,7 @@
         </span>
       </div>
     </a>
+    {%- endif -%}
 
   </div>
 </section>
@@ -169,6 +172,7 @@
 {
   "name": "Collections Grid",
   "settings": [
+    {"type": "checkbox", "id": "show_card_4", "label": "Show the 4th card", "info": "Untick to show 3 cards in one row.", "default": true},
     {
       "type": "header",
       "content": "Section Titles (English)"
