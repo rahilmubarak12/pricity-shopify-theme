@@ -303,7 +303,7 @@
         if (activeSubcategory === 'all') {
           matchesSubcategory = true;
         } else if (activeSubcategory === 'summer') {
-          matchesSubcategory = (sub !== 'hoodie' && sub !== 'sweatshirt');
+          matchesSubcategory = (sub !== 'hoodie' && sub !== 'sweatshirt' && !(card.getAttribute('data-tags') || '').split(',').map(t => t.trim()).includes('winter'));
         } else {
           matchesSubcategory = (sub === activeSubcategory);
         }
