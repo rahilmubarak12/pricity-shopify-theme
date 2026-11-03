@@ -11,12 +11,65 @@
   "sections": {
     "hero_video": {
       "type": "hero-video",
+      "blocks": {
+        "slide_6jTETW": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/hero-noir.jpg",
+            "image_mobile": "shopify://shop_images/hero-noir-mobile.jpg"
+          }
+        },
+        "slide_zpKet4": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/hero-midnight.jpg",
+            "image_mobile": "shopify://shop_images/hero-midnight-mobile.jpg"
+          }
+        },
+        "slide_Ind7xQ": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/hero-winter_d9237ebd-e05d-4079-92ce-529504b13c1d.jpg",
+            "image_mobile": "shopify://shop_images/hero-winter-mobile_0dd96597-fb6e-4996-bd35-d71f28790628.jpg"
+          }
+        },
+        "slide_Pip4kM": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/hero-leatherpiped.jpg",
+            "image_mobile": "shopify://shop_images/hero-leatherpiped-mobile.jpg"
+          }
+        },
+        "slide_9XqgqC": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/hero-doublecollar.jpg",
+            "image_mobile": "shopify://shop_images/hero-doublecollar-mobile.jpg"
+          }
+        },
+        "slide_YcgCAa": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/hero-leatherpatch.jpg",
+            "image_mobile": "shopify://shop_images/hero-leatherpatch-mobile.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "slide_6jTETW",
+        "slide_zpKet4",
+        "slide_Ind7xQ",
+        "slide_Pip4kM",
+        "slide_9XqgqC",
+        "slide_YcgCAa"
+      ],
       "custom_css": [
         ".bg-gradient-to-t {display: none;}",
         "@media (min-width: 769px) {.-mt-10 {margin: 140px auto 0 6vw; max-width: 44vw; text-align: start; } .-mt-10 h1 {font-size: min(4.5rem, 3.8vw); } .max-w-xl {margin-inline-start: 0; } .-mt-10 > .flex {justify-content: flex-start; }}",
         "@media (max-width: 768px) {div[class*=\"h-[90vh]\"] {align-items: flex-end; } .-mt-10 {margin-top: 0; padding-bottom: 28px; } .-mt-10 h1, .max-w-xl {display: none; } .-mt-10 a {padding-top: 12px; padding-bottom: 12px; }}"
       ],
       "settings": {
+        "slide_seconds": 3,
         "subtitle": "Winter Capsule '26",
         "title": "APRICITY OFFICIALS",
         "description": "Elevated essentials with a refined modern fit.",
