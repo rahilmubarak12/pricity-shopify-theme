@@ -1,6 +1,7 @@
 <script src="{{ 'hero-typewriter.js' | asset_url }}" defer="defer"></script>
 
 <div class="relative w-full h-[90vh] min-h-[640px] bg-black overflow-hidden flex items-center justify-center">
+  {%- if section.blocks.size == 0 -%}
   <!-- Fallback Image -->
   <picture class="absolute inset-0 w-full h-full z-0">
     {%- if section.settings.image_mobile != blank -%}
@@ -15,6 +16,16 @@
       <img src="{{ 'hero-photo.jpg' | asset_url }}" alt="Hero Background" class="absolute inset-0 w-full h-full object-cover object-center z-0" width="1000" height="1000">
     {%- endif -%}
   </picture>
+  {%- endif -%}
+  <!-- Slideshow (Effeect): one slide per block, first slide shows on load -->
+  {%- for block in section.blocks -%}
+  <picture class="apy-slide absolute inset-0 w-full h-full{% if forloop.first %} is-on{% endif %}" {{ block.shopify_attributes }}>
+    {%- if block.settings.image_mobile != blank -%}<source media="(max-width: 768px)" srcset="{{ block.settings.image_mobile | image_url: width: 1000 }}">{%- endif -%}
+    {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 2000 }}" alt="" class="absolute inset-0 w-full h-full object-cover object-center" width="1000" height="1000"{% if forloop.first %} fetchpriority="high"{% else %} loading="lazy"{% endif %}>{%- endif -%}
+  </picture>
+  {%- endfor -%}
+  <style>.apy-slide{z-index:1;opacity:0;transition:opacity 1s ease-in-out}.apy-slide.is-on{opacity:1}.apy-slide.is-top{z-index:2}</style>
+  <script>(function(){var r=document.currentScript.parentElement,s=r.querySelectorAll('.apy-slide');if(s.length<2)return;var c=0,hold=false;function show(n){if(n===c)return;var p=c;c=n;s.forEach(function(e){e.classList.remove('is-top')});s[c].classList.add('is-top','is-on');setTimeout(function(){if(c!==p)s[p].classList.remove('is-on')},1100)}document.addEventListener('shopify:block:select',function(e){var i=Array.prototype.indexOf.call(s,e.target);if(i>-1){hold=true;show(i)}});document.addEventListener('shopify:block:deselect',function(){hold=false});if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;setInterval(function(){if(!hold)show((c+1)%s.length)},{{ section.settings.slide_seconds | default: 3 | times: 1000 }})})();</script>
   {%- if section.settings.show_video -%}
   <!-- Video -->
   <video
@@ -146,7 +157,9 @@
 {% schema %}
 {
   "name": "Hero Video",
+  "blocks": [{"type": "slide", "name": "Slide", "settings": [{"type": "image_picker", "id": "image", "label": "Desktop image", "info": "Wide picture, about 2400 x 1200"}, {"type": "image_picker", "id": "image_mobile", "label": "Mobile image", "info": "Tall picture, about 1080 x 1920"}]}],
   "settings": [
+    {"type": "range", "id": "slide_seconds", "min": 2, "max": 10, "step": 1, "unit": "s", "label": "Seconds per slide", "default": 3},
     {
       "type": "header",
       "content": "English Content"
