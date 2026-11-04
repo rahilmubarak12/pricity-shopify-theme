@@ -1,0 +1,71 @@
+{%- comment -%}
+  Cart page – added by Effeect (Nov 2026). /cart used to return 404, so the bag icon in checkout
+  and any "View cart" link landed on an error page. Simple server-rendered cart, English + Arabic.
+{%- endcomment -%}
+{%- liquid
+  assign ar = false
+  if request.locale.iso_code == 'ar'
+    assign ar = true
+  endif
+-%}
+<style>
+  .apy-cart{max-width:720px;margin:0 auto;padding:170px 20px 80px;color:#1a1a1a}
+  @media (max-width:639px){.apy-cart{padding-top:135px}}
+  .apy-cart h1{font-size:28px;font-weight:300;letter-spacing:.06em;text-transform:uppercase;margin:0 0 20px}
+  .apy-cart__item{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid #e5e7eb}
+  .apy-cart__img{display:block;width:96px;flex:0 0 96px;border-radius:12px;overflow:hidden;background:#f4f4f5}
+  .apy-cart__img img{display:block;width:100%;height:auto}
+  .apy-cart__info{flex:1;min-width:0}
+  .apy-cart__title{font-size:14px;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;color:inherit}
+  .apy-cart__meta{font-size:13px;color:#71717a;margin:4px 0 0}
+  .apy-cart__row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}
+  .apy-cart__qty{width:64px;padding:8px;border:1px solid #d4d4d8;border-radius:10px;text-align:center;font-size:14px}
+  .apy-cart__remove{font-size:12px;color:#71717a;text-decoration:underline}
+  .apy-cart__price{font-size:14px;white-space:nowrap}
+  .apy-cart__total{display:flex;justify-content:space-between;font-size:16px;margin:24px 0 6px}
+  .apy-cart__note{font-size:12px;color:#71717a;margin:0 0 20px}
+  .apy-cart__checkout{display:block;width:100%;padding:16px;border:0;border-radius:14px;background:#000;color:#fff;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+  .apy-cart__update{display:block;width:100%;margin-top:10px;padding:12px;border:1px solid #d4d4d8;border-radius:14px;background:#fff;color:#1a1a1a;font-size:12px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+  .apy-cart__empty{text-align:center;padding:40px 0}
+  .apy-cart__shop{display:inline-block;margin-top:16px;padding:14px 28px;border-radius:14px;background:#000;color:#fff;text-decoration:none;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+</style>
+<div class="apy-cart"{% if ar %} dir="rtl"{% endif %}>
+  <h1>{% if ar %}حقيبة التسوق{% else %}Your bag{% endif %}</h1>
+  {%- if cart.item_count > 0 -%}
+    <form action="{{ routes.cart_url }}" method="post" novalidate>
+      {%- for item in cart.items -%}
+        <div class="apy-cart__item">
+          <a class="apy-cart__img" href="{{ item.url }}">
+            {%- if item.image -%}{{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: item.product.title }}{%- endif -%}
+          </a>
+          <div class="apy-cart__info">
+            <a class="apy-cart__title" href="{{ item.url }}">{{ item.product.title }}</a>
+            {%- unless item.product.has_only_default_variant -%}
+              <p class="apy-cart__meta">{{ item.variant.title }}</p>
+            {%- endunless -%}
+            {%- for allocation in item.line_level_discount_allocations -%}
+              <p class="apy-cart__meta">{{ allocation.discount_application.title }} (−{{ allocation.amount | money }})</p>
+            {%- endfor -%}
+            <div class="apy-cart__row">
+              <input class="apy-cart__qty" type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="{% if ar %}الكمية{% else %}Quantity{% endif %}">
+              <a class="apy-cart__remove" href="{{ item.url_to_remove }}">{% if ar %}إزالة{% else %}Remove{% endif %}</a>
+              <span class="apy-cart__price">{{ item.final_line_price | money }}</span>
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+      <div class="apy-cart__total">
+        <span>{% if ar %}المجموع{% else %}Subtotal{% endif %}</span>
+        <span>{{ cart.total_price | money }}</span>
+      </div>
+      <p class="apy-cart__note">{% if ar %}شحن مجاني لجميع أنحاء المملكة · يمكنك إدخال كود الخصم عند الدفع{% else %}Free shipping across Saudi Arabia · Discount codes can be added at checkout{% endif %}</p>
+      <button class="apy-cart__checkout" type="submit" name="checkout">{% if ar %}إتمام الطلب{% else %}Checkout{% endif %}</button>
+      <button class="apy-cart__update" type="submit" name="update">{% if ar %}تحديث الحقيبة{% else %}Update bag{% endif %}</button>
+    </form>
+  {%- else -%}
+    <div class="apy-cart__empty">
+      <p>{% if ar %}حقيبة التسوق فارغة.{% else %}Your bag is empty.{% endif %}</p>
+      <a class="apy-cart__shop" href="{{ routes.root_url }}">{% if ar %}تسوق الآن{% else %}Continue shopping{% endif %}</a>
+    </div>
+  {%- endif -%}
+</div>
