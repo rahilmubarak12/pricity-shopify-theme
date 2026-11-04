@@ -72,6 +72,34 @@
         {%- endif -%}
       }
     </style>
+    {%- comment -%} Effeect (Nov 2026): Microsoft Clarity, project z5cjtrt6td. The Clarity app embed rendered nothing (project never linked), so the tag lives here and the app embed is switched off to avoid double tracking. {%- endcomment -%}
+    <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "z5cjtrt6td");
+    </script>
+
+    {%- comment -%} Effeect CRO fixes (Nov 2026): smaller logo on phones (the search icon covered it); hide the 'Want 15% off?' teaser on set pages (APY-15 excludes the sets) and on the cart page (it covered the Checkout button). {%- endcomment -%}
+    <style>
+      @media (max-width: 639px) {
+        header a > img + .apricity-wordmark { font-size: 18px !important; letter-spacing: .16em !important; }
+        header a:has(> .apricity-wordmark) { gap: 8px !important; }
+        header a:has(> .apricity-wordmark) > img { height: 32px !important; width: 32px !important; }
+      }
+    </style>
+    {%- liquid
+      assign apy_hide_teaser = false
+      if template.name == 'cart'
+        assign apy_hide_teaser = true
+      elsif template.name == 'product' and product.type == 'Sets'
+        assign apy_hide_teaser = true
+      endif
+    -%}
+    {%- if apy_hide_teaser -%}
+      <style>.discount-sticky-bar, .discount-modal-overlay { display: none !important; }</style>
+    {%- endif -%}
   </head>
 
   <body>
