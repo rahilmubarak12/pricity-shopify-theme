@@ -25,9 +25,27 @@
         "trust_badge_4_text_ar": "جودة عاليه",
         "low_stock_threshold": 3
       }
+    },
+    "1793957860fa4c7ce6": {
+      "type": "apps",
+      "blocks": {
+        "tabby_pay_later_pdp_final_h8xrbc": {
+          "type": "shopify://apps/tabby-pay-later/blocks/pdp-final/b31c2495-41fc-4b20-9fc7-8cb2e9dd9a95",
+          "settings": {
+            "merchant_code": "",
+            "should_inherit_bg": false,
+            "no_price_display": true
+          }
+        }
+      },
+      "block_order": [
+        "tabby_pay_later_pdp_final_h8xrbc"
+      ],
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "1793957860fa4c7ce6"
   ]
 }
