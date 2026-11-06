@@ -16,11 +16,11 @@
         "sticky_atc_enabled": true,
         "trust_badges_enabled": true,
         "trust_badge_1_text": "Secure Pay",
-        "trust_badge_2_text": "Free Shipping in 3–4 Days",
+        "trust_badge_2_text": "Free Shipping in 3–6 Days",
         "trust_badge_3_text": "Easy Returns",
         "trust_badge_4_text": "Premium",
         "trust_badge_1_text_ar": "دفع آمن",
-        "trust_badge_2_text_ar": "شحن مجاني خلال 3–4 أيام",
+        "trust_badge_2_text_ar": "شحن مجاني خلال 3–6 أيام",
         "trust_badge_3_text_ar": "إرجاع سهل",
         "trust_badge_4_text_ar": "جودة عالية",
         "low_stock_threshold": 3
