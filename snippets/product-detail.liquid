@@ -1230,7 +1230,7 @@
         })
         .then(item => {
           if (isCheckout) {
-            window.location.href = '/checkout';
+            window.location.href = ((window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/') + 'checkout'; // Effeect (Nov 2026): Arabic site goes to the Arabic checkout
             return;
           }
           if (atcText) atcText.textContent = '✓';
