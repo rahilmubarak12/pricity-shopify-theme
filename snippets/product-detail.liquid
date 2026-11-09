@@ -1017,7 +1017,9 @@
       if (!container) return;
 
       const isAr = container.getAttribute('data-lang') === 'ar';
-      const rawJsonEl = container.querySelector('.product-raw-json');
+      // Effeect fix (Nov 2026): the product JSON and size chart sit outside .product-detail-wrapper, so look in the whole section.
+      const scopeEl = container.closest('.shopify-section') || document;
+      const rawJsonEl = scopeEl.querySelector('.product-raw-json');
       let productData = null;
       try {
         if (rawJsonEl) productData = JSON.parse(rawJsonEl.textContent);
@@ -1097,10 +1099,10 @@
         if (atcBtn) atcBtn.setAttribute('data-variant-id', currentVariant.id);
         if (quickBuyBtn) quickBuyBtn.setAttribute('data-variant-id', currentVariant.id);
 
-        if (priceDisplay) priceDisplay.textContent = currentVariant.price;
+        if (priceDisplay) priceDisplay.innerHTML = currentVariant.price;
         if (compareDisplay) {
           if (currentVariant.compare_at_price && currentVariant.compare_at_price !== '' && currentVariant.compare_at_price !== currentVariant.price) {
-            compareDisplay.textContent = currentVariant.compare_at_price;
+            compareDisplay.innerHTML = currentVariant.compare_at_price;
             compareDisplay.classList.remove('hidden');
           } else {
             compareDisplay.classList.add('hidden');
@@ -1200,8 +1202,8 @@
 
       // 7. Size Guide
       const guideBtn = container.querySelector('.size-guide-trigger-btn');
-      const sizeModal = container.querySelector('.product-size-chart-modal');
-      const modalClose = container.querySelector('.size-chart-modal-close');
+      const sizeModal = scopeEl.querySelector('.product-size-chart-modal');
+      const modalClose = scopeEl.querySelector('.size-chart-modal-close');
       if (guideBtn && sizeModal) {
         guideBtn.onclick = function(e) { e.preventDefault(); sizeModal.classList.remove('hidden'); sizeModal.style.display = 'flex'; document.body.classList.add('overflow-hidden'); };
         if (modalClose) modalClose.onclick = function() { sizeModal.classList.add('hidden'); sizeModal.style.display = 'none'; document.body.classList.remove('overflow-hidden'); };
