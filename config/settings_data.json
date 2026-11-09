@@ -51,8 +51,8 @@
       "cart-drawer": {
         "type": "cart-drawer",
         "settings": {
-          "shipping_notice_text": "🇸🇦 Free KSA Express Shipping",
-          "shipping_notice_text_ar": "شحن سريع مجاني داخل السعودية",
+          "shipping_notice_text": "🇸🇦 Free shipping to your nearest pickup point",
+          "shipping_notice_text_ar": "شحن مجاني إلى أقرب نقطة استلام",
           "shipping_notice_threshold": 0,
           "empty_cart_text": "Your bag is empty.",
           "empty_cart_text_ar": "حقيبة التسوق فارغة.",
