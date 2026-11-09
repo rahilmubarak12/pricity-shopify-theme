@@ -70,6 +70,8 @@
           #DiscountPopupSection .apy-popup-submit{flex-shrink:0;border:0;border-radius:12px;background:#1a1a1a;color:#fff;padding:12px 16px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
           #DiscountPopupSection .apy-popup-success{width:100%;border:1px solid #a7f3d0;background:#ecfdf5;color:#047857;border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.5;margin:0}
           #DiscountPopupSection .apy-popup-error{color:#dc2626;font-size:12px;margin:8px 0 0}
+          /* Effeect (Nov 2026): hide the Inbox chat button while the pop-up is open - on phones it covered the Get My 10% button */
+          body:has(#DiscountPopupSection .discount-modal-overlay:not(.hidden)) shopify-chat{display:none !important}
         </style>
         <p class="apy-popup-note">
           {{ section.settings.signup_text | default: "Enter your email and we'll send your code." }}
