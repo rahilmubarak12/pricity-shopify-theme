@@ -93,8 +93,6 @@
       assign apy_hide_teaser = false
       if template.name == 'cart'
         assign apy_hide_teaser = true
-      elsif template.name == 'product' and product.type == 'Sets'
-        assign apy_hide_teaser = true
       endif
     -%}
     {%- if apy_hide_teaser -%}
