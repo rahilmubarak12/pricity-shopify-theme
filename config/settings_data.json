@@ -80,10 +80,10 @@
       "discount-popup": {
         "type": "discount-popup",
         "settings": {
-          "sticky_text": "Want 15% off? Tap here",
+          "sticky_text": "Want 10% off? Tap here",
           "coupon_code": "APY-15",
-          "offer_1_title": "15% Off",
-          "offer_1_description": "when you purchase two or more items",
+          "offer_1_title": "10% Off",
+          "offer_1_description": "your first order",
           "offer_2_text": "Free shipping with no minimum order",
           "welcome_text": "Welcome to",
           "brand_text": "APRICITY",
@@ -92,7 +92,11 @@
           "tap_to_copy_text": "Tap to copy",
           "copied_text": "✓ Copied!",
           "shop_now_text": "Shop Now",
-          "no_thanks_text": "No thanks"
+          "no_thanks_text": "No thanks",
+          "signup_text": "Enter your email and we'll send your code.",
+          "email_placeholder": "Your email",
+          "signup_button_text": "Get My 10%",
+          "success_text": "You're in! Check your inbox for your 10% code."
         }
       },
       "footer": {
