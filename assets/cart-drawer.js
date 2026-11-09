@@ -30,7 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const refreshCart = (openAfterRefresh = false) => {
     const shouldBeOpen = openAfterRefresh || cartContainer.classList.contains('opacity-100');
 
-    fetch('/?sections=cart-drawer')
+    // Effeect (Nov 2026): fetch the drawer in the shopper's language (/ar/ on the Arabic site) - it used to come back in English after Add to cart
+    fetch(((window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/') + '?sections=cart-drawer')
       .then(res => res.json())
       .then(sections => {
         const html = sections['cart-drawer'];
