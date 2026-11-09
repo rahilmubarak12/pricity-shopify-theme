@@ -72,6 +72,8 @@
           #DiscountPopupSection .apy-popup-error{color:#dc2626;font-size:12px;margin:8px 0 0}
           /* Effeect (Nov 2026): hide the Inbox chat button while the pop-up is open - on phones it covered the Get My 10% button */
           body:has(#DiscountPopupSection .discount-modal-overlay:not(.hidden)) shopify-chat{display:none !important}
+          /* Effeect (Nov 2026): the site is left-to-right, so Arabic lines with numbers (10%) or a full stop showed in the wrong order - each line now takes its direction from its own text */
+          #DiscountPopupSection p,#DiscountPopupSection button{unicode-bidi:plaintext}
         </style>
         <p class="apy-popup-note">
           {{ section.settings.signup_text | default: "Enter your email and we'll send your code." }}
