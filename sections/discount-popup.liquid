@@ -60,26 +60,38 @@
           </p>
         </div>
 
-        <p class="text-zinc-400 text-xs font-mono-street tracking-wider uppercase leading-relaxed">
-          {{ section.settings.apply_code_text | default: 'Apply code at checkout' }}
+        <!-- Email sign-up (Effeect, Nov 2026): replaces the APY-15 code box. Customer form tagged "newsletter" = same as the footer, so Shopify Messaging sends the NEW10 welcome email. -->
+        <style>
+          #DiscountPopupSection .apy-popup-note{font-size:13px;line-height:1.5;color:#71717a;margin:0}
+          #DiscountPopupSection .apy-popup-form{width:100%}
+          #DiscountPopupSection .apy-popup-row{display:flex;gap:8px;width:100%}
+          #DiscountPopupSection .apy-popup-email{flex:1;min-width:0;border:1px solid #e4e4e7;border-radius:12px;padding:12px 14px;font-size:16px;color:#1a1a1a;background:#fff}
+          #DiscountPopupSection .apy-popup-email:focus{outline:none;border-color:#1a1a1a}
+          #DiscountPopupSection .apy-popup-submit{flex-shrink:0;border:0;border-radius:12px;background:#1a1a1a;color:#fff;padding:12px 16px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
+          #DiscountPopupSection .apy-popup-success{width:100%;border:1px solid #a7f3d0;background:#ecfdf5;color:#047857;border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.5;margin:0}
+          #DiscountPopupSection .apy-popup-error{color:#dc2626;font-size:12px;margin:8px 0 0}
+        </style>
+        <p class="apy-popup-note">
+          {{ section.settings.signup_text | default: "Enter your email and we'll send your code." }}
         </p>
-
-        <!-- Code Box -->
-        <button class="discount-copy-button w-full border-2 border-dashed border-zinc-300 hover:border-zinc-900 rounded-xl py-4 px-6 transition-all group select-all">
-          <span class="discount-code-text font-mono-street font-bold text-xl tracking-[0.3em] text-[#1a1a1a] group-hover:text-zinc-600 transition-colors">
-            {{ section.settings.coupon_code | default: 'APY-15' }}
-          </span>
-          <p class="copy-status-text text-[10px] text-zinc-400 mt-1 font-mono-street tracking-widest uppercase"
-             data-tap-to-copy="{{ section.settings.tap_to_copy_text | default: 'Tap to copy' | escape }}"
-             data-copied="{{ section.settings.copied_text | default: '✓ Copied!' | escape }}">
-            {{ section.settings.tap_to_copy_text | default: 'Tap to copy' }}
-          </p>
-        </button>
-
-        <!-- Action Button -->
-        <button class="discount-shop-now w-full bg-[#1a1a1a] text-white font-mono-street text-xs uppercase tracking-[0.2em] py-4 rounded-xl hover:bg-zinc-700 transition-colors">
-          {{ section.settings.shop_now_text | default: 'Shop Now' }}
-        </button>
+        {%- form 'customer', id: 'PopupNewsletterForm', class: 'apy-popup-form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter, popup">
+          {%- if form.posted_successfully? -%}
+            <p class="apy-popup-success">
+              {{ section.settings.success_text | default: "You're in! Check your inbox for your 10% code." }}
+            </p>
+          {%- else -%}
+            <div class="apy-popup-row">
+              <input class="apy-popup-email" type="email" name="contact[email]" required autocomplete="email" aria-label="{{ section.settings.email_placeholder | default: 'Your email' | escape }}" placeholder="{{ section.settings.email_placeholder | default: 'Your email' | escape }}">
+              <button class="apy-popup-submit" type="submit">
+                {{ section.settings.signup_button_text | default: 'Get My 10%' }}
+              </button>
+            </div>
+            {%- if form.errors -%}
+              <p class="apy-popup-error">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endform -%}
 
         <!-- Dismiss Button -->
         <button class="discount-dismiss text-[11px] text-zinc-400 font-mono-street uppercase tracking-widest hover:text-zinc-600 transition-colors">
@@ -100,11 +112,8 @@
     const overlay = section.querySelector('.discount-modal-overlay');
     const content = section.querySelector('.discount-modal-content');
     const closeBtn = section.querySelector('.discount-modal-close');
-    const copyBtn = section.querySelector('.discount-copy-button');
-    const codeText = section.querySelector('.discount-code-text').textContent.trim();
-    const statusText = section.querySelector('.copy-status-text');
-    const shopNowBtn = section.querySelector('.discount-shop-now');
     const dismissBtn = section.querySelector('.discount-dismiss');
+    if (!stickyBar || !overlay || !content) return;
 
     // Show modal function
     const openModal = () => {
@@ -131,9 +140,8 @@
     };
 
     stickyBar.addEventListener('click', openModal);
-    closeBtn.addEventListener('click', closeModal);
-    shopNowBtn.addEventListener('click', closeModal);
-    dismissBtn.addEventListener('click', closeModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (dismissBtn) dismissBtn.addEventListener('click', closeModal);
 
     // Close on click outside content
     overlay.addEventListener('click', (e) => {
@@ -142,54 +150,14 @@
       }
     });
 
-    // Copy to clipboard function
-    const showCopied = () => {
-      statusText.textContent = statusText.getAttribute('data-copied') || '✓ Copied!';
-      statusText.classList.remove('text-zinc-400');
-      statusText.classList.add('text-green-500');
-      
-      setTimeout(() => {
-        statusText.textContent = statusText.getAttribute('data-tap-to-copy') || 'Tap to copy';
-        statusText.classList.remove('text-green-500');
-        statusText.classList.add('text-zinc-400');
-      }, 2000);
-    };
-
-    const fallbackCopy = () => {
-      try {
-        const el = document.createElement('textarea');
-        el.value = codeText;
-        el.setAttribute('readonly', '');
-        el.style.position = 'absolute';
-        el.style.left = '-9999px';
-        document.body.appendChild(el);
-        const selected = document.getSelection().rangeCount > 0 ? document.getSelection().getRangeAt(0) : false;
-        el.select();
-        const success = document.execCommand('copy');
-        document.body.removeChild(el);
-        if (selected) {
-          document.getSelection().removeAllRanges();
-          document.getSelection().addRange(selected);
-        }
-        if (success) {
-          showCopied();
-        } else {
-          console.error('Fallback copy command failed');
-        }
-      } catch (err) {
-        console.error('Fallback copy failed: ', err);
-      }
-    };
-
-    copyBtn.addEventListener('click', () => {
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(codeText).then(showCopied).catch(err => {
-          fallbackCopy();
-        });
-      } else {
-        fallbackCopy();
-      }
-    });
+    // Effeect (Nov 2026): after the sign-up form posts, the page reloads at #PopupNewsletterForm,
+    // so reopen the popup to show the thank-you (or error) message. Hide the bar once signed up.
+    const signedUp = !!section.querySelector('.apy-popup-success');
+    if (window.location.hash === '#PopupNewsletterForm') openModal();
+    try {
+      if (signedUp) localStorage.setItem('apy_popup_signed_up', '1');
+      if (!signedUp && localStorage.getItem('apy_popup_signed_up') === '1') stickyBar.style.display = 'none';
+    } catch (e) {}
   });
 </script>
 
@@ -283,6 +251,34 @@
       "id": "no_thanks_text",
       "label": "Dismiss Link Label",
       "default": "No thanks"
+    },
+    {
+      "type": "header",
+      "content": "Email sign-up"
+    },
+    {
+      "type": "text",
+      "id": "signup_text",
+      "label": "Sign-up line",
+      "default": "Enter your email and we'll send your code."
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "Your email"
+    },
+    {
+      "type": "text",
+      "id": "signup_button_text",
+      "label": "Sign-up button",
+      "default": "Get My 10%"
+    },
+    {
+      "type": "text",
+      "id": "success_text",
+      "label": "Thank-you message",
+      "default": "You're in! Check your inbox for your 10% code."
     }
   ],
   "presets": [
