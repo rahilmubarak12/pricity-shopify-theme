@@ -243,6 +243,8 @@
     from { opacity: 1; transform: translateX(0); max-height: 200px; }
     to   { opacity: 0; transform: translateX(30px); max-height: 0; padding-top: 0; padding-bottom: 0; margin: 0; border: none; }
   }
+  /* Effeect (Nov 2026): hide the Inbox chat button while the bag is open - it sat on top of the checkout button */
+  body:has(#CartDrawerSection.opacity-100) shopify-chat { display: none !important; }
 </style>
 
 {% schema %}
